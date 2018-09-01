@@ -1,7 +1,5 @@
 package org.apache.maven.plugins.changes;
 
-import org.apache.maven.plugins.changes.ChangesCheckMojo;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,7 +19,14 @@ import org.apache.maven.plugins.changes.ChangesCheckMojo;
  * under the License.
  */
 
-import junit.framework.TestCase;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
+import static org.hamcrest.CoreMatchers.startsWith;
+
+import org.apache.maven.plugins.changes.ChangesCheckMojo;
+import org.junit.Test;
 
 /**
  * @author Dennis Lundberg
@@ -29,8 +34,8 @@ import junit.framework.TestCase;
  * @since 2.4
  */
 public class ChangesCheckMojoTestCase
-    extends TestCase
 {
+    @Test
     public void testIsValidDate()
         throws Exception
     {
@@ -59,6 +64,7 @@ public class ChangesCheckMojoTestCase
         assertFalse( ChangesCheckMojo.isValidDate( "pending", pattern ) );
     }
 
+    @Test
     public void testIsValidateWithLocale()
         throws Exception
     {
@@ -98,13 +104,6 @@ public class ChangesCheckMojoTestCase
         // pattern with months as text
         pattern = "dd MMM yyyy";
 
-        // Czech locale
-        locale = "cs_CZ";
-        assertFalse( ChangesCheckMojo.isValidDate( null, pattern, locale ) );
-        assertFalse( ChangesCheckMojo.isValidDate( "", pattern, locale ) );
-        assertTrue( ChangesCheckMojo.isValidDate( "06 XII 2010", pattern, locale ) );
-        assertFalse( ChangesCheckMojo.isValidDate( "pending", pattern, locale ) );
-
         // English locale
         locale = "en_US";
         assertFalse( ChangesCheckMojo.isValidDate( null, pattern, locale ) );
@@ -112,4 +111,46 @@ public class ChangesCheckMojoTestCase
         assertTrue( ChangesCheckMojo.isValidDate( "06 Dec 2010", pattern, locale ) );
         assertFalse( ChangesCheckMojo.isValidDate( "pending", pattern, locale ) );
     }
+    
+    // In JDK 9, the Unicode Consortium's Common Locale Data Repository (CLDR) data is enabled as the default locale data, 
+    //   so that you can use standard locale data without any further action.
+    // In JDK 8, although CLDR locale data is bundled with the JRE, it isn’t enabled by default.
+    // source: https://docs.oracle.com/javase/9/migrate/toc.htm#JSMIG-GUID-A20F2989-BFA9-482D-8618-6CBB4BAAE310
+    @Test
+    public void testCompat()
+    {
+        // @TODO fix for Java 9+
+        // System.setProperty( "java.locale.providers", "COMPAT,CLDR" ) is not picked up...
+        assumeThat( System.getProperty( "java.version" ), startsWith( "1." ) );
+        
+        // pattern with months as text
+        String pattern = "dd MMM yyyy";
+
+        String originalJavaLocaleProviders = null;
+        if ( !System.getProperty( "java.version" ).startsWith( "1." ) )
+        {
+            originalJavaLocaleProviders = System.setProperty( "java.locale.providers", "COMPAT,CLDR" );
+        }
+        try
+        {
+            // Czech locale
+            String locale = "cs_CZ";
+            assertFalse( ChangesCheckMojo.isValidDate( null, pattern, locale ) );
+            assertFalse( ChangesCheckMojo.isValidDate( "", pattern, locale ) );
+            assertTrue( ChangesCheckMojo.isValidDate( "06 XII 2010", pattern, locale ) );
+            assertFalse( ChangesCheckMojo.isValidDate( "pending", pattern, locale ) );
+        }
+        finally
+        {
+            if ( originalJavaLocaleProviders != null )
+            {
+                System.setProperty( "java.locale.providers", originalJavaLocaleProviders );
+            }
+            else
+            {
+                System.clearProperty( "java.locale.providers" );
+            }
+        }
+    }
+    
 }
