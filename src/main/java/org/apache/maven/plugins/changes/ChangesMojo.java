@@ -191,7 +191,7 @@ public class ChangesMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "team-list.html" )
+    @Parameter( defaultValue = "team.html" )
     private String teamlist;
 
     /**
