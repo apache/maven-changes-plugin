@@ -191,8 +191,8 @@ public class ChangesMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "team-list.html" )
-    private String teamlist;
+    @Parameter( defaultValue = "team.html" )
+    private String team;
 
     /**
      */
@@ -328,7 +328,7 @@ public class ChangesMojo
 
         report.setSystem( system );
 
-        report.setTeamlist( teamlist );
+        report.setTeam( team );
 
         report.setUrl( url );
 
@@ -487,9 +487,9 @@ public class ChangesMojo
         return ResourceBundle.getBundle( "changes-report", locale, this.getClass().getClassLoader() );
     }
 
-    protected String getTeamlist()
+    protected String getTeam()
     {
-        return teamlist;
+        return team;
     }
 
     private void logIssueLinkTemplatePerSystem( Map<String, String> issueLinkTemplatePerSystem )
