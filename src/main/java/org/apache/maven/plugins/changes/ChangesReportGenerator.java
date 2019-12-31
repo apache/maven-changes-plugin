@@ -60,7 +60,7 @@ public class ChangesReportGenerator
 
     static final String DEFAULT_ISSUE_SYSTEM_KEY = "default";
 
-    private static final String NO_TEAMLIST = "none";
+    private static final String NO_TEAM = "none";
 
     /**
      * The issue management system to use, for actions that do not specify a system.
@@ -69,7 +69,7 @@ public class ChangesReportGenerator
      */
     private String system;
 
-    private String teamlist;
+    private String team;
 
     private String url;
 
@@ -120,14 +120,14 @@ public class ChangesReportGenerator
         this.system = system;
     }
 
-    public void setTeamlist( final String teamlist )
+    public void setTeam( final String team )
     {
-        this.teamlist = teamlist;
+        this.team = team;
     }
 
-    public String getTeamlist()
+    public String getTeam()
     {
-        return teamlist;
+        return team;
     }
 
     public void setUrl( String url )
@@ -287,13 +287,13 @@ public class ChangesReportGenerator
 
         sink.tableCell_();
 
-        if ( NO_TEAMLIST.equals( teamlist ) )
+        if ( NO_TEAM.equals( team ) )
         {
             sinkCell( sink, action.getDev() );
         }
         else
         {
-            sinkCellLink( sink, action.getDev(), teamlist + "#" + action.getDev() );
+            sinkCellLink( sink, action.getDev(), team + "#" + action.getDev() );
         }
 
         if ( this.isAddActionDate() )
