@@ -271,7 +271,7 @@ under the License.
           <description>
             <![CDATA[
             Name of developer who committed the change.
-            <p>This can be either the id of the developer, as specified in the developers section of the pom.xml file, or the name of the developer. If you generate a changes report and specify the id of the developer, a link is created to that developer in the team-list.html page.</p>
+            <p>This can be either the id of the developer, as specified in the developers section of the pom.xml file, or the name of the developer. If you generate a changes report and specify the id of the developer, a link is created to that developer in the team.html page.</p>
             ]]>
           </description>
         </field>
