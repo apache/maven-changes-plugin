@@ -42,7 +42,7 @@ public class JiraUnicodeTestProjectStub
         ArtifactRepositoryPolicy policy =
             new ArtifactRepositoryPolicy( true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
                                           ArtifactRepositoryPolicy.CHECKSUM_POLICY_IGNORE );
-        ArtifactRepository repository = new MavenArtifactRepository( "central", "http://repo1.maven.org/maven2",
+        ArtifactRepository repository = new MavenArtifactRepository( "central", "https://repo.maven.apache.org/maven2",
                                                                      new DefaultRepositoryLayout(), policy, policy );
 
         return Collections.singletonList( repository );
