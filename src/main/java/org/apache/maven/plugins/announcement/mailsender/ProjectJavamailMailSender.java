@@ -19,7 +19,6 @@ package org.apache.maven.plugins.announcement.mailsender;
  * under the License.
  */
 
-import java.security.Security;
 import java.util.Date;
 import java.util.Properties;
 
@@ -85,24 +84,12 @@ public class ProjectJavamailMailSender
 
         if ( isSslMode() )
         {
-            try
-            {
-                // Try to load the SSL Provider class before we use it, it isn't present in non-Sun JVMs
-                this.getClass().getClassLoader().loadClass( "com.sun.net.ssl.internal.ssl.Provider" );
+            props.put( "mail.smtp.socketFactory.port", String.valueOf( getSmtpPort() ) );
 
-                Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider() );
+            props.put( "mail.smtp.socketFactory.class", SSL_FACTORY );
 
-                props.put( "mail.smtp.socketFactory.port", String.valueOf( getSmtpPort() ) );
-
-                props.put( "mail.smtp.socketFactory.class", SSL_FACTORY );
-
-                props.put( "mail.smtp.socketFactory.fallback", "false" );
-            }
-            catch ( ClassNotFoundException e )
-            {
-                getLogger().error( "You can't use sslMode because your system is missing an SSL Provider.", e );
-            }
-        }
+            props.put( "mail.smtp.socketFactory.fallback", "false" );
+    }
 
         if ( isTlsEnabled() )
         {
