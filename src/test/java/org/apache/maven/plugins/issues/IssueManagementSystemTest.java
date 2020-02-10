@@ -38,7 +38,7 @@ public class IssueManagementSystemTest
 
     private MockIssueManagementSystem ims;
 
-    private class MockIssueManagementSystem
+    private static class MockIssueManagementSystem
         extends AbstractIssueManagementSystem
     {
 
@@ -52,14 +52,13 @@ public class IssueManagementSystemTest
 
     @Override
     protected void setUp()
-        throws Exception
     {
         ims = new MockIssueManagementSystem();
     }
 
     public void testApplyingValidCustomIssueTypes()
     {
-        Map<String, String> issueTypes = new HashMap<String, String>();
+        Map<String, String> issueTypes = new HashMap<>();
         issueTypes.put( "add", "Story,Epic" );
         issueTypes.put( "fix", "Defect" );
         issueTypes.put( "update", "Improvement" );
@@ -76,7 +75,7 @@ public class IssueManagementSystemTest
 
     public void testApplyingInvalidCustomIssueTypes()
     {
-        Map<String, String> issueTypes = new HashMap<String, String>();
+        Map<String, String> issueTypes = new HashMap<>();
         issueTypes.put( "new", "Story,Epic" );
 
         try
@@ -84,7 +83,7 @@ public class IssueManagementSystemTest
             ims.applyConfiguration( issueTypes );
             fail( "Exception not thrown for invalid group name" );
         }
-        catch ( MojoExecutionException e )
+        catch ( MojoExecutionException ignored )
         {
 
         }

@@ -89,7 +89,7 @@ public class Issue
     {
         if ( comments == null )
         {
-            comments = new ArrayList<String>();
+            comments = new ArrayList<>();
         }
         comments.add( comment );
     }
@@ -103,7 +103,7 @@ public class Issue
     {
         if ( components == null )
         {
-            components = new ArrayList<String>();
+            components = new ArrayList<>();
         }
         components.add( component );
     }
@@ -127,7 +127,7 @@ public class Issue
     {
         if ( fixVersions == null )
         {
-            fixVersions = new ArrayList<String>();
+            fixVersions = new ArrayList<>();
         }
         fixVersions.add( fixVersion );
     }

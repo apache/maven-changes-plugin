@@ -67,7 +67,7 @@ public class TracDownloader
 
         issue.setKey( String.valueOf( ticketObj[0] ) );
 
-        issue.setLink( getUrl() + "/ticket/" + String.valueOf( ticketObj[0] ) );
+        issue.setLink( getUrl() + "/ticket/" + ticketObj[0] );
 
         issue.setCreated( parseDate( String.valueOf( ticketObj[1] ) ) );
 
@@ -130,7 +130,7 @@ public class TracDownloader
 
         Object[] params = new Object[] { qstr };
         Object[] queryResult;
-        ArrayList<Issue> issueList = new ArrayList<Issue>();
+        ArrayList<Issue> issueList = new ArrayList<>();
         try
         {
             queryResult = (Object[]) client.execute( "ticket.query", params );

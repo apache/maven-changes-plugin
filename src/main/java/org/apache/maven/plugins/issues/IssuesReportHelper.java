@@ -91,7 +91,7 @@ public class IssuesReportHelper
                                               Map<String, Integer> deprecatedColumns, Log log )
     {
         DualHashBidiMap bidiColumns = null;
-        List<Integer> columnIds = new ArrayList<Integer>();
+        List<Integer> columnIds = new ArrayList<>();
         String[] columnNamesArray = columnNames.split( "," );
 
         if ( deprecatedColumns != null )

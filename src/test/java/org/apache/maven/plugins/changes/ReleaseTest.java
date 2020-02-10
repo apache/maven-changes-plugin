@@ -39,21 +39,9 @@ public class ReleaseTest
         super( testName );
     }
 
-    protected void setUp()
-        throws Exception
-    {
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-    }
-
     public static Test suite()
     {
-        TestSuite suite = new TestSuite( ReleaseTest.class );
-
-        return suite;
+        return new TestSuite( ReleaseTest.class );
     }
 
     public void testGetSetVersion()
@@ -72,7 +60,7 @@ public class ReleaseTest
 
     public void testGetSetAction()
     {
-        List<Action> actionList = new ArrayList<Action>();
+        List<Action> actionList = new ArrayList<>();
 
         release.setActions( actionList );
 

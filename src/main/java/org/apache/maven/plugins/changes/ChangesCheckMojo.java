@@ -163,11 +163,11 @@ public class ChangesCheckMojo
             {
                 // Try to find the specified locale on this system
                 Locale[] locales = Locale.getAvailableLocales();
-                for ( int i = 0; i < locales.length; i++ )
+                for ( Locale value : locales )
                 {
-                    if ( locales[i].toString().equals( locale ) )
+                    if ( value.toString().equals( locale ) )
                     {
-                        usedLocale = locales[i];
+                        usedLocale = value;
                         break;
                     }
                 }

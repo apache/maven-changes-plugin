@@ -49,7 +49,7 @@ public class IssueUtilsTestCase
         issue_2.setId( "2" );
         issue_2.addFixVersion( "1.0" );
 
-        List<Issue> issueList = new ArrayList<Issue>();
+        List<Issue> issueList = new ArrayList<>();
         issueList.add( issue_1 );
         issueList.add( issue_2 );
 

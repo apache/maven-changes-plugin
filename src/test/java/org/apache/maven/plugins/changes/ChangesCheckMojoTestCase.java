@@ -37,7 +37,6 @@ public class ChangesCheckMojoTestCase
 {
     @Test
     public void testIsValidDate()
-        throws Exception
     {
         String pattern;
 
@@ -66,7 +65,6 @@ public class ChangesCheckMojoTestCase
 
     @Test
     public void testIsValidateWithLocale()
-        throws Exception
     {
         String pattern, locale = null;
 

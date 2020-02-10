@@ -424,11 +424,7 @@ public class ChangesMojo
                 xmlStreamReader.close();
                 xmlStreamReader = null;
             }
-            catch ( IOException e )
-            {
-                throw new MavenReportException( "Exception during filtering changes file : " + e.getMessage(), e );
-            }
-            catch ( MavenFilteringException e )
+            catch ( IOException | MavenFilteringException e )
             {
                 throw new MavenReportException( "Exception during filtering changes file : " + e.getMessage(), e );
             }
@@ -465,7 +461,7 @@ public class ChangesMojo
         throws MavenReportException
     {
         final String pluginResourcesBase = "org/apache/maven/plugins/changes";
-        String resourceNames[] = { "images/add.gif", "images/fix.gif", "images/icon_help_sml.gif", "images/remove.gif",
+        String[] resourceNames = { "images/add.gif", "images/fix.gif", "images/icon_help_sml.gif", "images/remove.gif",
             "images/rss.png", "images/update.gif" };
         try
         {

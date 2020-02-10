@@ -53,7 +53,7 @@ public class GitHubMojo
     /**
      * Valid Github columns.
      */
-    private static Map<String, Integer> githubColumns = new HashMap<String, Integer>();
+    private static Map<String, Integer> githubColumns = new HashMap<>();
 
     static
     {

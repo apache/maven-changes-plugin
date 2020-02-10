@@ -51,7 +51,7 @@ public class JiraMojo
     /**
      * Valid JIRA columns.
      */
-    private static final Map<String, Integer> JIRA_COLUMNS = new HashMap<String, Integer>( 16 );
+    private static final Map<String, Integer> JIRA_COLUMNS = new HashMap<>( 16 );
 
     static
     {
@@ -109,14 +109,14 @@ public class JiraMojo
      * Sets the component(s) that you want to limit your report to include. Multiple values can be separated by commas
      * (such as 10011,10012). If this is set to empty - that means all components will be included.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String component;
 
     /**
      * Defines the filter parameters to restrict which issues are retrieved from JIRA. The filter parameter uses the
      * same format of url parameters that is used in a JIRA search.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter()
     private String filter;
 
     /**
@@ -126,7 +126,7 @@ public class JiraMojo
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String fixVersionIds;
 
     /**
@@ -140,13 +140,13 @@ public class JiraMojo
     /**
      * Defines the JIRA password for authentication into a private JIRA installation.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String jiraPassword;
 
     /**
      * Defines the JIRA username for authentication into a private JIRA installation.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String jiraUser;
 
     /**
@@ -175,7 +175,7 @@ public class JiraMojo
      * <code>Critical</code>, <code>Major</code>, <code>Minor</code> and <code>Trivial</code>. Multiple values can be
      * separated by commas. If this is set to empty - that means all priorities will be included.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String priorityIds;
 
     /**
@@ -252,7 +252,7 @@ public class JiraMojo
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String typeIds;
 
     /**
@@ -265,19 +265,19 @@ public class JiraMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String versionPrefix;
 
     /**
      * Defines the http password for basic authentication into the JIRA webserver.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String webPassword;
 
     /**
      * Defines the http user for basic authentication into the JIRA webserver.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String webUser;
 
     /*

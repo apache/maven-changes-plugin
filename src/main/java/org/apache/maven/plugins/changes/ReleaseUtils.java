@@ -146,7 +146,7 @@ public class ReleaseUtils
             return firstReleases;
         }
 
-        List<Release> mergedReleases = new ArrayList<Release>();
+        List<Release> mergedReleases = new ArrayList<>();
 
         // Loop through the releases from the first issue tracker, merging in
         // actions from releases with the same version from the second issue
@@ -198,7 +198,7 @@ public class ReleaseUtils
             return releases;
         }
 
-        final List<Release> mergedReleases = new ArrayList<Release>();
+        final List<Release> mergedReleases = new ArrayList<>();
 
         if ( releases != null )
         {
@@ -240,7 +240,7 @@ public class ReleaseUtils
 
     public static String toString( List<Release> releases )
     {
-        List<String> releaseStrings = new ArrayList<String>( releases.size() );
+        List<String> releaseStrings = new ArrayList<>( releases.size() );
         for ( Release release : releases )
         {
             releaseStrings.add( toString( release ) );

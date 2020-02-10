@@ -35,14 +35,8 @@ public class IssueTestCase
     Issue issue;
 
     protected void setUp()
-        throws Exception
     {
         issue = new Issue();
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
     }
 
     public void testGetSetAssignee()

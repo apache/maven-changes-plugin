@@ -51,7 +51,7 @@ public class ProjectResourceLoader
      * Used to map the path that a template was found on so that we can properly check the modification times of the
      * files.
      */
-    private Hashtable<String, String> templatePaths = new Hashtable<String, String>();
+    private Hashtable<String, String> templatePaths = new Hashtable<>();
 
     public void init( ExtendedProperties configuration )
     {
@@ -64,7 +64,7 @@ public class ProjectResourceLoader
 
         rsvc.getLog().info( "path :" + path );
 
-        paths = new ArrayList<String>();
+        paths = new ArrayList<>();
 
         paths.add( path );
 

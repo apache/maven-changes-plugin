@@ -182,10 +182,10 @@ public class GitHubDownloader
     public List<Issue> getIssueList()
         throws IOException
     {
-        List<Issue> issueList = new ArrayList<Issue>();
+        List<Issue> issueList = new ArrayList<>();
 
         IssueService service = new IssueService( client );
-        Map<String, String> issueFilter = new HashMap<String, String>();
+        Map<String, String> issueFilter = new HashMap<>();
 
         if ( includeOpenIssues )
         {

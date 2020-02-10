@@ -43,7 +43,7 @@ public abstract class AbstractIssueManagementSystem
 
     protected AbstractIssueManagementSystem()
     {
-        issueTypeMap = new HashMap<String, IssueType>();
+        issueTypeMap = new HashMap<>();
     }
 
     /*

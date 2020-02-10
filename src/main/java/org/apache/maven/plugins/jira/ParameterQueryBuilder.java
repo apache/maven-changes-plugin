@@ -44,16 +44,16 @@ public class ParameterQueryBuilder
     private StringBuilder query = new StringBuilder();
 
     /** Mapping containing all allowed JIRA priority values. */
-    private final Map<String, String> priorityMap = new HashMap<String, String>( 8 );
+    private final Map<String, String> priorityMap = new HashMap<>( 8 );
 
     /** Mapping containing all allowed JIRA resolution values. */
-    private final Map<String, String> resolutionMap = new HashMap<String, String>( 8 );
+    private final Map<String, String> resolutionMap = new HashMap<>( 8 );
 
     /** Mapping containing all allowed JIRA status values. */
-    private final Map<String, String> statusMap = new HashMap<String, String>( 8 );
+    private final Map<String, String> statusMap = new HashMap<>( 8 );
 
     /** Mapping containing all allowed JIRA type values. */
-    private final Map<String, String> typeMap = new HashMap<String, String>( 8 );
+    private final Map<String, String> typeMap = new HashMap<>( 8 );
 
     public ParameterQueryBuilder( Log log )
     {
@@ -262,57 +262,49 @@ public class ParameterQueryBuilder
                     lowerColumnName = lowerColumnName.substring( 0, lowerColumnName.length() - 3 ).trim();
                 }
 
-                if ( "key".equals( lowerColumnName ) )
+                switch ( lowerColumnName )
                 {
-                    fieldName = "issuekey";
-                }
-                else if ( "summary".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "status".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "resolution".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "assignee".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "reporter".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "type".equals( lowerColumnName ) )
-                {
-                    fieldName = "issuetype";
-                }
-                else if ( "priority".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "version".equals( lowerColumnName ) )
-                {
-                    fieldName = "versions";
-                }
-                else if ( "fix version".equals( lowerColumnName ) )
-                {
-                    fieldName = "fixVersions";
-                }
-                else if ( "component".equals( lowerColumnName ) )
-                {
-                    fieldName = "components";
-                }
-                else if ( "created".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
-                }
-                else if ( "updated".equals( lowerColumnName ) )
-                {
-                    fieldName = lowerColumnName;
+                    case "key":
+                        fieldName = "issuekey";
+                        break;
+                    case "summary":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "status":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "resolution":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "assignee":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "reporter":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "type":
+                        fieldName = "issuetype";
+                        break;
+                    case "priority":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "version":
+                        fieldName = "versions";
+                        break;
+                    case "fix version":
+                        fieldName = "fixVersions";
+                        break;
+                    case "component":
+                        fieldName = "components";
+                        break;
+                    case "created":
+                        fieldName = lowerColumnName;
+                        break;
+                    case "updated":
+                        fieldName = lowerColumnName;
+                        break;
+                    default:
+                        // skip
                 }
                 if ( fieldName != null )
                 {

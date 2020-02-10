@@ -85,8 +85,8 @@ public class GitHubDownloaderTestCase
         SettingsDecrypter decrypter = mock( SettingsDecrypter.class );
         SettingsDecryptionResult result = mock( SettingsDecryptionResult.class );
         Log log = mock( Log.class );
-        when( result.getProblems() ).thenReturn( Arrays.<SettingsProblem>asList( new DefaultSettingsProblem( "Ups "
-            + server.getId(), Severity.ERROR, null, -1, -1, null ) ) );
+        when( result.getProblems() ).thenReturn( Collections.<SettingsProblem>singletonList(
+                new DefaultSettingsProblem( "Ups " + server.getId(), Severity.ERROR, null, -1, -1, null ) ) );
         when( result.getServer() ).thenReturn( server );
         when( decrypter.decrypt( any( SettingsDecryptionRequest.class ) ) ).thenReturn( result );
 
@@ -95,7 +95,7 @@ public class GitHubDownloaderTestCase
         verify( log ).error( "Ups github-server", null );
         ArgumentCaptor<SettingsDecryptionRequest> argument = ArgumentCaptor.forClass( SettingsDecryptionRequest.class );
         verify( decrypter ).decrypt( argument.capture() );
-        List<Server> servers = ( (DefaultSettingsDecryptionRequest) argument.getValue() ).getServers();
+        List<Server> servers = argument.getValue().getServers();
         assertEquals( 1, servers.size() );
         assertSame( server, servers.get( 0 ) );
     }

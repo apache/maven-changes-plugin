@@ -133,7 +133,6 @@ public class ChangesXMLTest
     }
 
     public void testParseChangesFile()
-        throws Exception
     {
         File changesFile = new File( getBasedir() + "/src/test/unit/changes.xml" );
         ChangesXML changesXML = new ChangesXML( changesFile, new MockLog() );

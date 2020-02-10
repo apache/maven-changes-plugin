@@ -30,13 +30,10 @@ public enum IssueType
 
     private String configurationKey;
 
-    // Checkstyle will complain about private modifier
-    //CHECKSTYLE_OFF: RedundantModifier
-    private IssueType( String configurationKey )
+    IssueType( String configurationKey )
     {
         this.configurationKey = configurationKey;
     }
-    //CHECKSTYLE_ON
 
     public String configurationKey()
     {

@@ -38,7 +38,6 @@ public class MockJiraDownloader
 {
     @Override
     public void doExecute()
-        throws Exception
     {
         // do nothing
     }

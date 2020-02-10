@@ -39,7 +39,6 @@ import org.apache.maven.plugins.issues.Issue;
 import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -65,7 +64,7 @@ public class JiraXML
 
     private final Log log;
 
-    private SimpleDateFormat sdf = null;
+    private SimpleDateFormat sdf;
 
     /**
      * @param log not null.
@@ -87,7 +86,7 @@ public class JiraXML
             sdf = new SimpleDateFormat( datePattern, Locale.ENGLISH );
         }
 
-        this.issueList = new ArrayList<Issue>( 16 );
+        this.issueList = new ArrayList<>( 16 );
     }
 
     /**
@@ -134,30 +133,30 @@ public class JiraXML
     }
 
     public void startElement( String namespaceURI, String sName, String qName, Attributes attrs )
-        throws SAXException
     {
-        if ( qName.equals( "item" ) )
+        switch ( qName )
         {
-            issue = new Issue();
+            case "item":
+                issue = new Issue();
 
-            currentParent = "item";
-        }
-        else if ( qName.equals( "key" ) )
-        {
-            String id = attrs.getValue( "id" );
-            if ( id != null )
-            {
-                issue.setId( id.trim() );
-            }
-        }
-        else if ( qName.equals( "build-info" ) )
-        {
-            currentParent = "build-info";
+                currentParent = "item";
+                break;
+            case "key":
+                String id = attrs.getValue( "id" );
+                if ( id != null )
+                {
+                    issue.setId( id.trim() );
+                }
+                break;
+            case "build-info":
+                currentParent = "build-info";
+                break;
+            default:
+                // none
         }
     }
 
     public void endElement( String namespaceURI, String sName, String qName )
-        throws SAXException
     {
         if ( qName.equals( "item" ) )
         {
@@ -252,7 +251,6 @@ public class JiraXML
     }
 
     public void characters( char[] buf, int offset, int len )
-        throws SAXException
     {
         currentElement.append( buf, offset, len );
     }

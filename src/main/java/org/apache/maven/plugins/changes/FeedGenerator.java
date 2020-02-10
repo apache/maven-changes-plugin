@@ -206,15 +206,13 @@ public class FeedGenerator
         }
         catch ( FeedException ex )
         {
-            IOException ioex = new IOException( ex.getMessage() );
-            ioex.initCause( ex );
-            throw ioex;
+            throw new IOException( ex.getMessage(), ex );
         }
     }
 
     private List<SyndEntry> getEntries( final List<Release> releases )
     {
-        final List<SyndEntry> entries = new ArrayList<SyndEntry>( 1 );
+        final List<SyndEntry> entries = new ArrayList<>( 1 );
 
         if ( releases.size() > 0 )
         {

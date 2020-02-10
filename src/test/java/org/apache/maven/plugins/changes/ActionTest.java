@@ -35,21 +35,9 @@ public class ActionTest
         super( testName );
     }
 
-    protected void setUp()
-        throws Exception
-    {
-    }
-
-    protected void tearDown()
-        throws Exception
-    {
-    }
-
     public static Test suite()
     {
-        TestSuite suite = new TestSuite( ActionTest.class );
-
-        return suite;
+        return new TestSuite( ActionTest.class );
     }
 
     public void testGetSetAction()

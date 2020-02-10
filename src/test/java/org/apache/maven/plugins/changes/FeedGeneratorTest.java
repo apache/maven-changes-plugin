@@ -77,7 +77,7 @@ public class FeedGeneratorTest
 
         Release release = new Release();
         release.setVersion( "1.0" );
-        List<Release> releases = new ArrayList<Release>( 1 );
+        List<Release> releases = new ArrayList<>( 1 );
 
         try
         {

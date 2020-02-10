@@ -51,7 +51,7 @@ public class DefaultChangesSchemaValidator
 
     public static final String CHANGES_SCHEMA_PATH = "META-INF/changes/xsd/";
 
-    private Map<String, Schema> compiledSchemas = new HashMap<String, Schema>();
+    private Map<String, Schema> compiledSchemas = new HashMap<>();
 
     public XmlValidationHandler validateXmlWithSchema( File file, String schemaVersion, boolean failOnValidationError )
         throws SchemaValidatorException
@@ -101,7 +101,7 @@ public class DefaultChangesSchemaValidator
     {
         if ( this.compiledSchemas.containsKey( schemaPath ) )
         {
-            return (Schema) this.compiledSchemas.get( schemaPath );
+            return this.compiledSchemas.get( schemaPath );
         }
         Schema schema = this.compileJAXPSchema( schemaPath );
 

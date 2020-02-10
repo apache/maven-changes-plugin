@@ -24,12 +24,13 @@ import java.io.InputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugins.jira.JiraMojo;
 import org.apache.maven.project.MavenProject;
 import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
 import org.sonatype.aether.util.DefaultRepositorySystemSession;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * @version $Id$
@@ -59,9 +60,9 @@ public class JiraUnicodeTestCase
         setVariableValueToObject( mojo, "project", project );
         setVariableValueToObject( mojo, "mavenSession", session );
         InputStream testJiraXmlStream = JiraUnicodeTestCase.class.getResourceAsStream( "unicode-jira-results.xml" );
-        String jiraXml = null;
+        String jiraXml;
         try {
-            jiraXml = IOUtils.toString(testJiraXmlStream, "utf-8");
+            jiraXml = IOUtils.toString(testJiraXmlStream, UTF_8 );
         } finally {
             testJiraXmlStream.close();
         }

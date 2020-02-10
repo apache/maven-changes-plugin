@@ -38,11 +38,11 @@ public class XmlValidationHandler
    
     private boolean parsingError = false;
 
-    private List<SAXParseException> errors = new ArrayList<SAXParseException>();
+    private List<SAXParseException> errors = new ArrayList<>();
 
-    private List<SAXParseException> fatalErrors = new ArrayList<SAXParseException>();
+    private List<SAXParseException> fatalErrors = new ArrayList<>();
 
-    private List<SAXParseException> warnings = new ArrayList<SAXParseException>();
+    private List<SAXParseException> warnings = new ArrayList<>();
 
     private boolean failOnValidationError;
 
@@ -85,7 +85,6 @@ public class XmlValidationHandler
      * @see org.xml.sax.ErrorHandler#warning(org.xml.sax.SAXParseException)
      */
     public void warning( SAXParseException excp )
-        throws SAXException
     {
         this.warnings.add( excp );
     }
@@ -94,7 +93,6 @@ public class XmlValidationHandler
      * @see org.xml.sax.ContentHandler#startElement(String, String, String, Attributes)
      */
     public void startElement( String uri, String localName, String qName, Attributes attributes )
-        throws SAXException
     {
         // nothing
     }

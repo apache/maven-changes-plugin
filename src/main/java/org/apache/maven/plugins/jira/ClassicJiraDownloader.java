@@ -63,10 +63,8 @@ public final class ClassicJiraDownloader
     /**
      * Execute the query on the JIRA server.
      *
-     * @throws Exception on error
      */
     public void doExecute()
-        throws Exception
     {
         try
         {
@@ -148,20 +146,17 @@ public final class ClassicJiraDownloader
         }
         else
         {
-            // CHECKSTYLE_OFF: LineLength
             // create the URL for getting the proper issues from JIRA
-            String jqlQuery =
-                new JqlQueryBuilder( log ).project( jiraProject ).fixVersion( getFixFor() ).fixVersionIds( fixVersionIds ).statusIds( statusIds ).priorityIds( priorityIds ).resolutionIds( resolutionIds ).components( component ).typeIds( typeIds ).sortColumnNames( sortColumnNames ).build();
+            String jqlQuery = new JqlQueryBuilder( log ).project( jiraProject ).fixVersion( getFixFor() )
+                .fixVersionIds( fixVersionIds ).statusIds( statusIds ).priorityIds( priorityIds )
+                .resolutionIds( resolutionIds ).components( component ).typeIds( typeIds )
+                .sortColumnNames( sortColumnNames )
+                .build();
 
-            String url =
-                new UrlBuilder( jiraUrl,
-                                "sr/jira.issueviews:searchrequest-xml/temp/SearchRequest.xml" ).addParameter( "tempMax",
-                                                                                                              nbEntriesMax ).addParameter( "reset",
-                                                                                                                                           "true" ).addParameter( "jqlQuery",
-                                                                                                                                                                  jqlQuery ).build();
-
-            // CHECKSTYLE_ON: LineLength
-            return url;
+            return new UrlBuilder( jiraUrl, "sr/jira.issueviews:searchrequest-xml/temp/SearchRequest.xml" )
+                        .addParameter( "tempMax", nbEntriesMax ).addParameter( "reset", "true" )
+                        .addParameter( "jqlQuery", jqlQuery )
+                        .build();
         }
     }
 
@@ -193,10 +188,10 @@ public final class ClassicJiraDownloader
                 fullURL += "&fixfor=" + getFixFor();
             }
 
-            // CHECKSTYLE_OFF: LineLength
-            String createdFilter =
-                new ParameterQueryBuilder( log ).fixVersionIds( fixVersionIds ).statusIds( statusIds ).priorityIds( priorityIds ).resolutionIds( resolutionIds ).components( component ).typeIds( typeIds ).sortColumnNames( sortColumnNames ).filter( filter ).build();
-            // CHECKSTYLE_ON: LineLength
+            String createdFilter = new ParameterQueryBuilder( log ).fixVersionIds( fixVersionIds )
+                    .statusIds( statusIds ).priorityIds( priorityIds ).resolutionIds( resolutionIds )
+                    .components( component ).typeIds( typeIds ).sortColumnNames( sortColumnNames ).filter( filter )
+                    .build();
 
             if ( createdFilter.charAt( 0 ) != '&' )
             {

@@ -76,8 +76,6 @@ public class RestJiraDownloader
 
     private List<String> resolvedPriorityIds;
 
-    private String jiraProject;
-
     /**
      * 
      */
@@ -102,12 +100,12 @@ public class RestJiraDownloader
         jsonFactory = new MappingJsonFactory();
         // 2012-07-17T06:26:47.723-0500
         dateFormat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSSZ" );
-        resolvedFixVersionIds = new ArrayList<String>();
-        resolvedStatusIds = new ArrayList<String>();
-        resolvedComponentIds = new ArrayList<String>();
-        resolvedTypeIds = new ArrayList<String>();
-        resolvedResolutionIds = new ArrayList<String>();
-        resolvedPriorityIds = new ArrayList<String>();
+        resolvedFixVersionIds = new ArrayList<>();
+        resolvedStatusIds = new ArrayList<>();
+        resolvedComponentIds = new ArrayList<>();
+        resolvedTypeIds = new ArrayList<>();
+        resolvedResolutionIds = new ArrayList<>();
+        resolvedPriorityIds = new ArrayList<>();
     }
 
     public void doExecute()
@@ -116,7 +114,7 @@ public class RestJiraDownloader
 
         Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectName( project.getIssueManagement().getUrl() );
         String jiraUrl = urlMap.get( "url" );
-        jiraProject = urlMap.get( "project" );
+        String jiraProject = urlMap.get( "project" );
 
         WebClient client = setupWebClient( jiraUrl );
 
@@ -137,10 +135,12 @@ public class RestJiraDownloader
 
         resolveIds( client, jiraProject );
 
-        // CHECKSTYLE_OFF: LineLength
-        String jqlQuery =
-            new JqlQueryBuilder( log ).urlEncode( false ).project( jiraProject ).fixVersion( getFixFor() ).fixVersionIds( resolvedFixVersionIds ).statusIds( resolvedStatusIds ).priorityIds( resolvedPriorityIds ).resolutionIds( resolvedResolutionIds ).components( resolvedComponentIds ).typeIds( resolvedTypeIds ).sortColumnNames( sortColumnNames ).filter( filter ).build();
-        // CHECKSTYLE_ON: LineLength
+        String jqlQuery = new JqlQueryBuilder( log ).urlEncode( false ).project( jiraProject )
+            .fixVersion( getFixFor() ).fixVersionIds( resolvedFixVersionIds ).statusIds( resolvedStatusIds )
+            .priorityIds( resolvedPriorityIds ).resolutionIds( resolvedResolutionIds )
+            .components( resolvedComponentIds ).typeIds( resolvedTypeIds ).sortColumnNames( sortColumnNames )
+            .filter( filter )
+            .build();
 
         StringWriter searchParamStringWriter = new StringWriter();
         JsonGenerator gen = jsonFactory.createGenerator( searchParamStringWriter );
@@ -250,7 +250,7 @@ public class RestJiraDownloader
     }
 
     private String resolveOneItem( JsonNode items, String what, String nameOrId )
-        throws IOException, MojoExecutionException, MojoFailureException
+        throws MojoFailureException
     {
         for ( int cx = 0; cx < items.size(); cx++ )
         {
@@ -275,7 +275,7 @@ public class RestJiraDownloader
 
     private void buildIssues( JsonNode issuesNode, String jiraUrl, String jiraProject )
     {
-        issueList = new ArrayList<Issue>();
+        issueList = new ArrayList<>();
         for ( int ix = 0; ix < issuesNode.size(); ix++ )
         {
             JsonNode issueNode = issuesNode.get( ix );
@@ -604,7 +604,6 @@ public class RestJiraDownloader
     }
 
     public List<Issue> getIssueList()
-        throws MojoExecutionException
     {
         return issueList;
     }

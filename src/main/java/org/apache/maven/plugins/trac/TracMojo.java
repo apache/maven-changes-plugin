@@ -50,12 +50,12 @@ public class TracMojo
     /**
      * Deprecated Trac columns.
      */
-    private static final Map<String, Integer> DEPRECATED_TRAC_COLUMNS = new HashMap<String, Integer>();
+    private static final Map<String, Integer> DEPRECATED_TRAC_COLUMNS = new HashMap<>();
 
     /**
      * Valid Trac columns.
      */
-    private static final Map<String, Integer> TRAC_COLUMNS = new HashMap<String, Integer>();
+    private static final Map<String, Integer> TRAC_COLUMNS = new HashMap<>();
 
     static
     {
@@ -109,13 +109,13 @@ public class TracMojo
     /**
      * Defines the Trac password for authentication into a private Trac installation.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String tracPassword;
 
     /**
      * Defines the Trac username for authentication into a private Trac installation.
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String tracUser;
 
     /* --------------------------------------------------------------------- */

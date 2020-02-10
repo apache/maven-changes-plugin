@@ -46,7 +46,7 @@ public class IssueUtils
     public static List<Issue> filterIssuesWithVersionPrefix( List<Issue> issues, String prefix )
         throws MojoExecutionException
     {
-        List<Issue> filteredIssues = new ArrayList<Issue>();
+        List<Issue> filteredIssues = new ArrayList<>();
         boolean isFound = false;
         Issue issue;
 
@@ -89,7 +89,7 @@ public class IssueUtils
     public static List<Issue> getIssuesForVersion( List<Issue> issues, String version )
         throws MojoExecutionException
     {
-        List<Issue> issuesForVersion = new ArrayList<Issue>();
+        List<Issue> issuesForVersion = new ArrayList<>();
         boolean isFound = false;
         Issue issue;
         String releaseVersion = version;
@@ -121,7 +121,7 @@ public class IssueUtils
 
     public static String toString( List<Issue> issues )
     {
-        List<String> issueStrings = new ArrayList<String>( issues.size() );
+        List<String> issueStrings = new ArrayList<>( issues.size() );
         for ( Issue issue : issues )
         {
             issueStrings.add( issue.toString() );

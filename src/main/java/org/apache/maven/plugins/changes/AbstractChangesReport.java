@@ -161,7 +161,7 @@ public abstract class AbstractChangesReport
         {
             DecorationModel model = new DecorationModel();
             model.setBody( new Body() );
-            Map<String, String> attributes = new HashMap<String, String>();
+            Map<String, String> attributes = new HashMap<>();
             attributes.put( "outputEncoding", getOutputEncoding() );
             Locale locale = Locale.getDefault();
             SiteRenderingContext siteContext = siteRenderer.createContextForSkin( getSkinArtifactFile(), attributes,
@@ -186,17 +186,7 @@ public abstract class AbstractChangesReport
             siteRenderer.copyResources( siteContext, new File( project.getBasedir(), "src/site/resources" ),
                                         outputDirectory );
         }
-        catch ( RendererException e )
-        {
-            throw new MojoExecutionException( "An error has occurred in " + getName( Locale.ENGLISH )
-                + " report generation.", e );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "An error has occurred in " + getName( Locale.ENGLISH )
-                + " report generation.", e );
-        }
-        catch ( MavenReportException e )
+        catch ( RendererException | IOException | MavenReportException e )
         {
             throw new MojoExecutionException( "An error has occurred in " + getName( Locale.ENGLISH )
                 + " report generation.", e );

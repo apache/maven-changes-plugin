@@ -37,13 +37,12 @@ public class ReleaseUtilsTestCase
     extends TestCase
 {
     public void testMergeReleases()
-        throws Exception
     {
         Log log = new SilentLog();
         ReleaseUtils releaseUtils = new ReleaseUtils( log );
 
-        List<Release> firstReleases = new ArrayList<Release>();
-        List<Release> secondReleases = new ArrayList<Release>();
+        List<Release> firstReleases = new ArrayList<>();
+        List<Release> secondReleases = new ArrayList<>();
         List<Release> mergedReleases;
 
         mergedReleases = releaseUtils.mergeReleases( firstReleases, secondReleases );

@@ -91,7 +91,7 @@ public class ChangesReportGenerator
 
     public ChangesReportGenerator()
     {
-        issueLinksPerSystem = new HashMap<String, String>();
+        issueLinksPerSystem = new HashMap<>();
     }
 
     public ChangesReportGenerator( List<Release> releaseList )
@@ -316,7 +316,7 @@ public class ChangesReportGenerator
     {
 
         // Create a Map with key : dueTo name, value : dueTo email
-        Map<String, String> namesEmailMap = new LinkedHashMap<String, String>();
+        Map<String, String> namesEmailMap = new LinkedHashMap<>();
 
         // Only add the dueTo specified as attributes, if it has either a dueTo or a dueToEmail
         if ( StringUtils.isNotEmpty( action.getDueTo() ) || StringUtils.isNotEmpty( action.getDueToEmail() ) )
@@ -634,7 +634,7 @@ public class ChangesReportGenerator
     private String parseIssueLink( String issue, String system )
     {
         String parseLink;
-        String issueLink = (String) this.issueLinksPerSystem.get( system );
+        String issueLink = this.issueLinksPerSystem.get( system );
         parseLink = issueLink.replaceFirst( ISSUE_TOKEN, issue );
         if ( parseLink.contains( URL_TOKEN ) )
         {

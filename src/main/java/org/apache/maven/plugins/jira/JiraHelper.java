@@ -84,7 +84,7 @@ public class JiraHelper
             }
         }
 
-        HashMap<String, String> urlMap = new HashMap<String, String>( 4 );
+        HashMap<String, String> urlMap = new HashMap<>( 4 );
 
         urlMap.put( "url", jiraUrl );
 
@@ -186,7 +186,7 @@ public class JiraHelper
             throw new IllegalArgumentException( "Invalid browse URL" );
         }
 
-        HashMap<String, String> urlMap = new HashMap<String, String>( 4 );
+        HashMap<String, String> urlMap = new HashMap<>( 4 );
         urlMap.put( "url", jiraUrl );
         urlMap.put( "project", project );
 

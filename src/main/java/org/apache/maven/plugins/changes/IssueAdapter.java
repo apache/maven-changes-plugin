@@ -67,7 +67,7 @@ public class IssueAdapter
     public List<Release> getReleases( List<Issue> issues )
     {
         // A Map of releases keyed by fixVersion
-        Map<String, Release> releasesMap = new HashMap<String, Release>();
+        Map<String, Release> releasesMap = new HashMap<>();
 
         // Loop through all issues looking for fixVersions
         for ( Issue issue : issues )
@@ -95,12 +95,7 @@ public class IssueAdapter
         }
 
         // Extract the releases from the Map to a List
-        List<Release> releasesList = new ArrayList<Release>();
-        for ( Release release : releasesMap.values() )
-        {
-            releasesList.add( release );
-        }
-        return releasesList;
+        return new ArrayList<>( releasesMap.values() );
     }
 
     /**

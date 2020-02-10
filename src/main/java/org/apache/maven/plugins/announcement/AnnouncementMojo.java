@@ -266,7 +266,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "" )
+    @Parameter
     private String filter;
 
     /**
@@ -293,7 +293,7 @@ public class AnnouncementMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.jiraPassword", defaultValue = "" )
+    @Parameter( property = "changes.jiraPassword" )
     private String jiraPassword;
 
     /**
@@ -301,7 +301,7 @@ public class AnnouncementMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.jiraUser", defaultValue = "" )
+    @Parameter( property = "changes.jiraUser" )
     private String jiraUser;
 
     /**
@@ -350,7 +350,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.webUser", defaultValue = "" )
+    @Parameter( property = "changes.webUser" )
     private String webUser;
 
     /**
@@ -358,7 +358,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.webPassword", defaultValue = "" )
+    @Parameter( property = "changes.webPassword" )
     private String webPassword;
 
     /**
@@ -371,7 +371,7 @@ public class AnnouncementMojo
      *
      * @since 2.5
      */
-    @Parameter( property = "changes.versionPrefix", defaultValue = "" )
+    @Parameter( property = "changes.versionPrefix" )
     private String versionPrefix;
 
     /**
@@ -405,7 +405,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.tracPassword", defaultValue = "" )
+    @Parameter( property = "changes.tracPassword" )
     private String tracPassword;
 
     /**
@@ -421,7 +421,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.tracUser", defaultValue = "" )
+    @Parameter( property = "changes.tracUser" )
     private String tracUser;
 
     // =======================================//
@@ -490,7 +490,7 @@ public class AnnouncementMojo
         {
             if ( issueManagementSystems == null )
             {
-                issueManagementSystems = new ArrayList<String>();
+                issueManagementSystems = new ArrayList<>();
             }
 
             if ( issueManagementSystems.isEmpty() )

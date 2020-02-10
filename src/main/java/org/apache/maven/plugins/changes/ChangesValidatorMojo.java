@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -71,7 +70,7 @@ public class ChangesValidatorMojo
      * @see org.apache.maven.plugin.Mojo#execute()
      */
     public void execute()
-        throws MojoExecutionException, MojoFailureException
+        throws MojoExecutionException
     {
         // Run only at the execution root
         if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
