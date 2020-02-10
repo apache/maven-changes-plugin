@@ -74,11 +74,12 @@ under the License.
   </distributionManagement>
 
   <properties>
+    <javaVersion>7</javaVersion>
     <doxiaVersion>1.4</doxiaVersion>
     <doxiaSitetoolsVersion>1.4</doxiaSitetoolsVersion>
-    <mavenVersion>3.0</mavenVersion>
+    <mavenVersion>3.0.5</mavenVersion>
     <sitePluginVersion>3.3</sitePluginVersion>
-    <wagonVersion>1.0-beta-6</wagonVersion>
+    <wagonVersion>2.4</wagonVersion>
   </properties>
 
   <dependencies>
@@ -139,7 +140,7 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-artifact-transfer</artifactId>
-      <version>0.9.0</version>
+      <version>0.12.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
@@ -253,7 +254,7 @@ under the License.
     <dependency>
       <groupId>commons-httpclient</groupId>
       <artifactId>commons-httpclient</artifactId>
-      <version>3.0.1</version>
+      <version>3.1</version>
     </dependency>
     <dependency>
       <groupId>commons-io</groupId>
@@ -364,12 +365,12 @@ under the License.
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
-      <version>4.1.2</version>
+      <version>4.2.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.1.2</version>
+      <version>4.2.3</version>
     </dependency>
 
     <!-- for rss feed generation -->
@@ -407,7 +408,7 @@ under the License.
     <dependency>
       <groupId>org.sonatype.aether</groupId>
       <artifactId>aether-connector-wagon</artifactId>
-      <version>1.7</version>
+      <version>1.13.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
