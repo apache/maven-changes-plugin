@@ -317,6 +317,7 @@ public class ChangesMojo
         addIssueLinkTemplate( "SourceForge2", "%URL%/%ISSUE%" );
         addIssueLinkTemplate( "Trac", "%URL%/ticket/%ISSUE%" );
         addIssueLinkTemplate( "Trackplus", "%URL%/printItem.action?key=%ISSUE%" );
+        addIssueLinkTemplate( "Tuleap", "%URL%/?aid=%ISSUE%" );
         addIssueLinkTemplate( "YouTrack", "%URL%/issue/%ISSUE%" );
         // @todo Add more issue management systems here
         // Remember to also add documentation in usage.apt.vm
