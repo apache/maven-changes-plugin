@@ -425,15 +425,6 @@ under the License.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <configuration>
-            <excludes combine.children="append">
-              <!--
-                This file should not contain a license header as it represents
-                real data downloaded from a JIRA server.
-              -->
-              <exclude>src/test/resources/org/apache/maven/plugins/jira/unicode-jira-results.xml</exclude>
-            </excludes>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
