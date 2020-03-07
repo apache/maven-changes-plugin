@@ -120,7 +120,11 @@ public final class ClassicJiraDownloader
                 download( client, fullUrl );
             }
         }
-        catch ( Exception e )
+        catch ( PomException e )
+        {
+            getLog().error( "Invalid issue management URL " + project.getIssueManagement().getUrl(), e );
+        }
+        catch ( RuntimeException e )
         {
             if ( project.getIssueManagement() != null )
             {
@@ -133,49 +137,48 @@ public final class ClassicJiraDownloader
         }
     }
 
-    private String getJqlQueryURL()
+    private String getJqlQueryURL() throws PomException
     {
         // JQL is based on project names instead of project ID's
-        Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectName( project.getIssueManagement().getUrl() );
-        String jiraUrl = urlMap.get( "url" );
-        String jiraProject = urlMap.get( "project" );
+        try
+        {
+            Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectName( project.getIssueManagement().getUrl() );
+            String jiraUrl = urlMap.get( "url" );
+            String jiraProject = urlMap.get( "project" );
 
-        if ( jiraProject == null )
-        {
-            throw new RuntimeException( "The issue management URL in the POM does not include a JIRA project name" );
-        }
-        else
-        {
             // create the URL for getting the proper issues from JIRA
-            String jqlQuery = new JqlQueryBuilder( log ).project( jiraProject ).fixVersion( getFixFor() )
-                .fixVersionIds( fixVersionIds ).statusIds( statusIds ).priorityIds( priorityIds )
-                .resolutionIds( resolutionIds ).components( component ).typeIds( typeIds )
-                .sortColumnNames( sortColumnNames )
-                .build();
+            String jqlQuery = new JqlQueryBuilder( log ).project( jiraProject ).fixVersion( getFixFor() ).fixVersionIds(
+                    fixVersionIds ).statusIds( statusIds ).priorityIds( priorityIds ).resolutionIds(
+                    resolutionIds ).components( component ).typeIds( typeIds ).sortColumnNames(
+                    sortColumnNames ).build();
 
             return new UrlBuilder( jiraUrl, "sr/jira.issueviews:searchrequest-xml/temp/SearchRequest.xml" )
-                        .addParameter( "tempMax", nbEntriesMax ).addParameter( "reset", "true" )
-                        .addParameter( "jqlQuery", jqlQuery )
-                        .build();
+                    .addParameter( "tempMax", nbEntriesMax ).addParameter( "reset", "true" )
+                    .addParameter( "jqlQuery", jqlQuery ).build();
+        }
+        catch ( IllegalArgumentException ex )
+        {
+            throw new PomException( ex );
         }
     }
 
-    private String getParameterBasedQueryURL( HttpClient client )
+    private String getParameterBasedQueryURL( HttpClient client ) throws PomException
     {
-        Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectId( project.getIssueManagement().getUrl() );
+        String url = project.getIssueManagement().getUrl();
+        Map<String, String> urlMap = JiraHelper.getJiraUrlAndProjectId( url );
         String jiraUrl = urlMap.get( "url" );
         String jiraId = urlMap.get( "id" );
 
         if ( jiraId == null || jiraId.length() == 0 )
         {
-            log.debug( "The JIRA URL " + project.getIssueManagement().getUrl()
+            log.debug( "The JIRA URL " + url
                 + " doesn't include a pid, trying to extract it from JIRA." );
-            jiraId = JiraHelper.getPidFromJira( log, project.getIssueManagement().getUrl(), client );
+            jiraId = JiraHelper.getPidFromJira( log, url, client );
         }
 
         if ( jiraId == null )
         {
-            throw new RuntimeException( "The issue management URL in the POM does not include a pid,"
+            throw new PomException( "The issue management URL in the POM does not include a pid,"
                 + " and it was not possible to extract it from the page at that URL." );
         }
         else

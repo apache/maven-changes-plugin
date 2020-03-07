@@ -23,7 +23,6 @@ import junit.framework.TestCase;
 
 import java.util.Map;
 
-import org.apache.maven.plugins.jira.JiraHelper;
 
 /**
  * Tests for the JiraHelper class.
@@ -35,32 +34,55 @@ import org.apache.maven.plugins.jira.JiraHelper;
 public class JiraHelperTestCase
     extends TestCase
 {
+
+    private Map<String, String> map;
+
     public void testGetJiraUrlAndProjectId()
     {
-        Map<String, String> map;
-
         map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/DOXIA" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
+    }
 
+    public void testGetJiraUrlAndProjectId_MCHANGES_218()
+    {
         // MCHANGES-218
         map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/DOXIA/" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
+    }
 
+    public void testGetJiraUrlAndProjectId_MCHANGES_222()
+    {
         // MCHANGES-222
-        map =
-            JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=11761&reset=true" );
+        map = JiraHelper.getJiraUrlAndProjectId(
+                "https://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=11761&reset=true" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
         map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/MSHARED/component/13380" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
     }
 
+    public void testGetJiraUrlAndProjectName_JQL()
+    {
+        // MCHANGES-385
+        String url = "https://issues.apache.org/jira/issues/?jql=component%20%3D%20changes.xml";
+        try
+        {
+            JiraHelper.getJiraUrlAndProjectName( url );
+            fail( "Expected IllegalArgumentException" );
+        }
+        catch ( IllegalArgumentException expected ) {
+            assertTrue( expected.getMessage().contains( url ) );
+        }
+    }
+
     public void testGetJiraUrlAndProjectName()
     {
-        Map<String, String> map;
         map = JiraHelper.getJiraUrlAndProjectName( "https://issues.apache.org/jira/browse/DOXIA/" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
         assertEquals( "DOXIA", map.get( "project" ) );
+    }
 
+    public void testGetJiraUrlAndProjectName_https()
+    {
         map = JiraHelper.getJiraUrlAndProjectName( "https://issues.apache.org/jira/browse/DOXIA" );
         assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
         assertEquals( "DOXIA", map.get( "project" ) );
@@ -71,9 +93,12 @@ public class JiraHelperTestCase
         String expected = "http://www.jira.com";
         String actual = JiraHelper.getBaseUrl( "http://www.jira.com/context/test?werewrew" );
         assertEquals( expected, actual );
+    }
 
-        expected = "https://www.jira.com";
-        actual = JiraHelper.getBaseUrl( "https://www.jira.com/context/test?werewrew" );
+    public void testGetBaseUrl_https()
+    {
+        String expected = "https://www.jira.com";
+        String actual = JiraHelper.getBaseUrl( "https://www.jira.com/context/test?werewrew" );
         assertEquals( expected, actual );
     }
 }

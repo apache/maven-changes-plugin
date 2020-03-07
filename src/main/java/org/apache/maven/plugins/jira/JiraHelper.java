@@ -19,6 +19,9 @@ package org.apache.maven.plugins.jira;
  * under the License.
  */
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.HashMap;
@@ -96,10 +99,10 @@ public class JiraHelper
     /**
      * Try to get a JIRA pid from the issue management URL.
      *
-     * @param log Used to tell the user what happened
-     * @param issueManagementUrl The URL to the issue management system
-     * @param client The client used to connect to JIRA
-     * @return The JIRA id for the project, or null if it can't be found
+     * @param log used to tell the user what happened
+     * @param issueManagementUrl the URL to the issue management system
+     * @param client the client used to connect to JIRA
+     * @return the JIRA id for the project, or null if it can't be found
      */
     public static String getPidFromJira( Log log, String issueManagementUrl, HttpClient client )
     {
@@ -113,7 +116,7 @@ public class JiraHelper
             log.debug( "Successfully reached JIRA." );
             projectPage = gm.getResponseBodyAsString();
         }
-        catch ( Exception e )
+        catch ( IOException e )
         {
             if ( log.isDebugEnabled() )
             {
@@ -148,49 +151,48 @@ public class JiraHelper
     }
 
     /**
-     * Parse out the base URL for JIRA and the JIRA project name from the issue management URL. The issue management URL
-     * is assumed to be of the format http(s)://host:port/browse/{projectname}
+     * Parse out the base URL for JIRA and the JIRA project name from the issue management URL.
+     * The issue management UURL must be in the format http(s)://host:port/browse/{projectname}.
+     * The URL is mapped to the key {@code "url"}.
+     * The project is mapped to the key {@code "project"}.
      *
-     * @param issueManagementUrl The URL to the issue management system
-     * @return A <code>Map</code> containing the URL and project name
+     * @param issueManagementUrl the URL of the issue management system
+     * @return a <code>Map</code> containing the URL and project name
+     * @throws IllegalArgumentException if the URL does not contain /browse
      * @since 2.8
      */
     public static Map<String, String> getJiraUrlAndProjectName( String issueManagementUrl )
     {
-        final int indexBrowse = issueManagementUrl.indexOf( "/browse/" );
 
-        String jiraUrl;
-        String project;
-
-        if ( indexBrowse != -1 )
+        try
         {
-            jiraUrl = issueManagementUrl.substring( 0, indexBrowse );
-
-            final int indexBrowseEnd = indexBrowse + "/browse/".length();
-
-            final int indexProject = issueManagementUrl.indexOf( "/", indexBrowseEnd );
-
-            if ( indexProject != -1 )
+            URI uri = new URI( issueManagementUrl );
+            String path = uri.getPath();
+            if ( !path.contains( "/browse/" ) )
             {
-                // Project name has trailing '/'
-                project = issueManagementUrl.substring( indexBrowseEnd, indexProject );
+                throw new IllegalArgumentException( "Invalid browse URL " + issueManagementUrl  );
             }
-            else
+
+            path = path.substring( path.indexOf( "/browse/" ) );
+
+            String jiraUrl = issueManagementUrl.substring( 0,  issueManagementUrl.indexOf( "/browse/" ) );
+
+            String project = path.substring( "/browse/".length() );
+            if ( project.endsWith( "/" ) )
             {
-                // Project name without trailing '/'
-                project = issueManagementUrl.substring( indexBrowseEnd );
+                project = project.substring( 0, project.length() - 1 );
             }
+
+            HashMap<String, String> urlMap = new HashMap<>( 4 );
+            urlMap.put( "url", jiraUrl );
+            urlMap.put( "project", project );
+
+            return urlMap;
         }
-        else
+        catch ( URISyntaxException | IndexOutOfBoundsException ex )
         {
-            throw new IllegalArgumentException( "Invalid browse URL" );
+            throw new IllegalArgumentException( ex );
         }
-
-        HashMap<String, String> urlMap = new HashMap<>( 4 );
-        urlMap.put( "url", jiraUrl );
-        urlMap.put( "project", project );
-
-        return urlMap;
     }
 
     /**

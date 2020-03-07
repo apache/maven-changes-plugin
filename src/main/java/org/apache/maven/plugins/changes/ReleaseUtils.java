@@ -83,9 +83,9 @@ public class ReleaseUtils
     /**
      * Get a release with the specified version from the list of releases.
      *
-     * @param releases A list of releases
-     * @param version The version we want
-     * @return A Release, or null if no release with the specified version can be found
+     * @param releases a list of releases
+     * @param version the version we want
+     * @return a Release, or null if no release with the specified version can be found
      */
     protected Release getRelease( List<Release> releases, String version )
     {
@@ -181,10 +181,10 @@ public class ReleaseUtils
      * components, i.e. they have the same version, their issues are merged into one (parent) release with component
      * marker for component issues.
      *
-     * @param releases Releases from the parent component
+     * @param releases releases from the parent component
      * @param componentName child component name (retrieved from project name)
-     * @param componentReleases Releases from the child component
-     * @return A list containing the merged releases
+     * @param componentReleases releases from the child component
+     * @return a list containing the merged releases
      */
     public List<Release> mergeReleases( final List<Release> releases, final String componentName,
                                         final List<Release> componentReleases )
