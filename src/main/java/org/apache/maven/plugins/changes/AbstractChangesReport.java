@@ -19,13 +19,22 @@ package org.apache.maven.plugins.changes;
  * under the License.
  */
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.doxia.sink.render.RenderingContext;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.doxia.site.decoration.Body;
 import org.apache.maven.doxia.site.decoration.DecorationModel;
 import org.apache.maven.doxia.site.decoration.Skin;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.doxia.siterenderer.RendererException;
+import org.apache.maven.doxia.siterenderer.RenderingContext;
 import org.apache.maven.doxia.siterenderer.SiteRenderingContext;
 import org.apache.maven.doxia.siterenderer.sink.SiteRendererSink;
 import org.apache.maven.execution.MavenSession;
@@ -42,15 +51,6 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
 import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.util.ReaderFactory;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Base class with the things that should be in AbstractMavenReport anyway. Note: This file was copied from r415312 of
@@ -127,7 +127,7 @@ public abstract class AbstractChangesReport
     @Component
     protected I18N i18n;
 
-    private File getSkinArtifactFile()
+    private Artifact getSkinArtifactFile()
         throws MojoExecutionException
     {
         Skin skin = Skin.getDefaultSkin();
@@ -139,7 +139,7 @@ public abstract class AbstractChangesReport
         pbr.setRemoteRepositories( project.getRemoteArtifactRepositories() );
         try
         {
-            return resolver.resolveArtifact( pbr, coordinate ).getArtifact().getFile();
+            return resolver.resolveArtifact( pbr, coordinate ).getArtifact();
         }
         catch ( ArtifactResolverException e )
         {
@@ -178,13 +178,9 @@ public abstract class AbstractChangesReport
             File file = new File( outputDirectory, getOutputName() + ".html" );
             writer = new OutputStreamWriter( new FileOutputStream( file ), getOutputEncoding() );
 
-            siteRenderer.generateDocument( writer, sink, siteContext );
+            siteRenderer.mergeDocumentIntoSite( writer, sink, siteContext );
 
-            writer.close();
-            writer = null;
-
-            siteRenderer.copyResources( siteContext, new File( project.getBasedir(), "src/site/resources" ),
-                                        outputDirectory );
+            siteRenderer.copyResources( siteContext, outputDirectory );
         }
         catch ( RendererException | IOException | MavenReportException e )
         {

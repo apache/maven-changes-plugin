@@ -75,8 +75,8 @@ under the License.
 
   <properties>
     <javaVersion>7</javaVersion>
-    <doxiaVersion>1.4</doxiaVersion>
-    <doxiaSitetoolsVersion>1.4</doxiaSitetoolsVersion>
+    <doxiaVersion>1.9.1</doxiaVersion>
+    <doxiaSitetoolsVersion>1.9.2</doxiaSitetoolsVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <sitePluginVersion>3.3</sitePluginVersion>
     <wagonVersion>2.4</wagonVersion>
@@ -425,15 +425,6 @@ under the License.
         <plugin>
           <groupId>org.apache.rat</groupId>
           <artifactId>apache-rat-plugin</artifactId>
-          <configuration>
-            <excludes combine.children="append">
-              <!--
-                This file should not contain a license header as it represents
-                real data downloaded from a JIRA server.
-              -->
-              <exclude>src/test/resources/org/apache/maven/plugins/jira/unicode-jira-results.xml</exclude>
-            </excludes>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>

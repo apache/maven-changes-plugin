@@ -20,7 +20,7 @@ package org.apache.maven.plugins.issues;
  */
 
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributeSet;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.codehaus.plexus.util.StringUtils;
 

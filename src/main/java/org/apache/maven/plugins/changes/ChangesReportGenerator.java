@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
 import org.apache.commons.lang.StringUtils;
 
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributeSet;
+import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.util.HtmlTools;
 import org.apache.maven.plugins.changes.model.Action;
