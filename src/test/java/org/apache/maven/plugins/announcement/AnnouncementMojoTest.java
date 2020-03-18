@@ -22,7 +22,6 @@ package org.apache.maven.plugins.announcement;
 import java.io.File;
 import java.io.FileReader;
 
-import org.apache.maven.plugins.announcement.AnnouncementMojo;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.IOUtil;
@@ -93,7 +92,7 @@ public class AnnouncementMojoTest
         assertContains( "Deleted the erroneous code.", result );
     }
 
-    protected void assertContains( String content, String announce )
+    private static void assertContains( String content, String announce )
     {
         assertTrue( announce.indexOf( content ) > 0 );
     }
