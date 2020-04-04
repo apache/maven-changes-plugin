@@ -75,8 +75,8 @@ under the License.
 
   <properties>
     <javaVersion>7</javaVersion>
-    <doxiaVersion>1.4</doxiaVersion>
-    <doxiaSitetoolsVersion>1.4</doxiaSitetoolsVersion>
+    <doxiaVersion>1.9.1</doxiaVersion>
+    <doxiaSitetoolsVersion>1.9.1</doxiaSitetoolsVersion>
     <mavenVersion>3.0.5</mavenVersion>
     <sitePluginVersion>3.3</sitePluginVersion>
     <wagonVersion>2.4</wagonVersion>
@@ -228,7 +228,7 @@ under the License.
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
-      <version>1.1.8</version>
+      <version>1.2</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>

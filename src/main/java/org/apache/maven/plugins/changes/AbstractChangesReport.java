@@ -20,12 +20,13 @@ package org.apache.maven.plugins.changes;
  */
 
 import org.apache.commons.io.IOUtils;
-import org.apache.maven.doxia.sink.render.RenderingContext;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.doxia.site.decoration.Body;
 import org.apache.maven.doxia.site.decoration.DecorationModel;
 import org.apache.maven.doxia.site.decoration.Skin;
 import org.apache.maven.doxia.siterenderer.Renderer;
 import org.apache.maven.doxia.siterenderer.RendererException;
+import org.apache.maven.doxia.siterenderer.RenderingContext;
 import org.apache.maven.doxia.siterenderer.SiteRenderingContext;
 import org.apache.maven.doxia.siterenderer.sink.SiteRendererSink;
 import org.apache.maven.execution.MavenSession;
@@ -127,7 +128,7 @@ public abstract class AbstractChangesReport
     @Component
     protected I18N i18n;
 
-    private File getSkinArtifactFile()
+    private Artifact getSkinArtifact()
         throws MojoExecutionException
     {
         Skin skin = Skin.getDefaultSkin();
@@ -139,7 +140,7 @@ public abstract class AbstractChangesReport
         pbr.setRemoteRepositories( project.getRemoteArtifactRepositories() );
         try
         {
-            return resolver.resolveArtifact( pbr, coordinate ).getArtifact().getFile();
+            return resolver.resolveArtifact( pbr, coordinate ).getArtifact();
         }
         catch ( ArtifactResolverException e )
         {
@@ -164,7 +165,7 @@ public abstract class AbstractChangesReport
             Map<String, String> attributes = new HashMap<>();
             attributes.put( "outputEncoding", getOutputEncoding() );
             Locale locale = Locale.getDefault();
-            SiteRenderingContext siteContext = siteRenderer.createContextForSkin( getSkinArtifactFile(), attributes,
+            SiteRenderingContext siteContext = siteRenderer.createContextForSkin( getSkinArtifact(), attributes,
                                                                                   model, getName( locale ), locale );
             siteContext.setOutputEncoding( getOutputEncoding() );
 
@@ -183,8 +184,7 @@ public abstract class AbstractChangesReport
             writer.close();
             writer = null;
 
-            siteRenderer.copyResources( siteContext, new File( project.getBasedir(), "src/site/resources" ),
-                                        outputDirectory );
+            siteRenderer.copyResources( siteContext, outputDirectory );
         }
         catch ( RendererException | IOException | MavenReportException e )
         {
