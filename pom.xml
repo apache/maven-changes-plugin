@@ -80,6 +80,7 @@ under the License.
     <mavenVersion>3.0.5</mavenVersion>
     <sitePluginVersion>3.3</sitePluginVersion>
     <wagonVersion>2.4</wagonVersion>
+    <project.build.outputTimestamp>2020-04-07T21:04:00Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
