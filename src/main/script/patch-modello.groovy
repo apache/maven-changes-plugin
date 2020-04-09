@@ -33,4 +33,4 @@ def patch( String path )
 
 patch( 'target/classes/META-INF/changes/xsd' );
 patch( 'target/generated-sources/modello/org/apache/maven/plugins/changes/model' );
-patch( 'target/generated-sources/modello/org/apache/maven/plugins/changes/model/xpp3' );
+patch( 'target/generated-sources/modello/org/apache/maven/plugins/changes/model/io/xpp3' );
