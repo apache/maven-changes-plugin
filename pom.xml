@@ -493,7 +493,7 @@ under the License.
         <executions>
           <execution>
             <id>patch-changes-xsd</id>
-            <phase>compile</phase>
+            <phase>process-resources</phase>
             <goals>
               <goal>execute</goal>
             </goals>
