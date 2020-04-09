@@ -485,6 +485,24 @@ under the License.
           </execution>
         </executions>
       </plugin>
+      <!-- workaround to remove timestamp inserted by Modello 1.0.1 into changes.xsd -->
+      <plugin>
+        <groupId>org.codehaus.gmaven</groupId>
+        <artifactId>groovy-maven-plugin</artifactId>
+        <version>2.0</version>
+        <executions>
+          <execution>
+            <id>patch-changes-xsd</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>execute</goal>
+            </goals>
+            <configuration>
+              <source>${project.basedir}/src/main/script/patch-changes-xsd.groovy</source>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
