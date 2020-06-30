@@ -48,6 +48,7 @@ import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
 import org.apache.maven.plugins.trac.TracDownloader;
 import org.apache.maven.plugins.trac.TracIssueManagmentSystem;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.velocity.Template;
@@ -303,6 +304,14 @@ public class AnnouncementMojo
      */
     @Parameter( property = "changes.jiraUser" )
     private String jiraUser;
+
+    /**
+     * The settings.xml server id to be used for authentication into a private JIRA installation.
+     *
+     * @since 3.0.0
+     */
+    @Parameter( property = "changes.jiraServerId" )
+    private String jiraServerId;
 
     /**
      * Path to the JIRA XML file, which will be parsed.
@@ -767,9 +776,17 @@ public class AnnouncementMojo
 
         jiraDownloader.setFilter( filter );
 
-        jiraDownloader.setJiraUser( jiraUser );
-
-        jiraDownloader.setJiraPassword( jiraPassword );
+        if ( jiraServerId != null )
+        {
+            final Server server = mavenSession.getSettings().getServer( jiraServerId );
+            jiraDownloader.setJiraUser( server.getUsername() );
+            jiraDownloader.setJiraPassword( server.getPassword() );
+        }
+        else
+        {
+            jiraDownloader.setJiraUser( jiraUser );
+            jiraDownloader.setJiraPassword( jiraPassword );
+        }
 
         jiraDownloader.setUseJql( useJql );
 
