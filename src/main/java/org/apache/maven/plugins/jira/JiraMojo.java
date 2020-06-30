@@ -36,6 +36,7 @@ import org.apache.maven.plugins.issues.IssueUtils;
 import org.apache.maven.plugins.issues.IssuesReportGenerator;
 import org.apache.maven.plugins.issues.IssuesReportHelper;
 import org.apache.maven.reporting.MavenReportException;
+import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 
 /**
@@ -148,6 +149,14 @@ public class JiraMojo
      */
     @Parameter
     private String jiraUser;
+
+    /**
+     * The settings.xml server id to be used for authentication into a private JIRA installation.
+     *
+     * @since 3.0.0
+     */
+    @Parameter( property = "changes.jiraServerId" )
+    private String jiraServerId;
 
     /**
      * Path to the JIRA XML file, which will be parsed.
@@ -430,9 +439,17 @@ public class JiraMojo
 
         issueDownloader.setJiraDatePattern( jiraDatePattern );
 
-        issueDownloader.setJiraUser( jiraUser );
-
-        issueDownloader.setJiraPassword( jiraPassword );
+        if ( jiraServerId != null )
+        {
+            final Server server = mavenSession.getSettings().getServer( jiraServerId );
+            issueDownloader.setJiraUser( server.getUsername() );
+            issueDownloader.setJiraPassword( server.getPassword() );
+        }
+        else
+        {
+            issueDownloader.setJiraUser( jiraUser );
+            issueDownloader.setJiraPassword( jiraPassword );
+        }
 
         issueDownloader.setTypeIds( typeIds );
 
