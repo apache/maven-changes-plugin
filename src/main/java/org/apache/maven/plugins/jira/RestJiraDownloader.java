@@ -184,7 +184,7 @@ public class RestJiraDownloader
             JsonNode errorTree = getResponseTree( resp );
             assert errorTree.isObject();
             JsonNode messages = errorTree.get( "errorMessages" );
-            if ( messages != null )
+            if ( !isNullNode( messages ) )
             {
                 for ( int mx = 0; mx < messages.size(); mx++ )
                 {
@@ -194,7 +194,7 @@ public class RestJiraDownloader
             else
             {
                 JsonNode message = errorTree.get( "message" );
-                if ( message != null )
+                if ( !isNullNode( message ) )
                 {
                     getLog().error( message.asText() );
                 }
@@ -284,13 +284,13 @@ public class RestJiraDownloader
             JsonNode val;
 
             val = issueNode.get( "id" );
-            if ( val != null )
+            if ( !isNullNode( val ) )
             {
                 issue.setId( val.asText() );
             }
 
             val = issueNode.get( "key" );
-            if ( val != null )
+            if ( !isNullNode( val ) )
             {
                 issue.setKey( val.asText() );
                 issue.setLink( String.format( "%s/browse/%s", jiraUrl, val.asText() ) );
@@ -330,13 +330,13 @@ public class RestJiraDownloader
             processStatus( issue, val );
 
             val = fieldsNode.get( "summary" );
-            if ( val != null )
+            if ( !isNullNode( val ) )
             {
                 issue.setSummary( val.asText() );
             }
 
             val = fieldsNode.get( "title" );
-            if ( val != null )
+            if ( !isNullNode( val ) )
             {
                 issue.setTitle( val.asText() );
             }
@@ -354,7 +354,7 @@ public class RestJiraDownloader
     private void processVersions( Issue issue, JsonNode val )
     {
         StringBuilder sb = new StringBuilder();
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             for ( int vx = 0; vx < val.size(); vx++ )
             {
@@ -371,7 +371,7 @@ public class RestJiraDownloader
 
     private void processStatus( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             issue.setStatus( val.get( "name" ).asText() );
         }
@@ -379,7 +379,7 @@ public class RestJiraDownloader
 
     private void processPriority( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             issue.setPriority( val.get( "name" ).asText() );
         }
@@ -387,7 +387,7 @@ public class RestJiraDownloader
 
     private void processResolution( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             issue.setResolution( val.get( "name" ).asText() );
         }
@@ -396,11 +396,11 @@ public class RestJiraDownloader
     private String getPerson( JsonNode val )
     {
         JsonNode nameNode = val.get( "displayName" );
-        if ( nameNode == null )
+        if ( isNullNode( nameNode ) )
         {
             nameNode = val.get( "name" );
         }
-        if ( nameNode != null )
+        if ( !isNullNode( val ) )
         {
             return nameNode.asText();
         }
@@ -412,7 +412,7 @@ public class RestJiraDownloader
 
     private void processAssignee( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             String text = getPerson( val );
             if ( text != null )
@@ -424,7 +424,7 @@ public class RestJiraDownloader
 
     private void processReporter( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             String text = getPerson( val );
             if ( text != null )
@@ -436,7 +436,7 @@ public class RestJiraDownloader
 
     private void processCreated( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             try
             {
@@ -451,7 +451,7 @@ public class RestJiraDownloader
 
     private void processUpdated( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             try
             {
@@ -472,7 +472,7 @@ public class RestJiraDownloader
 
     private void processFixVersions( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             assert val.isArray();
             for ( int vx = 0; vx < val.size(); vx++ )
@@ -485,7 +485,7 @@ public class RestJiraDownloader
 
     private void processComments( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             JsonNode commentsArray = val.get( "comments" );
             for ( int cx = 0; cx < commentsArray.size(); cx++ )
@@ -498,7 +498,7 @@ public class RestJiraDownloader
 
     private void processComponents( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             assert val.isArray();
             for ( int cx = 0; cx < val.size(); cx++ )
@@ -511,7 +511,7 @@ public class RestJiraDownloader
 
     private void processIssueType( Issue issue, JsonNode val )
     {
-        if ( val != null )
+        if ( !isNullNode( val ) )
         {
             issue.setType( val.get( "name" ).asText() );
         }
@@ -606,5 +606,10 @@ public class RestJiraDownloader
     public List<Issue> getIssueList()
     {
         return issueList;
+    }
+
+    private boolean isNullNode( JsonNode val )
+    {
+        return val == null || val.isNull();
     }
 }
