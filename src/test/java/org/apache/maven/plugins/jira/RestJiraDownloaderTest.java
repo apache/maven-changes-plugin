@@ -42,23 +42,23 @@ public class RestJiraDownloaderTest
     private static final int PORT = 3033;
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(3033);
+    public WireMockRule wireMockRule = new WireMockRule( PORT );
 
     @Test
     public void getIssues() throws Exception
     {
         stubFor(
-            get(urlEqualTo("/rest/api/2/serverInfo"))
+            get( urlEqualTo( "/rest/api/2/serverInfo" ) )
                 .willReturn(
-                    aResponse().withHeader("Content-Type", APPLICATION_JSON)
+                    aResponse().withHeader( "Content-Type", APPLICATION_JSON )
                 )
         );
         stubFor(
-            post(urlEqualTo("/rest/api/2/search"))
+            post( urlEqualTo( "/rest/api/2/search" ) )
                 .willReturn(
                     aResponse()
-                        .withHeader("Content-Type", APPLICATION_JSON)
-                        .withBody("{\"issues\": [{\"id\": \"some-id\", \"key\": null, \"fields\": { \"resolution\": null } }]}")
+                        .withHeader( "Content-Type", APPLICATION_JSON )
+                        .withBody( "{\"issues\": [{\"id\": \"some-id\", \"key\": null, \"fields\": { \"resolution\": null } }]}" )
                 )
         );
 
