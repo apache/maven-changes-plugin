@@ -168,7 +168,6 @@ under the License.
         </exclusion>
       </exclusions>
     </dependency>
-    <!--  javamail to parse an email address -->
     <dependency>
       <groupId>org.apache.geronimo.javamail</groupId>
       <artifactId>geronimo-javamail_1.4_provider</artifactId>
