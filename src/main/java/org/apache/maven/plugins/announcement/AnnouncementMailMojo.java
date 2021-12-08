@@ -68,7 +68,7 @@ public class AnnouncementMailMojo
     private List<Developer> from;
 
     /**
-     * The id of the developer sending the announcement mail. Only used if the <tt>mailSender</tt> attribute is not set.
+     * The id of the developer sending the announcement mail. Only used if the {@code mailSender} attribute is not set.
      * In this case, this should match the id of one of the developers in the pom. If a matching developer is not found,
      * then the first developer in the pom will be used.
      */
@@ -402,9 +402,9 @@ public class AnnouncementMailMojo
     /**
      * Returns the identify of the mail sender according to the plugin's configuration:
      * <ul>
-     * <li>if the <tt>mailSender</tt> parameter is set, it is returned</li>
-     * <li>if no <tt>fromDeveloperId</tt> is set, the first developer in the list is returned</li>
-     * <li>if a <tt>fromDeveloperId</tt> is set, the developer with that id is returned</li>
+     * <li>if the {@code mailSender} parameter is set, it is returned</li>
+     * <li>if no {@code fromDeveloperId} is set, the first developer in the list is returned</li>
+     * <li>if a {@code fromDeveloperId} is set, the developer with that id is returned</li>
      * <li>if the developers list is empty or if the specified id does not exist, an exception is thrown</li>
      * </ul>
      *
