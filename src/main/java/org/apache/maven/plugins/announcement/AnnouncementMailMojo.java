@@ -364,7 +364,6 @@ public class AnnouncementMailMojo
     protected String readAnnouncement( File file )
         throws MojoExecutionException
     {
-        InputStreamReader reader = null;
         try
         {
             if ( StringUtils.isEmpty( templateEncoding ) )
@@ -375,11 +374,10 @@ public class AnnouncementMailMojo
 
             }
 
-            reader = new InputStreamReader( new FileInputStream( file ), templateEncoding );
-            final String announcement = IOUtil.toString( reader );
-            reader.close();
-            reader = null;
-            return announcement;
+            try ( InputStreamReader reader = new InputStreamReader( new FileInputStream( file ), templateEncoding ) )
+            {
+                return IOUtil.toString( reader );
+            }
         }
         catch ( FileNotFoundException fnfe )
         {
@@ -392,10 +390,6 @@ public class AnnouncementMailMojo
         catch ( IOException ioe )
         {
             throw new MojoExecutionException( "Failed to read the announcement file.", ioe );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 

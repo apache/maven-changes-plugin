@@ -47,7 +47,6 @@ import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFileFilterRequest;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
@@ -408,30 +407,25 @@ public class ChangesMojo
             {
                 filteredOutputDirectory.mkdirs();
             }
-            XmlStreamReader xmlStreamReader = null;
             try
             {
                 // so we get encoding from the file itself
-                xmlStreamReader = new XmlStreamReader( changesXml );
-                String encoding = xmlStreamReader.getEncoding();
-                File resultFile = new File( filteredOutputDirectory,
+                try ( XmlStreamReader xmlStreamReader = new XmlStreamReader( changesXml ) )
+                {
+                    String encoding = xmlStreamReader.getEncoding();
+                    File resultFile = new File( filteredOutputDirectory,
                                             project.getGroupId() + "." + project.getArtifactId() + "-changes.xml" );
 
-                final MavenFileFilterRequest mavenFileFilterRequest =
-                    new MavenFileFilterRequest( changesXml, resultFile, true, project, Collections.<String>emptyList(),
-                                                false, encoding, session, additionalProperties );
-                mavenFileFilter.copyFile( mavenFileFilterRequest );
-                changesXml = resultFile;
-                xmlStreamReader.close();
-                xmlStreamReader = null;
+                    final MavenFileFilterRequest mavenFileFilterRequest =
+                            new MavenFileFilterRequest( changesXml, resultFile, true, project, 
+                                    Collections.<String>emptyList(), false, encoding, session, additionalProperties );
+                    mavenFileFilter.copyFile( mavenFileFilterRequest );
+                    changesXml = resultFile;
+                }
             }
             catch ( IOException | MavenFilteringException e )
             {
                 throw new MavenReportException( "Exception during filtering changes file : " + e.getMessage(), e );
-            }
-            finally
-            {
-                IOUtil.close( xmlStreamReader );
             }
 
         }

@@ -29,7 +29,6 @@ import java.util.Locale;
 
 import junit.framework.TestCase;
 
-import org.apache.maven.plugins.changes.FeedGenerator;
 import org.apache.maven.plugins.changes.model.Release;
 
 /**
@@ -94,12 +93,13 @@ public class FeedGeneratorTest
 
         for ( String type : generator.getSupportedFeedTypes() )
         {
-            Writer writer = new StringWriter( 512 );
-            generator.export( releases, type, writer );
-            String result = writer.toString(); // TODO: save for inspection?
-            assertNotNull( result );
-            assertTrue( result.length() > 0 );
-            writer.close();
+            try ( Writer writer = new StringWriter( 512 ) )
+            {
+                generator.export( releases, type, writer );
+                String result = writer.toString(); // TODO: save for inspection?
+                assertNotNull( result );
+                assertTrue( result.length() > 0 );
+            }
         }
     }
 }

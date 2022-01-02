@@ -20,11 +20,10 @@ package org.apache.maven.plugins.announcement;
  */
 
 import java.io.File;
-import java.io.FileReader;
+import java.nio.file.Files;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.IOUtil;
 
 /**
  * @author Olivier Lamy
@@ -62,10 +61,7 @@ public class AnnouncementMojoTest
         setVariableValueToObject( mojo, "introduction", "Nice library" );
         mojo.execute();
 
-        FileReader fileReader = new FileReader( new File( announcementDirectory, "announcement.vm" ) );
-        String result = IOUtil.toString( fileReader );
-
-        fileReader.close();
+        String result = new String( Files.readAllBytes( announcementDirectory.toPath().resolve( "announcement.vm" ) ) );
 
         assertContains( "Nice library", result );
 

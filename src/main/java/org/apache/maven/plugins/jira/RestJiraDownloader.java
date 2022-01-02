@@ -143,16 +143,17 @@ public class RestJiraDownloader
             .build();
 
         StringWriter searchParamStringWriter = new StringWriter();
-        JsonGenerator gen = jsonFactory.createGenerator( searchParamStringWriter );
-        gen.writeStartObject();
-        gen.writeStringField( "jql", jqlQuery );
-        gen.writeNumberField( "maxResults", nbEntriesMax );
-        gen.writeArrayFieldStart( "fields" );
-        // Retrieve all fields. If that seems slow, we can reconsider.
-        gen.writeString( "*all" );
-        gen.writeEndArray();
-        gen.writeEndObject();
-        gen.close();
+        try ( JsonGenerator gen = jsonFactory.createGenerator( searchParamStringWriter ) ) 
+        {
+            gen.writeStartObject();
+            gen.writeStringField( "jql", jqlQuery );
+            gen.writeNumberField( "maxResults", nbEntriesMax );
+            gen.writeArrayFieldStart( "fields" );
+            // Retrieve all fields. If that seems slow, we can reconsider.
+            gen.writeString( "*all" );
+            gen.writeEndArray();
+            gen.writeEndObject();
+        }
         client.replacePath( "/rest/api/2/search" );
         client.type( MediaType.APPLICATION_JSON_TYPE );
         client.accept( MediaType.APPLICATION_JSON_TYPE );
@@ -526,12 +527,13 @@ public class RestJiraDownloader
             client.replacePath( "/rest/auth/1/session" );
             client.type( MediaType.APPLICATION_JSON_TYPE );
             StringWriter jsWriter = new StringWriter();
-            JsonGenerator gen = jsonFactory.createGenerator( jsWriter );
-            gen.writeStartObject();
-            gen.writeStringField( "username", jiraUser );
-            gen.writeStringField( "password", jiraPassword );
-            gen.writeEndObject();
-            gen.close();
+            try ( JsonGenerator gen = jsonFactory.createGenerator( jsWriter ) )
+            {
+                gen.writeStartObject();
+                gen.writeStringField( "username", jiraUser ) ;
+                gen.writeStringField( "password", jiraPassword );
+                gen.writeEndObject();
+            }
             Response authRes = client.post( jsWriter.toString() );
             if ( authRes.getStatus() != Response.Status.OK.getStatusCode() )
             {
