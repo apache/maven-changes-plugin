@@ -59,12 +59,9 @@ public class JiraUnicodeTestCase
         repoSession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( "target/local-repo" ) );
         setVariableValueToObject( mojo, "project", project );
         setVariableValueToObject( mojo, "mavenSession", session );
-        InputStream testJiraXmlStream = JiraUnicodeTestCase.class.getResourceAsStream( "unicode-jira-results.xml" );
         String jiraXml;
-        try {
+        try (InputStream testJiraXmlStream = JiraUnicodeTestCase.class.getResourceAsStream( "unicode-jira-results.xml" ) ) {
             jiraXml = IOUtils.toString(testJiraXmlStream, UTF_8 );
-        } finally {
-            testJiraXmlStream.close();
         }
 
         MockJiraDownloader mockDownloader = new MockJiraDownloader();

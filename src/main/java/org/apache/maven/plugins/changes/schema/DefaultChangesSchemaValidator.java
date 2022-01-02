@@ -56,7 +56,6 @@ public class DefaultChangesSchemaValidator
     public XmlValidationHandler validateXmlWithSchema( File file, String schemaVersion, boolean failOnValidationError )
         throws SchemaValidatorException
     {
-        Reader reader = null;
         try
         {
             String schemaPath = CHANGES_SCHEMA_PATH + "changes-" + schemaVersion + ".xsd";
@@ -69,12 +68,10 @@ public class DefaultChangesSchemaValidator
 
             validator.setErrorHandler( baseHandler );
 
-            reader = new XmlStreamReader( file );
-
-            validator.validate( new StreamSource( reader ) );
-
-            reader.close();
-            reader = null;
+            try ( Reader reader = new XmlStreamReader( file ) )
+            {
+                validator.validate( new StreamSource( reader ) );
+            }
 
             return baseHandler;
         }
@@ -89,10 +86,6 @@ public class DefaultChangesSchemaValidator
         catch ( Exception e )
         {
             throw new SchemaValidatorException( "Exception : " + e.getMessage(), e );
-        }
-        finally
-        {
-            IOUtil.close( reader );
         }
     }
 
