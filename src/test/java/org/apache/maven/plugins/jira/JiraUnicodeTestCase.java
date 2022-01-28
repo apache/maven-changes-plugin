@@ -25,10 +25,11 @@ import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.project.MavenProject;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
-import org.sonatype.aether.util.DefaultRepositorySystemSession;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.internal.impl.SimpleLocalRepositoryManagerFactory;
+import org.eclipse.aether.repository.LocalRepository;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -56,7 +57,9 @@ public class JiraUnicodeTestCase
         MavenProject project = new JiraUnicodeTestProjectStub();
         MavenSession session = newMavenSession( project );
         DefaultRepositorySystemSession repoSession = (DefaultRepositorySystemSession) session.getRepositorySession();
-        repoSession.setLocalRepositoryManager( new SimpleLocalRepositoryManager( "target/local-repo" ) );
+        LocalRepository localRepo = new LocalRepository( "target/local-repo" );
+        repoSession.setLocalRepositoryManager(
+                new SimpleLocalRepositoryManagerFactory().newInstance( repoSession, localRepo ) );
         setVariableValueToObject( mojo, "project", project );
         setVariableValueToObject( mojo, "mavenSession", session );
         String jiraXml;
