@@ -169,7 +169,7 @@ public abstract class AbstractChangesReport
                                                                                   model, getName( locale ), locale );
             siteContext.setOutputEncoding( getOutputEncoding() );
 
-            RenderingContext context = new RenderingContext( outputDirectory, getOutputName() + ".html" );
+            RenderingContext context = new RenderingContext( outputDirectory, getOutputName() + ".html", null );
 
             SiteRendererSink sink = new SiteRendererSink( context );
             generate( sink, null, locale );
@@ -179,7 +179,7 @@ public abstract class AbstractChangesReport
             File file = new File( outputDirectory, getOutputName() + ".html" );
             writer = new OutputStreamWriter( new FileOutputStream( file ), getOutputEncoding() );
 
-            siteRenderer.generateDocument( writer, sink, siteContext );
+            siteRenderer.mergeDocumentIntoSite( writer, sink, siteContext );
 
             writer.close();
             writer = null;

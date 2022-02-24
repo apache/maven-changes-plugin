@@ -25,7 +25,7 @@ under the License.
   <parent>
     <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
-    <version>34</version>
+    <version>35-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
@@ -76,7 +76,7 @@ under the License.
   <properties>
     <javaVersion>8</javaVersion>
     <doxiaVersion>2.0.0-M2-SNAPSHOT</doxiaVersion>
-    <doxiaSitetoolsVersion>2.0.0-M1-SNAPSHOT</doxiaSitetoolsVersion>
+    <doxiaSitetoolsVersion>2.0.0-M3-SNAPSHOT</doxiaSitetoolsVersion>
     <mavenVersion>4.0.0-alpha-1-SNAPSHOT</mavenVersion>
     <sitePluginVersion>3.3</sitePluginVersion>
     <wagonVersion>3.5.2-SNAPSHOT</wagonVersion>
