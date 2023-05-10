@@ -122,7 +122,7 @@ public class TracDownloader
         // Fetch issues
         String qstr = "";
 
-        if ( !(query == null || query.isEmpty()) )
+        if ( !( query == null || query.isEmpty() ) )
         {
             qstr = query;
         }
