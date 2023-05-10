@@ -58,7 +58,6 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.tools.ToolManager;
 import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -696,7 +695,7 @@ public class AnnouncementMojo
         File f;
 
         // Use the name of the template as a default value
-        if ( StringUtils.isEmpty( announcementFile ) )
+        if ( announcementFile == null || announcementFile.isEmpty() )
         {
             announcementFile = template;
         }
@@ -714,7 +713,7 @@ public class AnnouncementMojo
 
             engine.setApplicationAttribute( "baseDirectory", basedir );
 
-            if ( StringUtils.isEmpty( templateEncoding ) )
+            if ( templateEncoding == null || templateEncoding.isEmpty() )
             {
                 templateEncoding = ReaderFactory.FILE_ENCODING;
                 getLog().warn( "File encoding has not been set, using platform encoding " + templateEncoding
@@ -804,7 +803,7 @@ public class AnnouncementMojo
 
             List<Issue> issueList = jiraDownloader.getIssueList();
 
-            if ( StringUtils.isNotEmpty( versionPrefix ) )
+            if ( versionPrefix != null && !versionPrefix.isEmpty() )
             {
                 int originalNumberOfIssues = issueList.size();
                 issueList = IssueUtils.filterIssuesWithVersionPrefix( issueList, versionPrefix );

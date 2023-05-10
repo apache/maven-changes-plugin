@@ -47,7 +47,6 @@ import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFileFilterRequest;
 import org.apache.maven.shared.filtering.MavenFilteringException;
 import org.codehaus.plexus.util.FileUtils;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Goal which creates a nicely formatted Changes Report in html format from a changes.xml file.
@@ -334,14 +333,14 @@ public class ChangesMojo
 
         report.setAddActionDate( addActionDate );
 
-        if ( StringUtils.isEmpty( url ) )
+        if ( url == null || url.isEmpty() )
         {
             getLog().warn( "No issue management URL defined in POM. Links to your issues will not work correctly." );
         }
 
         boolean feedGenerated = false;
 
-        if ( StringUtils.isNotEmpty( feedType ) )
+        if ( feedType != null && !feedType.isEmpty() )
         {
             feedGenerated = generateFeed( changesXml, locale );
         }

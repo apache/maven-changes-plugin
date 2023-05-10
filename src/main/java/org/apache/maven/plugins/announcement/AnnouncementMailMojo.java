@@ -43,7 +43,6 @@ import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSenderException;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
-import org.codehaus.plexus.util.StringUtils;
 
 /**
  * Goal which sends an announcement through email.
@@ -366,7 +365,7 @@ public class AnnouncementMailMojo
     {
         try
         {
-            if ( StringUtils.isEmpty( templateEncoding ) )
+            if ( templateEncoding == null || templateEncoding.isEmpty() )
             {
                 templateEncoding = ReaderFactory.FILE_ENCODING;
                 getLog().warn( "File encoding has not been set, using platform encoding '" + templateEncoding
