@@ -25,7 +25,6 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -123,7 +122,7 @@ public class TracDownloader
         // Fetch issues
         String qstr = "";
 
-        if ( !StringUtils.isEmpty( query ) )
+        if ( !( query == null || query.isEmpty() ) )
         {
             qstr = query;
         }

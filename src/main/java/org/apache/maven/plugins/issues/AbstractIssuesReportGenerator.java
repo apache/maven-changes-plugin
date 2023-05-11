@@ -22,7 +22,6 @@ package org.apache.maven.plugins.issues;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-import org.codehaus.plexus.util.StringUtils;
 
 import java.util.ResourceBundle;
 
@@ -80,7 +79,7 @@ public abstract class AbstractIssuesReportGenerator
         sink.text( title );
         sink.title_();
 
-        if ( StringUtils.isNotEmpty( author ) )
+        if ( author != null && !author.isEmpty() )
         {
             sink.author();
             sink.text( author );
