@@ -19,22 +19,22 @@ package org.apache.maven.plugins.changes;
  * under the License.
  */
 
-import org.apache.maven.plugins.changes.IssueAdapter;
-import org.apache.maven.plugins.changes.IssueType;
+import java.util.Arrays;
+import java.util.List;
+
+import junit.framework.TestCase;
 import org.apache.maven.plugins.changes.model.Action;
+import org.apache.maven.plugins.changes.model.Release;
 import org.apache.maven.plugins.issues.Issue;
 import org.apache.maven.plugins.issues.IssueManagementSystem;
 import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
-
-import junit.framework.TestCase;
 
 /**
  * @author Alan Parkinson
  * @version $Id$
  * @since 2.6
  */
-public class IssueAdapterTest
-    extends TestCase
+public class IssueAdapterTest extends TestCase
 {
 
     public void testDefaultIssueTypeMapping()
@@ -115,11 +115,45 @@ public class IssueAdapterTest
 
     private Issue createIssue( String key, String type )
     {
+        return createIssue( key, type, null );
+    }
+
+    private Issue createIssue( String key, String type, String version )
+    {
         Issue issue = new Issue();
         issue.setKey( key );
         issue.setType( type );
+        if ( version != null )
+        {
+            issue.addFixVersion( version );
+        }
+
         issue.setAssignee( "A User" );
         issue.setSummary( "The title of this issue" );
         return issue;
+    }
+
+    public void testReleaseOrder()
+    {
+        IssueManagementSystem ims = new JIRAIssueManagmentSystem();
+        ims.getIssueTypeMap().put( "Story", IssueType.ADD );
+        ims.getIssueTypeMap().put( "Epic", IssueType.ADD );
+        ims.getIssueTypeMap().put( "Defect", IssueType.FIX );
+        ims.getIssueTypeMap().put( "Error", IssueType.FIX );
+        IssueAdapter adapter = new IssueAdapter( ims );
+
+        List<Issue> issues =
+                Arrays.asList( createIssue( "TST-1", "Story", "1.0.0-alpha" ), createIssue( "TST-2", "Epic", "1.2.1" ),
+                        createIssue( "TST-3", "Error", "0.1.1" ), createIssue( "TST-4", "Defect", "3.0" ),
+                        createIssue( "TST-5", "Improvement", "4" ), createIssue( "TST-6", "Epic", "0.1.1" ) );
+
+        List<Release> releases = adapter.getReleases( issues );
+
+        assertEquals( releases.size(), 5 );
+        assertEquals( releases.get( 0 ).getVersion(), "4" );
+        assertEquals( releases.get( 1 ).getVersion(), "3.0" );
+        assertEquals( releases.get( 2 ).getVersion(), "1.2.1" );
+        assertEquals( releases.get( 3 ).getVersion(), "1.0.0-alpha" );
+        assertEquals( releases.get( 4 ).getVersion(), "0.1.1" );
     }
 }
