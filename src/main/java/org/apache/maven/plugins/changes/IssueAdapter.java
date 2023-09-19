@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
 import org.apache.maven.plugins.issues.Issue;
@@ -85,8 +86,15 @@ public class IssueAdapter {
             }
         }
 
-        // Extract the releases from the Map to a List
-        return new ArrayList<>(releasesMap.values());
+        // Extract the releases from the Map to a sorted List. Releases are sorted by descending order of version.
+        List<Release> allReleases = new ArrayList<>(releasesMap.values());
+        allReleases.sort((release1, release2) -> {
+            ComparableVersion version1 = new ComparableVersion(release1.getVersion());
+            ComparableVersion version2 = new ComparableVersion(release2.getVersion());
+            return version2.compareTo(version1);
+        });
+
+        return allReleases;
     }
 
     /**
