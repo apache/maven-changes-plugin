@@ -313,10 +313,10 @@ under the License.
             <![CDATA[
             Supported action types are the following:
             <ul>
-              <li>add: added functionnality to the project.</li>
+              <li>add: added functionality to the project.</li>
               <li>fix: bug fix for the project.</li>
               <li>update: updated some part of the project.</li>
-              <li>remove: removed some functionnality from the project.</li>
+              <li>remove: removed some functionality from the project.</li>
             </ul>
             ]]>
           </description>
@@ -346,7 +346,7 @@ under the License.
             <type>FixedIssue</type>
             <multiplicity>*</multiplicity>
           </association>
-          <description>A list of fix issues.</description>
+          <description>A list of fixed issues.</description>
         </field>
         <field>
           <name>dueTos</name>
