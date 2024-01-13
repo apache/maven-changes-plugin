@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -54,17 +53,15 @@ import org.codehaus.plexus.util.FileUtils;
  * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
  * @version $Id$
  */
-@Mojo( name = "changes-report", threadSafe = true )
-public class ChangesMojo
-    extends AbstractChangesReport
-{
+@Mojo(name = "changes-report", threadSafe = true)
+public class ChangesMojo extends AbstractChangesReport {
     /**
      * A flag whether the report should also include changes from child modules. If set to <code>false</code>, only the
      * changes from current project will be written to the report.
      *
      * @since 2.5
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean aggregated;
 
     /**
@@ -73,7 +70,7 @@ public class ChangesMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.addActionDate", defaultValue = "false" )
+    @Parameter(property = "changes.addActionDate", defaultValue = "false")
     private boolean addActionDate;
 
     /**
@@ -98,7 +95,7 @@ public class ChangesMojo
      *
      * @since 2.2
      */
-    @Parameter( defaultValue = "${project.build.directory}/changes", required = true, readonly = true )
+    @Parameter(defaultValue = "${project.build.directory}/changes", required = true, readonly = true)
     private File filteredOutputDirectory;
 
     /**
@@ -106,7 +103,7 @@ public class ChangesMojo
      *
      * @since 2.2
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean filteringChanges;
 
     /**
@@ -122,7 +119,7 @@ public class ChangesMojo
      * @since 2.0-beta-2
      * @deprecated As of 2.1 use issueLinkTemplatePerSystem: this one will be with system default
      */
-    @Parameter( property = "changes.issueLinkTemplate" )
+    @Parameter(property = "changes.issueLinkTemplate")
     private String issueLinkTemplate;
 
     /**
@@ -159,7 +156,7 @@ public class ChangesMojo
      * @see java.text.SimpleDateFormat
      * @since 2.2
      */
-    @Parameter( defaultValue = "yyyy-MM-dd" )
+    @Parameter(defaultValue = "yyyy-MM-dd")
     private String publishDateFormat;
 
     /**
@@ -168,19 +165,19 @@ public class ChangesMojo
      * @see java.util.Locale
      * @since 2.2
      */
-    @Parameter( defaultValue = "en" )
+    @Parameter(defaultValue = "en")
     private String publishDateLocale;
 
     /**
      * @since 2.2
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession session;
 
     /**
      * @since 2.4
      */
-    @Parameter( defaultValue = "${project.issueManagement.system}", readonly = true )
+    @Parameter(defaultValue = "${project.issueManagement.system}", readonly = true)
     private String system;
 
     /**
@@ -189,12 +186,12 @@ public class ChangesMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "team.html" )
+    @Parameter(defaultValue = "team.html")
     private String team;
 
     /**
      */
-    @Parameter( defaultValue = "${project.issueManagement.url}", readonly = true )
+    @Parameter(defaultValue = "${project.issueManagement.url}", readonly = true)
     private String url;
 
     /**
@@ -215,10 +212,10 @@ public class ChangesMojo
     /**
      * The path of the <code>changes.xml</code> file that will be converted into an HTML report.
      */
-    @Parameter( property = "changes.xmlPath", defaultValue = "src/changes/changes.xml" )
+    @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
 
-    private ReleaseUtils releaseUtils = new ReleaseUtils( getLog() );
+    private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private CaseInsensitiveMap caseInsensitiveIssueLinkTemplatePerSystem;
 
@@ -226,154 +223,136 @@ public class ChangesMojo
     /* Public methods */
     /* --------------------------------------------------------------------- */
 
-    public boolean canGenerateReport()
-    {
+    public boolean canGenerateReport() {
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the Changes Report in this project because it's not the Execution Root" );
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the Changes Report in this project because it's not the Execution Root");
             return false;
         }
         return xmlPath.isFile();
     }
 
-    public void executeReport( Locale locale )
-        throws MavenReportException
-    {
-        failIfUsingDeprecatedParameter( escapeHTML, "escapeHTML",
-                                        "Using markup inside CDATA sections does not work for all output formats!" );
-        failIfUsingDeprecatedParameter( issueLinkTemplate, "issueLinkTemplate",
-                                        "You must use 'issueLinkTemplatePerSystem' for the system '"
-                                            + ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY + "' instead." );
+    public void executeReport(Locale locale) throws MavenReportException {
+        failIfUsingDeprecatedParameter(
+                escapeHTML, "escapeHTML", "Using markup inside CDATA sections does not work for all output formats!");
+        failIfUsingDeprecatedParameter(
+                issueLinkTemplate,
+                "issueLinkTemplate",
+                "You must use 'issueLinkTemplatePerSystem' for the system '"
+                        + ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY + "' instead.");
         Date now = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( publishDateFormat, new Locale( publishDateLocale ) );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(publishDateFormat, new Locale(publishDateLocale));
         Properties additionalProperties = new Properties();
-        additionalProperties.put( "publishDate", simpleDateFormat.format( now ) );
+        additionalProperties.put("publishDate", simpleDateFormat.format(now));
 
-        ChangesXML changesXml = getChangesFromFile( xmlPath, project, additionalProperties );
-        if ( changesXml == null )
-        {
+        ChangesXML changesXml = getChangesFromFile(xmlPath, project, additionalProperties);
+        if (changesXml == null) {
             return;
         }
 
-        if ( aggregated )
-        {
+        if (aggregated) {
             final String basePath = project.getBasedir().getAbsolutePath();
             final String absolutePath = xmlPath.getAbsolutePath();
-            if ( !absolutePath.startsWith( basePath ) )
-            {
-                getLog().warn( "xmlPath should be within the project dir for aggregated changes report." );
+            if (!absolutePath.startsWith(basePath)) {
+                getLog().warn("xmlPath should be within the project dir for aggregated changes report.");
                 return;
             }
-            final String relativePath = absolutePath.substring( basePath.length() );
+            final String relativePath = absolutePath.substring(basePath.length());
 
             List<Release> releaseList = changesXml.getReleaseList();
-            for ( Object o : project.getCollectedProjects() )
-            {
+            for (Object o : project.getCollectedProjects()) {
                 final MavenProject childProject = (MavenProject) o;
-                final File changesFile = new File( childProject.getBasedir(), relativePath );
-                final ChangesXML childXml = getChangesFromFile( changesFile, childProject, additionalProperties );
-                if ( childXml != null )
-                {
+                final File changesFile = new File(childProject.getBasedir(), relativePath);
+                final ChangesXML childXml = getChangesFromFile(changesFile, childProject, additionalProperties);
+                if (childXml != null) {
                     releaseList =
-                        releaseUtils.mergeReleases( releaseList, childProject.getName(), childXml.getReleaseList() );
+                            releaseUtils.mergeReleases(releaseList, childProject.getName(), childXml.getReleaseList());
                 }
             }
-            changesXml.setReleaseList( releaseList );
+            changesXml.setReleaseList(releaseList);
         }
 
-        ChangesReportGenerator report = new ChangesReportGenerator( changesXml.getReleaseList() );
+        ChangesReportGenerator report = new ChangesReportGenerator(changesXml.getReleaseList());
 
-        report.setAuthor( changesXml.getAuthor() );
-        report.setTitle( changesXml.getTitle() );
+        report.setAuthor(changesXml.getAuthor());
+        report.setTitle(changesXml.getTitle());
 
-        report.setEscapeHTML( true );
+        report.setEscapeHTML(true);
 
         // Create a case insensitive version of issueLinkTemplatePerSystem
         // We need something case insensitive to maintain backward compatibility
-        if ( issueLinkTemplatePerSystem == null )
-        {
+        if (issueLinkTemplatePerSystem == null) {
             caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap();
-        }
-        else
-        {
-            caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap( issueLinkTemplatePerSystem );
+        } else {
+            caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap(issueLinkTemplatePerSystem);
         }
 
         // Set good default values for issue management systems here
-        addIssueLinkTemplate( ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY, "%URL%/ViewIssue.jspa?key=%ISSUE%" );
-        addIssueLinkTemplate( "Bitbucket", "%URL%/issue/%ISSUE%" );
-        addIssueLinkTemplate( "Bugzilla", "%URL%/show_bug.cgi?id=%ISSUE%" );
-        addIssueLinkTemplate( "GitHub", "%URL%/%ISSUE%" );
-        addIssueLinkTemplate( "GoogleCode", "%URL%/detail?id=%ISSUE%" );
-        addIssueLinkTemplate( "JIRA", "%URL%/%ISSUE%" );
-        addIssueLinkTemplate( "Mantis", "%URL%/view.php?id=%ISSUE%" );
-        addIssueLinkTemplate( "MKS", "%URL%/viewissue?selection=%ISSUE%" );
-        addIssueLinkTemplate( "Redmine", "%URL%/issues/show/%ISSUE%" );
-        addIssueLinkTemplate( "Scarab", "%URL%/issues/id/%ISSUE%" );
-        addIssueLinkTemplate( "SourceForge", "http://sourceforge.net/support/tracker.php?aid=%ISSUE%" );
-        addIssueLinkTemplate( "SourceForge2", "%URL%/%ISSUE%" );
-        addIssueLinkTemplate( "Trac", "%URL%/ticket/%ISSUE%" );
-        addIssueLinkTemplate( "Trackplus", "%URL%/printItem.action?key=%ISSUE%" );
-        addIssueLinkTemplate( "Tuleap", "%URL%/?aid=%ISSUE%" );
-        addIssueLinkTemplate( "YouTrack", "%URL%/issue/%ISSUE%" );
+        addIssueLinkTemplate(ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY, "%URL%/ViewIssue.jspa?key=%ISSUE%");
+        addIssueLinkTemplate("Bitbucket", "%URL%/issue/%ISSUE%");
+        addIssueLinkTemplate("Bugzilla", "%URL%/show_bug.cgi?id=%ISSUE%");
+        addIssueLinkTemplate("GitHub", "%URL%/%ISSUE%");
+        addIssueLinkTemplate("GoogleCode", "%URL%/detail?id=%ISSUE%");
+        addIssueLinkTemplate("JIRA", "%URL%/%ISSUE%");
+        addIssueLinkTemplate("Mantis", "%URL%/view.php?id=%ISSUE%");
+        addIssueLinkTemplate("MKS", "%URL%/viewissue?selection=%ISSUE%");
+        addIssueLinkTemplate("Redmine", "%URL%/issues/show/%ISSUE%");
+        addIssueLinkTemplate("Scarab", "%URL%/issues/id/%ISSUE%");
+        addIssueLinkTemplate("SourceForge", "http://sourceforge.net/support/tracker.php?aid=%ISSUE%");
+        addIssueLinkTemplate("SourceForge2", "%URL%/%ISSUE%");
+        addIssueLinkTemplate("Trac", "%URL%/ticket/%ISSUE%");
+        addIssueLinkTemplate("Trackplus", "%URL%/printItem.action?key=%ISSUE%");
+        addIssueLinkTemplate("Tuleap", "%URL%/?aid=%ISSUE%");
+        addIssueLinkTemplate("YouTrack", "%URL%/issue/%ISSUE%");
         // @todo Add more issue management systems here
         // Remember to also add documentation in usage.apt.vm
 
         // Show the current issueLinkTemplatePerSystem configuration
-        logIssueLinkTemplatePerSystem( caseInsensitiveIssueLinkTemplatePerSystem );
+        logIssueLinkTemplatePerSystem(caseInsensitiveIssueLinkTemplatePerSystem);
 
-        report.setIssueLinksPerSystem( caseInsensitiveIssueLinkTemplatePerSystem );
+        report.setIssueLinksPerSystem(caseInsensitiveIssueLinkTemplatePerSystem);
 
-        report.setSystem( system );
+        report.setSystem(system);
 
-        report.setTeam( team );
+        report.setTeam(team);
 
-        report.setUrl( url );
+        report.setUrl(url);
 
-        report.setAddActionDate( addActionDate );
+        report.setAddActionDate(addActionDate);
 
-        if ( url == null || url.isEmpty() )
-        {
-            getLog().warn( "No issue management URL defined in POM. Links to your issues will not work correctly." );
+        if (url == null || url.isEmpty()) {
+            getLog().warn("No issue management URL defined in POM. Links to your issues will not work correctly.");
         }
 
         boolean feedGenerated = false;
 
-        if ( feedType != null && !feedType.isEmpty() )
-        {
-            feedGenerated = generateFeed( changesXml, locale );
+        if (feedType != null && !feedType.isEmpty()) {
+            feedGenerated = generateFeed(changesXml, locale);
         }
 
-        report.setLinkToFeed( feedGenerated );
+        report.setLinkToFeed(feedGenerated);
 
-        report.doGenerateReport( getBundle( locale ), getSink() );
+        report.doGenerateReport(getBundle(locale), getSink());
 
         // Copy the images
         copyStaticResources();
     }
 
-    private void failIfUsingDeprecatedParameter( Object value, String name, String message )
-        throws MavenReportException
-    {
-        if ( value != null )
-        {
-            throw new MavenReportException( "You are using the old parameter '" + name + "'. " + message );
+    private void failIfUsingDeprecatedParameter(Object value, String name, String message) throws MavenReportException {
+        if (value != null) {
+            throw new MavenReportException("You are using the old parameter '" + name + "'. " + message);
         }
     }
 
-    public String getDescription( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.description" );
+    public String getDescription(Locale locale) {
+        return getBundle(locale).getString("report.issues.description");
     }
 
-    public String getName( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.name" );
+    public String getName(Locale locale) {
+        return getBundle(locale).getString("report.issues.name");
     }
 
-    public String getOutputName()
-    {
+    public String getOutputName() {
         return "changes-report";
     }
 
@@ -391,44 +370,43 @@ public class ChangesMojo
      * @return parsed <code>ChangesXML</code> instance or null if file doesn't exist
      * @throws MavenReportException if any errors occurs while parsing
      */
-    private ChangesXML getChangesFromFile( File changesXml, MavenProject project, Properties additionalProperties )
-        throws MavenReportException
-    {
-        if ( !changesXml.exists() )
-        {
-            getLog().warn( "changes.xml file " + changesXml.getAbsolutePath() + " does not exist." );
+    private ChangesXML getChangesFromFile(File changesXml, MavenProject project, Properties additionalProperties)
+            throws MavenReportException {
+        if (!changesXml.exists()) {
+            getLog().warn("changes.xml file " + changesXml.getAbsolutePath() + " does not exist.");
             return null;
         }
 
-        if ( filteringChanges )
-        {
-            if ( !filteredOutputDirectory.exists() )
-            {
+        if (filteringChanges) {
+            if (!filteredOutputDirectory.exists()) {
                 filteredOutputDirectory.mkdirs();
             }
-            try
-            {
+            try {
                 // so we get encoding from the file itself
-                try ( XmlStreamReader xmlStreamReader = new XmlStreamReader( changesXml ) )
-                {
+                try (XmlStreamReader xmlStreamReader = new XmlStreamReader(changesXml)) {
                     String encoding = xmlStreamReader.getEncoding();
-                    File resultFile = new File( filteredOutputDirectory,
-                                            project.getGroupId() + "." + project.getArtifactId() + "-changes.xml" );
+                    File resultFile = new File(
+                            filteredOutputDirectory,
+                            project.getGroupId() + "." + project.getArtifactId() + "-changes.xml");
 
-                    final MavenFileFilterRequest mavenFileFilterRequest =
-                            new MavenFileFilterRequest( changesXml, resultFile, true, project, 
-                                    Collections.<String>emptyList(), false, encoding, session, additionalProperties );
-                    mavenFileFilter.copyFile( mavenFileFilterRequest );
+                    final MavenFileFilterRequest mavenFileFilterRequest = new MavenFileFilterRequest(
+                            changesXml,
+                            resultFile,
+                            true,
+                            project,
+                            Collections.<String>emptyList(),
+                            false,
+                            encoding,
+                            session,
+                            additionalProperties);
+                    mavenFileFilter.copyFile(mavenFileFilterRequest);
                     changesXml = resultFile;
                 }
+            } catch (IOException | MavenFilteringException e) {
+                throw new MavenReportException("Exception during filtering changes file : " + e.getMessage(), e);
             }
-            catch ( IOException | MavenFilteringException e )
-            {
-                throw new MavenReportException( "Exception during filtering changes file : " + e.getMessage(), e );
-            }
-
         }
-        return new ChangesXML( changesXml, getLog() );
+        return new ChangesXML(changesXml, getLog());
     }
 
     /**
@@ -439,105 +417,85 @@ public class ChangesMojo
      * @param issueLinkTemplate The issue link template to use
      * @since 2.4
      */
-    private void addIssueLinkTemplate( String system, String issueLinkTemplate )
-    {
-        if ( caseInsensitiveIssueLinkTemplatePerSystem == null )
-        {
+    private void addIssueLinkTemplate(String system, String issueLinkTemplate) {
+        if (caseInsensitiveIssueLinkTemplatePerSystem == null) {
             caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap();
         }
-        if ( !caseInsensitiveIssueLinkTemplatePerSystem.containsKey( system ) )
-        {
-            caseInsensitiveIssueLinkTemplatePerSystem.put( system, issueLinkTemplate );
+        if (!caseInsensitiveIssueLinkTemplatePerSystem.containsKey(system)) {
+            caseInsensitiveIssueLinkTemplatePerSystem.put(system, issueLinkTemplate);
         }
     }
 
-    private void copyStaticResources()
-        throws MavenReportException
-    {
+    private void copyStaticResources() throws MavenReportException {
         final String pluginResourcesBase = "org/apache/maven/plugins/changes";
-        String[] resourceNames = { "images/add.gif", "images/fix.gif", "images/icon_help_sml.gif", "images/remove.gif",
-            "images/rss.png", "images/update.gif" };
-        try
-        {
-            getLog().debug( "Copying static resources." );
-            for ( String resourceName : resourceNames )
-            {
-                URL url = this.getClass().getClassLoader().getResource( pluginResourcesBase + "/" + resourceName );
-                FileUtils.copyURLToFile( url, new File( getReportOutputDirectory(), resourceName ) );
+        String[] resourceNames = {
+            "images/add.gif",
+            "images/fix.gif",
+            "images/icon_help_sml.gif",
+            "images/remove.gif",
+            "images/rss.png",
+            "images/update.gif"
+        };
+        try {
+            getLog().debug("Copying static resources.");
+            for (String resourceName : resourceNames) {
+                URL url = this.getClass().getClassLoader().getResource(pluginResourcesBase + "/" + resourceName);
+                FileUtils.copyURLToFile(url, new File(getReportOutputDirectory(), resourceName));
             }
-        }
-        catch ( IOException e )
-        {
-            throw new MavenReportException( "Unable to copy static resources." );
+        } catch (IOException e) {
+            throw new MavenReportException("Unable to copy static resources.");
         }
     }
 
-    private ResourceBundle getBundle( Locale locale )
-    {
-        return ResourceBundle.getBundle( "changes-report", locale, this.getClass().getClassLoader() );
+    private ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle(
+                "changes-report", locale, this.getClass().getClassLoader());
     }
 
-    protected String getTeam()
-    {
+    protected String getTeam() {
         return team;
     }
 
-    private void logIssueLinkTemplatePerSystem( Map<String, String> issueLinkTemplatePerSystem )
-    {
-        if ( getLog().isDebugEnabled() )
-        {
-            if ( issueLinkTemplatePerSystem == null )
-            {
-                getLog().debug( "No issueLinkTemplatePerSystem configuration was found" );
-            }
-            else
-            {
-                for ( Entry<String, String> entry : issueLinkTemplatePerSystem.entrySet() )
-                {
-                    getLog().debug( "issueLinkTemplatePerSystem[" + entry.getKey() + "] = " + entry.getValue() );
+    private void logIssueLinkTemplatePerSystem(Map<String, String> issueLinkTemplatePerSystem) {
+        if (getLog().isDebugEnabled()) {
+            if (issueLinkTemplatePerSystem == null) {
+                getLog().debug("No issueLinkTemplatePerSystem configuration was found");
+            } else {
+                for (Entry<String, String> entry : issueLinkTemplatePerSystem.entrySet()) {
+                    getLog().debug("issueLinkTemplatePerSystem[" + entry.getKey() + "] = " + entry.getValue());
                 }
             }
         }
     }
 
-    private boolean generateFeed( final ChangesXML changesXml, final Locale locale )
-    {
-        getLog().debug( "Generating " + feedType + " feed." );
+    private boolean generateFeed(final ChangesXML changesXml, final Locale locale) {
+        getLog().debug("Generating " + feedType + " feed.");
 
         boolean success = true;
 
-        final FeedGenerator feed = new FeedGenerator( locale );
-        feed.setLink( project.getUrl() + "/changes-report.html" ); // TODO: better way?
-        feed.setTitle( project.getName() + ": " + changesXml.getTitle() );
-        feed.setAuthor( changesXml.getAuthor() );
-        feed.setDateFormat( new SimpleDateFormat( publishDateFormat, new Locale( publishDateLocale ) ) );
+        final FeedGenerator feed = new FeedGenerator(locale);
+        feed.setLink(project.getUrl() + "/changes-report.html"); // TODO: better way?
+        feed.setTitle(project.getName() + ": " + changesXml.getTitle());
+        feed.setAuthor(changesXml.getAuthor());
+        feed.setDateFormat(new SimpleDateFormat(publishDateFormat, new Locale(publishDateLocale)));
 
         Writer writer = null;
 
-        try
-        {
-            writer = new FileWriter( new File( getReportOutputDirectory(), "changes.rss" ) );
-            feed.export( changesXml.getReleaseList(), feedType, writer );
-        }
-        catch ( IOException ex )
-        {
+        try {
+            writer = new FileWriter(new File(getReportOutputDirectory(), "changes.rss"));
+            feed.export(changesXml.getReleaseList(), feedType, writer);
+        } catch (IOException ex) {
             success = false;
-            getLog().warn( "Failed to create rss feed: " + ex.getMessage() );
-            getLog().debug( ex );
-        }
-        finally
-        {
-            try
-            {
-                if ( writer != null )
-                {
+            getLog().warn("Failed to create rss feed: " + ex.getMessage());
+            getLog().debug(ex);
+        } finally {
+            try {
+                if (writer != null) {
                     writer.close();
                 }
-            }
-            catch ( IOException ex )
-            {
-                getLog().warn( "Failed to close writer: " + ex.getMessage() );
-                getLog().debug( ex );
+            } catch (IOException ex) {
+                getLog().warn("Failed to close writer: " + ex.getMessage());
+                getLog().debug(ex);
             }
         }
 

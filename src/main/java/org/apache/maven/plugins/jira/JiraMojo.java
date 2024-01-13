@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
 
 import java.io.File;
 import java.util.HashMap;
@@ -45,31 +44,28 @@ import org.apache.maven.settings.Settings;
  * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
  * @version $Id$
  */
-@Mojo( name = "jira-report", threadSafe = true )
-public class JiraMojo
-    extends AbstractChangesReport
-{
+@Mojo(name = "jira-report", threadSafe = true)
+public class JiraMojo extends AbstractChangesReport {
     /**
      * Valid JIRA columns.
      */
-    private static final Map<String, Integer> JIRA_COLUMNS = new HashMap<>( 16 );
+    private static final Map<String, Integer> JIRA_COLUMNS = new HashMap<>(16);
 
-    static
-    {
-        JIRA_COLUMNS.put( "Assignee", IssuesReportHelper.COLUMN_ASSIGNEE );
-        JIRA_COLUMNS.put( "Component", IssuesReportHelper.COLUMN_COMPONENT );
-        JIRA_COLUMNS.put( "Created", IssuesReportHelper.COLUMN_CREATED );
-        JIRA_COLUMNS.put( "Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION );
-        JIRA_COLUMNS.put( "Id", IssuesReportHelper.COLUMN_ID );
-        JIRA_COLUMNS.put( "Key", IssuesReportHelper.COLUMN_KEY );
-        JIRA_COLUMNS.put( "Priority", IssuesReportHelper.COLUMN_PRIORITY );
-        JIRA_COLUMNS.put( "Reporter", IssuesReportHelper.COLUMN_REPORTER );
-        JIRA_COLUMNS.put( "Resolution", IssuesReportHelper.COLUMN_RESOLUTION );
-        JIRA_COLUMNS.put( "Status", IssuesReportHelper.COLUMN_STATUS );
-        JIRA_COLUMNS.put( "Summary", IssuesReportHelper.COLUMN_SUMMARY );
-        JIRA_COLUMNS.put( "Type", IssuesReportHelper.COLUMN_TYPE );
-        JIRA_COLUMNS.put( "Updated", IssuesReportHelper.COLUMN_UPDATED );
-        JIRA_COLUMNS.put( "Version", IssuesReportHelper.COLUMN_VERSION );
+    static {
+        JIRA_COLUMNS.put("Assignee", IssuesReportHelper.COLUMN_ASSIGNEE);
+        JIRA_COLUMNS.put("Component", IssuesReportHelper.COLUMN_COMPONENT);
+        JIRA_COLUMNS.put("Created", IssuesReportHelper.COLUMN_CREATED);
+        JIRA_COLUMNS.put("Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION);
+        JIRA_COLUMNS.put("Id", IssuesReportHelper.COLUMN_ID);
+        JIRA_COLUMNS.put("Key", IssuesReportHelper.COLUMN_KEY);
+        JIRA_COLUMNS.put("Priority", IssuesReportHelper.COLUMN_PRIORITY);
+        JIRA_COLUMNS.put("Reporter", IssuesReportHelper.COLUMN_REPORTER);
+        JIRA_COLUMNS.put("Resolution", IssuesReportHelper.COLUMN_RESOLUTION);
+        JIRA_COLUMNS.put("Status", IssuesReportHelper.COLUMN_STATUS);
+        JIRA_COLUMNS.put("Summary", IssuesReportHelper.COLUMN_SUMMARY);
+        JIRA_COLUMNS.put("Type", IssuesReportHelper.COLUMN_TYPE);
+        JIRA_COLUMNS.put("Updated", IssuesReportHelper.COLUMN_UPDATED);
+        JIRA_COLUMNS.put("Version", IssuesReportHelper.COLUMN_VERSION);
     }
 
     /**
@@ -83,7 +79,7 @@ public class JiraMojo
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "Key,Summary,Status,Resolution,Assignee" )
+    @Parameter(defaultValue = "Key,Summary,Status,Resolution,Assignee")
     private String columnNames;
 
     /**
@@ -93,7 +89,7 @@ public class JiraMojo
      *
      * @since 2.8
      */
-    @Parameter( property = "changes.useJql", defaultValue = "false" )
+    @Parameter(property = "changes.useJql", defaultValue = "false")
     private boolean useJql;
 
     /**
@@ -103,7 +99,7 @@ public class JiraMojo
      *
      * @since 2.9
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean forceRss;
 
     /**
@@ -135,7 +131,7 @@ public class JiraMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "EEE, d MMM yyyy HH:mm:ss Z" )
+    @Parameter(defaultValue = "EEE, d MMM yyyy HH:mm:ss Z")
     private String jiraDatePattern;
 
     /**
@@ -155,19 +151,19 @@ public class JiraMojo
      *
      * @since 3.0.0
      */
-    @Parameter( property = "changes.jiraServerId" )
+    @Parameter(property = "changes.jiraServerId")
     private String jiraServerId;
 
     /**
      * Path to the JIRA XML file, which will be parsed.
      */
-    @Parameter( defaultValue = "${project.build.directory}/jira-results.xml", required = true, readonly = true )
+    @Parameter(defaultValue = "${project.build.directory}/jira-results.xml", required = true, readonly = true)
     private File jiraXmlPath;
 
     /**
      * Maximum number of entries to be fetched from JIRA.
      */
-    @Parameter( defaultValue = "100" )
+    @Parameter(defaultValue = "100")
     private int maxEntries;
 
     /**
@@ -176,7 +172,7 @@ public class JiraMojo
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean onlyCurrentVersion;
 
     /**
@@ -195,21 +191,21 @@ public class JiraMojo
      * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter had no default value.
      * </p>
      */
-    @Parameter( defaultValue = "Fixed" )
+    @Parameter(defaultValue = "Fixed")
     private String resolutionIds;
 
     /**
      * Settings XML configuration.
      */
-    @Parameter( defaultValue = "${settings}", readonly = true, required = true )
+    @Parameter(defaultValue = "${settings}", readonly = true, required = true)
     private Settings settings;
 
     /**
      * If set to <code>true</code>, then the JIRA report will not be generated.
-     * 
+     *
      * @since 2.8
      */
-    @Parameter( property = "changes.jira.skip", defaultValue = "false" )
+    @Parameter(property = "changes.jira.skip", defaultValue = "false")
     private boolean skip;
 
     /**
@@ -233,7 +229,7 @@ public class JiraMojo
      *
      * @since 2.0
      */
-    @Parameter( defaultValue = "Priority DESC, Created DESC" )
+    @Parameter(defaultValue = "Priority DESC, Created DESC")
     private String sortColumnNames;
 
     /**
@@ -250,7 +246,7 @@ public class JiraMojo
      * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter had no default value.
      * </p>
      */
-    @Parameter( defaultValue = "Closed" )
+    @Parameter(defaultValue = "Closed")
     private String statusIds;
 
     /**
@@ -301,106 +297,84 @@ public class JiraMojo
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
-    public boolean canGenerateReport()
-    {
+    public boolean canGenerateReport() {
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the JIRA Report in this project because it's not the Execution Root" );
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the JIRA Report in this project because it's not the Execution Root");
             return false;
         }
-        if ( skip )
-        {
+        if (skip) {
             return false;
         }
-        if ( mockDownloader != null )
-        {
+        if (mockDownloader != null) {
             return true;
         }
-        String message = ProjectUtils.validateIssueManagement( project, "JIRA", "JIRA Report" );
-        if ( message != null )
-        {
-            getLog().warn( message );
+        String message = ProjectUtils.validateIssueManagement(project, "JIRA", "JIRA Report");
+        if (message != null) {
+            getLog().warn(message);
         }
         return message == null;
     }
 
-    public void executeReport( Locale locale )
-        throws MavenReportException
-    {
+    public void executeReport(Locale locale) throws MavenReportException {
         // Validate parameters
-        List<Integer> columnIds = IssuesReportHelper.getColumnIds( columnNames, JIRA_COLUMNS );
-        if ( columnIds.isEmpty() )
-        {
+        List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, JIRA_COLUMNS);
+        if (columnIds.isEmpty()) {
             // This can happen if the user has configured column names and they are all invalid
-            throw new MavenReportException( "maven-changes-plugin: None of the configured columnNames '" + columnNames
-                + "' are valid." );
+            throw new MavenReportException(
+                    "maven-changes-plugin: None of the configured columnNames '" + columnNames + "' are valid.");
         }
 
-        try
-        {
+        try {
             // Download issues
             AbstractJiraDownloader issueDownloader;
-            if ( mockDownloader != null )
-            {
+            if (mockDownloader != null) {
                 issueDownloader = mockDownloader;
-            }
-            else
-            {
+            } else {
                 AdaptiveJiraDownloader downloader = new AdaptiveJiraDownloader();
-                downloader.setForceClassic( forceRss );
+                downloader.setForceClassic(forceRss);
                 issueDownloader = downloader;
             }
-            configureIssueDownloader( issueDownloader );
+            configureIssueDownloader(issueDownloader);
             issueDownloader.doExecute();
 
             List<Issue> issueList = issueDownloader.getIssueList();
 
-            if ( StringUtils.isNotEmpty( versionPrefix ) )
-            {
+            if (StringUtils.isNotEmpty(versionPrefix)) {
                 int originalNumberOfIssues = issueList.size();
-                issueList = IssueUtils.filterIssuesWithVersionPrefix( issueList, versionPrefix );
-                getLog().debug( "Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
-                    + " that matched the versionPrefix '" + versionPrefix + "'." );
+                issueList = IssueUtils.filterIssuesWithVersionPrefix(issueList, versionPrefix);
+                getLog().debug("Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
+                        + " that matched the versionPrefix '" + versionPrefix + "'.");
             }
 
-            if ( onlyCurrentVersion )
-            {
-                String version = ( versionPrefix == null ? "" : versionPrefix ) + project.getVersion();
-                issueList = IssueUtils.getIssuesForVersion( issueList, version );
-                getLog().info( "The JIRA Report will contain issues only for the current version." );
+            if (onlyCurrentVersion) {
+                String version = (versionPrefix == null ? "" : versionPrefix) + project.getVersion();
+                issueList = IssueUtils.getIssuesForVersion(issueList, version);
+                getLog().info("The JIRA Report will contain issues only for the current version.");
             }
 
             // Generate the report
-            IssuesReportGenerator report = new IssuesReportGenerator( IssuesReportHelper.toIntArray( columnIds ) );
+            IssuesReportGenerator report = new IssuesReportGenerator(IssuesReportHelper.toIntArray(columnIds));
 
-            if ( issueList.isEmpty() )
-            {
-                report.doGenerateEmptyReport( getBundle( locale ), getSink() );
+            if (issueList.isEmpty()) {
+                report.doGenerateEmptyReport(getBundle(locale), getSink());
+            } else {
+                report.doGenerateReport(getBundle(locale), getSink(), issueList);
             }
-            else
-            {
-                report.doGenerateReport( getBundle( locale ), getSink(), issueList );
-            }
-        }
-        catch ( Exception e )
-        {
-            getLog().warn( e );
+        } catch (Exception e) {
+            getLog().warn(e);
         }
     }
 
-    public String getDescription( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.description" );
+    public String getDescription(Locale locale) {
+        return getBundle(locale).getString("report.issues.description");
     }
 
-    public String getName( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.name" );
+    public String getName(Locale locale) {
+        return getBundle(locale).getString("report.issues.name");
     }
 
-    public String getOutputName()
-    {
+    public String getOutputName() {
         return "jira-report";
     }
 
@@ -408,71 +382,64 @@ public class JiraMojo
     /* Private methods */
     /* --------------------------------------------------------------------- */
 
-    private ResourceBundle getBundle( Locale locale )
-    {
-        return ResourceBundle.getBundle( "jira-report", locale, this.getClass().getClassLoader() );
+    private ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("jira-report", locale, this.getClass().getClassLoader());
     }
 
-    private void configureIssueDownloader( AbstractJiraDownloader issueDownloader )
-    {
-        issueDownloader.setLog( getLog() );
+    private void configureIssueDownloader(AbstractJiraDownloader issueDownloader) {
+        issueDownloader.setLog(getLog());
 
-        issueDownloader.setMavenProject( project );
+        issueDownloader.setMavenProject(project);
 
-        issueDownloader.setOutput( jiraXmlPath );
+        issueDownloader.setOutput(jiraXmlPath);
 
-        issueDownloader.setNbEntries( maxEntries );
+        issueDownloader.setNbEntries(maxEntries);
 
-        issueDownloader.setComponent( component );
+        issueDownloader.setComponent(component);
 
-        issueDownloader.setFixVersionIds( fixVersionIds );
+        issueDownloader.setFixVersionIds(fixVersionIds);
 
-        issueDownloader.setStatusIds( statusIds );
+        issueDownloader.setStatusIds(statusIds);
 
-        issueDownloader.setResolutionIds( resolutionIds );
+        issueDownloader.setResolutionIds(resolutionIds);
 
-        issueDownloader.setPriorityIds( priorityIds );
+        issueDownloader.setPriorityIds(priorityIds);
 
-        issueDownloader.setSortColumnNames( sortColumnNames );
+        issueDownloader.setSortColumnNames(sortColumnNames);
 
-        issueDownloader.setFilter( filter );
+        issueDownloader.setFilter(filter);
 
-        issueDownloader.setJiraDatePattern( jiraDatePattern );
+        issueDownloader.setJiraDatePattern(jiraDatePattern);
 
-        if ( jiraServerId != null )
-        {
-            final Server server = mavenSession.getSettings().getServer( jiraServerId );
-            issueDownloader.setJiraUser( server.getUsername() );
-            issueDownloader.setJiraPassword( server.getPassword() );
-        }
-        else
-        {
-            issueDownloader.setJiraUser( jiraUser );
-            issueDownloader.setJiraPassword( jiraPassword );
+        if (jiraServerId != null) {
+            final Server server = mavenSession.getSettings().getServer(jiraServerId);
+            issueDownloader.setJiraUser(server.getUsername());
+            issueDownloader.setJiraPassword(server.getPassword());
+        } else {
+            issueDownloader.setJiraUser(jiraUser);
+            issueDownloader.setJiraPassword(jiraPassword);
         }
 
-        issueDownloader.setTypeIds( typeIds );
+        issueDownloader.setTypeIds(typeIds);
 
-        issueDownloader.setWebUser( webUser );
+        issueDownloader.setWebUser(webUser);
 
-        issueDownloader.setWebPassword( webPassword );
+        issueDownloader.setWebPassword(webPassword);
 
-        issueDownloader.setSettings( settings );
+        issueDownloader.setSettings(settings);
 
-        issueDownloader.setUseJql( useJql );
+        issueDownloader.setUseJql(useJql);
 
-        issueDownloader.setOnlyCurrentVersion( onlyCurrentVersion );
+        issueDownloader.setOnlyCurrentVersion(onlyCurrentVersion);
 
-        issueDownloader.setVersionPrefix( versionPrefix );
+        issueDownloader.setVersionPrefix(versionPrefix);
     }
 
-    public void setMockDownloader( AbstractJiraDownloader mockDownloader )
-    {
+    public void setMockDownloader(AbstractJiraDownloader mockDownloader) {
         this.mockDownloader = mockDownloader;
     }
 
-    public AbstractJiraDownloader getMockDownloader()
-    {
+    public AbstractJiraDownloader getMockDownloader() {
         return mockDownloader;
     }
 }

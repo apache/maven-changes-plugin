@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.plugins.changes;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,14 +34,12 @@ import org.apache.maven.plugins.changes.model.Release;
  * @version $Id$
  * @since 2.4
  */
-public class ReleaseUtils
-{
+public class ReleaseUtils {
     private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
     private Log log;
 
-    public ReleaseUtils( Log log )
-    {
+    public ReleaseUtils(Log log) {
         this.log = log;
     }
 
@@ -54,29 +51,24 @@ public class ReleaseUtils
      * @return A <code>Release</code> that matches the next release of the current project
      * @throws org.apache.maven.plugin.MojoExecutionException If a release can't be found
      */
-    public Release getLatestRelease( List<Release> releases, String pomVersion )
-        throws MojoExecutionException
-    {
+    public Release getLatestRelease(List<Release> releases, String pomVersion) throws MojoExecutionException {
         // Remove "-SNAPSHOT" from the end, if it's there
-        if ( pomVersion != null && pomVersion.endsWith( SNAPSHOT_SUFFIX ) )
-        {
-            pomVersion = pomVersion.substring( 0, pomVersion.length() - SNAPSHOT_SUFFIX.length() );
+        if (pomVersion != null && pomVersion.endsWith(SNAPSHOT_SUFFIX)) {
+            pomVersion = pomVersion.substring(0, pomVersion.length() - SNAPSHOT_SUFFIX.length());
         }
-        getLog().debug( "Found " + releases.size() + " releases." );
+        getLog().debug("Found " + releases.size() + " releases.");
 
-        Release release = getRelease( releases, pomVersion );
+        Release release = getRelease(releases, pomVersion);
 
-        if ( release == null )
-        {
-            throw new MojoExecutionException( "Couldn't find the release '" + pomVersion
-                + "' among the supplied releases: " + toString( releases ) );
+        if (release == null) {
+            throw new MojoExecutionException("Couldn't find the release '" + pomVersion
+                    + "' among the supplied releases: " + toString(releases));
         }
 
         return release;
     }
 
-    private Log getLog()
-    {
+    private Log getLog() {
         return log;
     }
 
@@ -87,22 +79,17 @@ public class ReleaseUtils
      * @param version The version we want
      * @return A Release, or null if no release with the specified version can be found
      */
-    protected Release getRelease( List<Release> releases, String version )
-    {
-        for ( Release release : releases )
-        {
-            if ( getLog().isDebugEnabled() )
-            {
-                getLog().debug( "The release: " + release.getVersion() + " has " + release.getActions().size()
-                    + " actions." );
+    protected Release getRelease(List<Release> releases, String version) {
+        for (Release release : releases) {
+            if (getLog().isDebugEnabled()) {
+                getLog().debug("The release: " + release.getVersion() + " has "
+                        + release.getActions().size() + " actions.");
             }
 
-            if ( release.getVersion() != null && release.getVersion().equals( version ) )
-            {
-                if ( getLog().isDebugEnabled() )
-                {
-                    getLog().debug( "Found the correct release: " + release.getVersion() );
-                    logRelease( release );
+            if (release.getVersion() != null && release.getVersion().equals(version)) {
+                if (getLog().isDebugEnabled()) {
+                    getLog().debug("Found the correct release: " + release.getVersion());
+                    logRelease(release);
                 }
                 return release;
             }
@@ -110,16 +97,14 @@ public class ReleaseUtils
         return null;
     }
 
-    protected void logRelease( Release release )
-    {
+    protected void logRelease(Release release) {
         Action action;
-        for ( Action action1 : release.getActions() )
-        {
+        for (Action action1 : release.getActions()) {
             action = action1;
-            getLog().debug( "o " + action.getType() );
-            getLog().debug( "issue : " + action.getIssue() );
-            getLog().debug( "action : " + action.getAction() );
-            getLog().debug( "dueTo : " + action.getDueTo() );
+            getLog().debug("o " + action.getType());
+            getLog().debug("issue : " + action.getIssue());
+            getLog().debug("action : " + action.getAction());
+            getLog().debug("dueTo : " + action.getDueTo());
         }
     }
 
@@ -131,18 +116,14 @@ public class ReleaseUtils
      * @param secondReleases Releases from the second issue tracker
      * @return A list containing the merged releases
      */
-    public List<Release> mergeReleases( final List<Release> firstReleases, final List<Release> secondReleases )
-    {
-        if ( firstReleases == null && secondReleases == null )
-        {
+    public List<Release> mergeReleases(final List<Release> firstReleases, final List<Release> secondReleases) {
+        if (firstReleases == null && secondReleases == null) {
             return Collections.emptyList();
         }
-        if ( firstReleases == null )
-        {
+        if (firstReleases == null) {
             return secondReleases;
         }
-        if ( secondReleases == null )
-        {
+        if (secondReleases == null) {
             return firstReleases;
         }
 
@@ -151,26 +132,21 @@ public class ReleaseUtils
         // Loop through the releases from the first issue tracker, merging in
         // actions from releases with the same version from the second issue
         // tracker
-        for ( Release firstRelease : firstReleases )
-        {
-            Release secondRelease = getRelease( secondReleases, firstRelease.getVersion() );
-            if ( secondRelease != null )
-            {
-                if ( secondRelease.getActions() != null )
-                {
-                    firstRelease.getActions().addAll( secondRelease.getActions() );
+        for (Release firstRelease : firstReleases) {
+            Release secondRelease = getRelease(secondReleases, firstRelease.getVersion());
+            if (secondRelease != null) {
+                if (secondRelease.getActions() != null) {
+                    firstRelease.getActions().addAll(secondRelease.getActions());
                 }
             }
-            mergedReleases.add( firstRelease );
+            mergedReleases.add(firstRelease);
         }
 
         // Handle releases that are only in the second issue tracker
-        for ( Release secondRelease : secondReleases )
-        {
-            Release mergedRelease = getRelease( mergedReleases, secondRelease.getVersion() );
-            if ( mergedRelease == null )
-            {
-                mergedReleases.add( secondRelease );
+        for (Release secondRelease : secondReleases) {
+            Release mergedRelease = getRelease(mergedReleases, secondRelease.getVersion());
+            if (mergedRelease == null) {
+                mergedReleases.add(secondRelease);
             }
         }
         return mergedReleases;
@@ -186,64 +162,53 @@ public class ReleaseUtils
      * @param componentReleases Releases from the child component
      * @return A list containing the merged releases
      */
-    public List<Release> mergeReleases( final List<Release> releases, final String componentName,
-                                        final List<Release> componentReleases )
-    {
-        if ( releases == null && componentReleases == null )
-        {
+    public List<Release> mergeReleases(
+            final List<Release> releases, final String componentName, final List<Release> componentReleases) {
+        if (releases == null && componentReleases == null) {
             return Collections.emptyList();
         }
-        if ( componentReleases == null )
-        {
+        if (componentReleases == null) {
             return releases;
         }
 
         final List<Release> mergedReleases = new ArrayList<>();
 
-        if ( releases != null )
-        {
-            for ( Object release1 : releases )
-            {
+        if (releases != null) {
+            for (Object release1 : releases) {
                 final Release release = (Release) release1;
-                final Release componentRelease = getRelease( componentReleases, release.getVersion() );
-                if ( componentRelease != null )
-                {
-                    release.addComponent( componentName, componentRelease );
+                final Release componentRelease = getRelease(componentReleases, release.getVersion());
+                if (componentRelease != null) {
+                    release.addComponent(componentName, componentRelease);
                 }
-                mergedReleases.add( release );
+                mergedReleases.add(release);
             }
         }
 
-        for ( Object componentRelease1 : componentReleases )
-        {
+        for (Object componentRelease1 : componentReleases) {
             final Release release = (Release) componentRelease1;
-            final Release mergedRelease = getRelease( mergedReleases, release.getVersion() );
-            if ( mergedRelease == null )
-            {
+            final Release mergedRelease = getRelease(mergedReleases, release.getVersion());
+            if (mergedRelease == null) {
                 final Release componentRelease = new Release();
-                componentRelease.setVersion( release.getVersion() );
-                componentRelease.setDateRelease( release.getDateRelease() );
-                componentRelease.addComponent( componentName, release );
-                mergedReleases.add( componentRelease );
+                componentRelease.setVersion(release.getVersion());
+                componentRelease.setDateRelease(release.getDateRelease());
+                componentRelease.addComponent(componentName, release);
+                mergedReleases.add(componentRelease);
             }
         }
 
         return mergedReleases;
     }
 
-    private static String toString( Release release )
-    {
+    private static String toString(Release release) {
         return release.getClass().getSimpleName() + "[version='" + release.getVersion() + "'" + ", date='"
-            + release.getDateRelease() + "'" + ", description='" + release.getDescription() + "'" + ", actionsSize="
-            + release.getActions().size() + "]";
+                + release.getDateRelease() + "'" + ", description='" + release.getDescription() + "'" + ", actionsSize="
+                + release.getActions().size() + "]";
     }
 
-    public static String toString( List<Release> releases )
-    {
-        List<String> releaseStrings = new ArrayList<>( releases.size() );
-        for ( Release release : releases )
-        {
-            releaseStrings.add( toString( release ) );
+    public static String toString(List<Release> releases) {
+        List<String> releaseStrings = new ArrayList<>(releases.size());
+        for (Release release : releases) {
+            releaseStrings.add(toString(release));
         }
         return releaseStrings.toString();
     }

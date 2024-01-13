@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,12 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -29,11 +33,6 @@ import org.apache.maven.settings.Settings;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.apache.maven.wagon.proxy.ProxyUtils;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
 /**
  * Abstract API, more or less, to retrieving issue information from JIRA. Intended to have subclasses for the old (RSS)
  * and new (REST) ways of doing things.
@@ -42,8 +41,7 @@ import java.util.List;
  * @author jruiz@exist.com
  * @version $Id$
  */
-public abstract class AbstractJiraDownloader
-{
+public abstract class AbstractJiraDownloader {
     protected static final String UTF_8 = "UTF-8";
 
     /** Log for debug output. */
@@ -129,60 +127,49 @@ public abstract class AbstractJiraDownloader
      *
      * @throws Exception on error
      */
-    public abstract void doExecute()
-        throws Exception;
+    public abstract void doExecute() throws Exception;
 
     /**
      * Check to see if we think that JIRA authentication is needed.
      *
      * @return <code>true</code> if jiraUser and jiraPassword are set, otherwise <code>false</code>
      */
-    protected boolean isJiraAuthenticationConfigured()
-    {
-        return ( jiraUser != null ) && ( jiraUser.length() > 0 ) && ( jiraPassword != null );
+    protected boolean isJiraAuthenticationConfigured() {
+        return (jiraUser != null) && (jiraUser.length() > 0) && (jiraPassword != null);
     }
 
-    protected void getProxyInfo( String jiraUrl )
-    {
+    protected void getProxyInfo(String jiraUrl) {
         // see whether there is any proxy defined in maven
         Proxy proxy = null;
 
-        if ( project == null )
-        {
-            getLog().error( "No project set. No proxy info available." );
+        if (project == null) {
+            getLog().error("No project set. No proxy info available.");
 
             return;
         }
 
-        if ( settings != null )
-        {
+        if (settings != null) {
             proxy = settings.getActiveProxy();
         }
 
-        if ( proxy != null )
-        {
+        if (proxy != null) {
 
             ProxyInfo proxyInfo = new ProxyInfo();
-            proxyInfo.setNonProxyHosts( proxy.getNonProxyHosts() );
+            proxyInfo.setNonProxyHosts(proxy.getNonProxyHosts());
 
             // Get the host out of the JIRA URL
             URL url = null;
-            try
-            {
-                url = new URL( jiraUrl );
-            }
-            catch ( MalformedURLException e )
-            {
-                getLog().error( "Invalid JIRA URL: " + jiraUrl + ". " + e.getMessage() );
+            try {
+                url = new URL(jiraUrl);
+            } catch (MalformedURLException e) {
+                getLog().error("Invalid JIRA URL: " + jiraUrl + ". " + e.getMessage());
             }
             String jiraHost = null;
-            if ( url != null )
-            {
+            if (url != null) {
                 jiraHost = url.getHost();
             }
 
-            if ( ProxyUtils.validateNonProxyHosts( proxyInfo, jiraHost ) )
-            {
+            if (ProxyUtils.validateNonProxyHosts(proxyInfo, jiraHost)) {
                 return;
             }
 
@@ -198,36 +185,27 @@ public abstract class AbstractJiraDownloader
      *
      * @return A Fix For id or <code>null</code> if you don't have that need
      */
-    protected String getFixFor()
-    {
-        if ( onlyCurrentVersion && useJql )
-        {
+    protected String getFixFor() {
+        if (onlyCurrentVersion && useJql) {
             // Let JIRA do the filtering of the current version instead of the JIRA mojo.
             // This way JIRA returns less issues and we do not run into the "nbEntriesMax" limit that easily.
 
-            String version = ( versionPrefix == null ? "" : versionPrefix ) + project.getVersion();
+            String version = (versionPrefix == null ? "" : versionPrefix) + project.getVersion();
 
             // Remove "-SNAPSHOT" from the end of the version, if it's there
-            if ( version.endsWith( IssueUtils.SNAPSHOT_SUFFIX ) )
-            {
-                return version.substring( 0, version.length() - IssueUtils.SNAPSHOT_SUFFIX.length() );
-            }
-            else
-            {
+            if (version.endsWith(IssueUtils.SNAPSHOT_SUFFIX)) {
+                return version.substring(0, version.length() - IssueUtils.SNAPSHOT_SUFFIX.length());
+            } else {
                 return version;
             }
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public abstract List<Issue> getIssueList()
-        throws MojoExecutionException;
+    public abstract List<Issue> getIssueList() throws MojoExecutionException;
 
-    public void setJiraDatePattern( String jiraDatePattern )
-    {
+    public void setJiraDatePattern(String jiraDatePattern) {
         this.jiraDatePattern = jiraDatePattern;
     }
 
@@ -236,13 +214,11 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisOutput the output file
      */
-    public void setOutput( File thisOutput )
-    {
+    public void setOutput(File thisOutput) {
         this.output = thisOutput;
     }
 
-    public File getOutput()
-    {
+    public File getOutput() {
         return this.output;
     }
 
@@ -251,8 +227,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisProject The project to set
      */
-    public void setMavenProject( Object thisProject )
-    {
+    public void setMavenProject(Object thisProject) {
         this.project = (MavenProject) thisProject;
     }
 
@@ -261,8 +236,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param nbEntries The maximum number of Issues
      */
-    public void setNbEntries( final int nbEntries )
-    {
+    public void setNbEntries(final int nbEntries) {
         nbEntriesMax = nbEntries;
     }
 
@@ -271,8 +245,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisStatusIds The id(s) of the status to show, as comma separated string
      */
-    public void setStatusIds( String thisStatusIds )
-    {
+    public void setStatusIds(String thisStatusIds) {
         statusIds = thisStatusIds;
     }
 
@@ -281,8 +254,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisPriorityIds The id(s) of the priority to show, as comma separated string
      */
-    public void setPriorityIds( String thisPriorityIds )
-    {
+    public void setPriorityIds(String thisPriorityIds) {
         priorityIds = thisPriorityIds;
     }
 
@@ -291,8 +263,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisResolutionIds The id(s) of the resolution to show, as comma separated string
      */
-    public void setResolutionIds( String thisResolutionIds )
-    {
+    public void setResolutionIds(String thisResolutionIds) {
         resolutionIds = thisResolutionIds;
     }
 
@@ -301,8 +272,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisSortColumnNames The column names to sort by
      */
-    public void setSortColumnNames( String thisSortColumnNames )
-    {
+    public void setSortColumnNames(String thisSortColumnNames) {
         sortColumnNames = thisSortColumnNames;
     }
 
@@ -311,8 +281,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisWebPassword The password of the webserver
      */
-    public void setWebPassword( String thisWebPassword )
-    {
+    public void setWebPassword(String thisWebPassword) {
         this.webPassword = thisWebPassword;
     }
 
@@ -321,8 +290,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisWebUser The username of the webserver
      */
-    public void setWebUser( String thisWebUser )
-    {
+    public void setWebUser(String thisWebUser) {
         this.webUser = thisWebUser;
     }
 
@@ -331,8 +299,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisJiraPassword The password for JIRA
      */
-    public void setJiraPassword( final String thisJiraPassword )
-    {
+    public void setJiraPassword(final String thisJiraPassword) {
         this.jiraPassword = thisJiraPassword;
     }
 
@@ -341,8 +308,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisJiraUser The username for JIRA
      */
-    public void setJiraUser( String thisJiraUser )
-    {
+    public void setJiraUser(String thisJiraUser) {
         this.jiraUser = thisJiraUser;
     }
 
@@ -351,8 +317,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param thisFilter The filter to query JIRA
      */
-    public void setFilter( String thisFilter )
-    {
+    public void setFilter(String thisFilter) {
         this.filter = thisFilter;
     }
 
@@ -361,8 +326,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param theseComponents The id(s) of components to show, as comma separated string
      */
-    public void setComponent( String theseComponents )
-    {
+    public void setComponent(String theseComponents) {
         this.component = theseComponents;
     }
 
@@ -371,8 +335,7 @@ public abstract class AbstractJiraDownloader
      *
      * @param theseFixVersionIds The id(s) of fix versions to show, as comma separated string
      */
-    public void setFixVersionIds( String theseFixVersionIds )
-    {
+    public void setFixVersionIds(String theseFixVersionIds) {
         this.fixVersionIds = theseFixVersionIds;
     }
 
@@ -381,63 +344,51 @@ public abstract class AbstractJiraDownloader
      *
      * @param theseTypeIds The id(s) of the types to show, as comma separated string
      */
-    public void setTypeIds( String theseTypeIds )
-    {
+    public void setTypeIds(String theseTypeIds) {
         typeIds = theseTypeIds;
     }
 
-    public void setLog( Log log )
-    {
+    public void setLog(Log log) {
         this.log = log;
     }
 
-    protected Log getLog()
-    {
+    protected Log getLog() {
         return log;
     }
 
-    public void setSettings( Settings settings )
-    {
+    public void setSettings(Settings settings) {
         this.settings = settings;
     }
 
-    public boolean isUseJql()
-    {
+    public boolean isUseJql() {
         return useJql;
     }
 
-    public void setUseJql( boolean useJql )
-    {
+    public void setUseJql(boolean useJql) {
         this.useJql = useJql;
     }
 
-    public boolean isOnlyCurrentVersion()
-    {
+    public boolean isOnlyCurrentVersion() {
         return onlyCurrentVersion;
     }
 
-    public void setOnlyCurrentVersion( boolean onlyCurrentVersion )
-    {
+    public void setOnlyCurrentVersion(boolean onlyCurrentVersion) {
         this.onlyCurrentVersion = onlyCurrentVersion;
     }
 
-    public String getVersionPrefix()
-    {
+    public String getVersionPrefix() {
         return versionPrefix;
     }
 
-    public void setVersionPrefix( String versionPrefix )
-    {
+    public void setVersionPrefix(String versionPrefix) {
         this.versionPrefix = versionPrefix;
     }
 
-    public void setConnectionTimeout( int connectionTimeout )
-    {
+    public void setConnectionTimeout(int connectionTimeout) {
         this.connectionTimeout = connectionTimeout;
     }
 
-    public void setReceiveTimout( int receiveTimout )
-    {
+    public void setReceiveTimout(int receiveTimout) {
         this.receiveTimout = receiveTimout;
     }
 }

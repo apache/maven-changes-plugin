@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import org.apache.maven.project.MavenProject;
 
@@ -28,12 +27,9 @@ import org.apache.maven.project.MavenProject;
  * @version $Id$
  * @since 2.4
  */
-public final class ProjectUtils
-{
+public final class ProjectUtils {
 
-    private ProjectUtils()
-    {
-    }
+    private ProjectUtils() {}
 
     /**
      * Check if the issue management system has been properly configured in the Maven project.
@@ -44,23 +40,17 @@ public final class ProjectUtils
      * @return <code>null</code> if the &lt;issueManagement&gt; element of the POM is complete, otherwise a String
      *         containing the reason of the failed validation.
      */
-    public static String validateIssueManagement( MavenProject project, String issueManagementSystem,
-                                                  String mojoResult )
-    {
-        if ( project.getIssueManagement() == null )
-        {
+    public static String validateIssueManagement(
+            MavenProject project, String issueManagementSystem, String mojoResult) {
+        if (project.getIssueManagement() == null) {
             return "No Issue Management set. No " + mojoResult + " will be generated.";
-        }
-        else if ( ( project.getIssueManagement().getUrl() == null )
-            || ( project.getIssueManagement().getUrl().trim().equals( "" ) ) )
-        {
+        } else if ((project.getIssueManagement().getUrl() == null)
+                || (project.getIssueManagement().getUrl().trim().equals(""))) {
             return "No URL set in Issue Management. No " + mojoResult + " will be generated.";
-        }
-        else if ( ( project.getIssueManagement().getSystem() != null )
-            && !( project.getIssueManagement().getSystem().equalsIgnoreCase( issueManagementSystem ) ) )
-        {
+        } else if ((project.getIssueManagement().getSystem() != null)
+                && !(project.getIssueManagement().getSystem().equalsIgnoreCase(issueManagementSystem))) {
             return "The " + mojoResult + " only supports " + issueManagementSystem + ".  No " + mojoResult
-                + " will be generated.";
+                    + " will be generated.";
         }
         return null;
     }

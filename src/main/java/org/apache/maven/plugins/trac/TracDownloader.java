@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.trac;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,13 +16,7 @@ package org.apache.maven.plugins.trac;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.project.MavenProject;
-import org.apache.xmlrpc.XmlRpcException;
-import org.apache.xmlrpc.client.XmlRpcClient;
-import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
-import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
+package org.apache.maven.plugins.trac;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -37,6 +29,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.maven.plugins.issues.Issue;
+import org.apache.maven.project.MavenProject;
+import org.apache.xmlrpc.XmlRpcException;
+import org.apache.xmlrpc.client.XmlRpcClient;
+import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+import org.apache.xmlrpc.client.XmlRpcCommonsTransportFactory;
+
 /**
  * Get issues from a Trac installation.
  *
@@ -44,8 +43,7 @@ import java.util.Map;
  * @version $Id$
  * @since 2.4
  */
-public class TracDownloader
-{
+public class TracDownloader {
     /** The Maven project. */
     private MavenProject project;
 
@@ -58,150 +56,125 @@ public class TracDownloader
     /** The username for authentication into a private Trac installation. */
     private String tracUser;
 
-    private Issue createIssue( Object[] ticketObj )
-    {
+    private Issue createIssue(Object[] ticketObj) {
         Issue issue = new Issue();
 
-        issue.setId( String.valueOf( ticketObj[0] ) );
+        issue.setId(String.valueOf(ticketObj[0]));
 
-        issue.setKey( String.valueOf( ticketObj[0] ) );
+        issue.setKey(String.valueOf(ticketObj[0]));
 
-        issue.setLink( getUrl() + "/ticket/" + ticketObj[0] );
+        issue.setLink(getUrl() + "/ticket/" + ticketObj[0]);
 
-        issue.setCreated( parseDate( String.valueOf( ticketObj[1] ) ) );
+        issue.setCreated(parseDate(String.valueOf(ticketObj[1])));
 
-        issue.setUpdated( parseDate( String.valueOf( ticketObj[2] ) ) );
+        issue.setUpdated(parseDate(String.valueOf(ticketObj[2])));
 
-        @SuppressWarnings( "unchecked" )
+        @SuppressWarnings("unchecked")
         Map<String, String> attributes = (Map<String, String>) ticketObj[3];
 
-        issue.setType( attributes.get( "type" ) );
+        issue.setType(attributes.get("type"));
 
-        issue.setSummary( attributes.get( "summary" ) );
+        issue.setSummary(attributes.get("summary"));
 
-        issue.setStatus( attributes.get( "status" ) );
+        issue.setStatus(attributes.get("status"));
 
-        issue.setResolution( attributes.get( "resolution" ) );
+        issue.setResolution(attributes.get("resolution"));
 
-        issue.setAssignee( attributes.get( "owner" ) );
+        issue.setAssignee(attributes.get("owner"));
 
-        issue.addFixVersion( attributes.get( "milestone" ) );
+        issue.addFixVersion(attributes.get("milestone"));
 
-        issue.setPriority( attributes.get( "priority" ) );
+        issue.setPriority(attributes.get("priority"));
 
-        issue.setReporter( attributes.get( "reporter" ) );
+        issue.setReporter(attributes.get("reporter"));
 
-        issue.addComponent( attributes.get( "component" ) );
+        issue.addComponent(attributes.get("component"));
 
         return issue;
     }
 
-    public List<Issue> getIssueList()
-        throws MalformedURLException, XmlRpcException
-    {
+    public List<Issue> getIssueList() throws MalformedURLException, XmlRpcException {
         // Create and configure an XML-RPC client
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
-        try
-        {
-            config.setServerURL( new URL( getUrl() + "/login/xmlrpc" ) );
+        try {
+            config.setServerURL(new URL(getUrl() + "/login/xmlrpc"));
+        } catch (MalformedURLException e) {
+            throw new MalformedURLException("The Trac URL is incorrect.");
         }
-        catch ( MalformedURLException e )
-        {
-            throw new MalformedURLException( "The Trac URL is incorrect." );
-        }
-        config.setBasicUserName( tracUser );
-        config.setBasicPassword( tracPassword );
+        config.setBasicUserName(tracUser);
+        config.setBasicPassword(tracPassword);
 
         XmlRpcClient client = new XmlRpcClient();
 
-        client.setConfig( config );
+        client.setConfig(config);
 
-        client.setTransportFactory( new XmlRpcCommonsTransportFactory( client ) );
+        client.setTransportFactory(new XmlRpcCommonsTransportFactory(client));
 
         // Fetch issues
         String qstr = "";
 
-        if ( !( query == null || query.isEmpty() ) )
-        {
+        if (!(query == null || query.isEmpty())) {
             qstr = query;
         }
 
-        Object[] params = new Object[] { qstr };
+        Object[] params = new Object[] {qstr};
         Object[] queryResult;
         ArrayList<Issue> issueList = new ArrayList<>();
-        try
-        {
-            queryResult = (Object[]) client.execute( "ticket.query", params );
+        try {
+            queryResult = (Object[]) client.execute("ticket.query", params);
 
-            for ( Object aQueryResult : queryResult )
-            {
-                params = new Object[] { aQueryResult };
+            for (Object aQueryResult : queryResult) {
+                params = new Object[] {aQueryResult};
                 Object[] ticketGetResult;
-                ticketGetResult = (Object[]) client.execute( "ticket.get", params );
-                issueList.add( createIssue( ticketGetResult ) );
+                ticketGetResult = (Object[]) client.execute("ticket.get", params);
+                issueList.add(createIssue(ticketGetResult));
             }
-        }
-        catch ( XmlRpcException e )
-        {
-            throw new XmlRpcException( "XmlRpc Error.", e );
+        } catch (XmlRpcException e) {
+            throw new XmlRpcException("XmlRpc Error.", e);
         }
         return issueList;
     }
 
-    private String getUrl()
-    {
+    private String getUrl() {
 
         String url = project.getIssueManagement().getUrl();
 
-        if ( url.endsWith( "/" ) )
-        {
-            url = url.substring( 0, url.length() - 1 );
+        if (url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
         }
 
         return url;
     }
 
-    public void setProject( MavenProject project )
-    {
+    public void setProject(MavenProject project) {
         this.project = project;
     }
 
-    public void setQuery( String query )
-    {
+    public void setQuery(String query) {
         this.query = query;
     }
 
-    public void setTracPassword( String tracPassword )
-    {
+    public void setTracPassword(String tracPassword) {
         this.tracPassword = tracPassword;
     }
 
-    public void setTracUser( String tracUser )
-    {
+    public void setTracUser(String tracUser) {
         this.tracUser = tracUser;
     }
 
-    private Date parseDate( String timeCreated )
-        throws RuntimeException
-    {
-        try
-        {
-            long millis = Long.parseLong( timeCreated );
+    private Date parseDate(String timeCreated) throws RuntimeException {
+        try {
+            long millis = Long.parseLong(timeCreated);
             Calendar cld = Calendar.getInstance();
-            cld.setTimeInMillis( millis * 1000L );
+            cld.setTimeInMillis(millis * 1000L);
             return cld.getTime();
-        }
-        catch ( NumberFormatException e )
-        {
-            SimpleDateFormat format = new SimpleDateFormat( "EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH );
-            try
-            {
-                return format.parse( timeCreated );
-            }
-            catch ( ParseException e1 )
-            {
-                throw new RuntimeException( "Failed to parse date '" + timeCreated + "' as a date.", e1 );
+        } catch (NumberFormatException e) {
+            SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+            try {
+                return format.parse(timeCreated);
+            } catch (ParseException e1) {
+                throw new RuntimeException("Failed to parse date '" + timeCreated + "' as a date.", e1);
             }
         }
     }

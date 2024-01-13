@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,73 +16,57 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.issues.AbstractIssueManagementSystem;
-
 import junit.framework.TestCase;
+import org.apache.maven.plugin.MojoExecutionException;
 
 /**
  * @author Alan Parkinson
  * @version $Id$
  * @since 2.7
  */
-public class IssueManagementSystemTest
-    extends TestCase
-{
+public class IssueManagementSystemTest extends TestCase {
 
     private MockIssueManagementSystem ims;
 
-    private static class MockIssueManagementSystem
-        extends AbstractIssueManagementSystem
-    {
+    private static class MockIssueManagementSystem extends AbstractIssueManagementSystem {
 
         @Override
-        public String getName()
-        {
+        public String getName() {
             return "Mock IMS";
         }
-
     }
 
     @Override
-    protected void setUp()
-    {
+    protected void setUp() {
         ims = new MockIssueManagementSystem();
     }
 
-    public void testApplyingValidCustomIssueTypes()
-    {
+    public void testApplyingValidCustomIssueTypes() {
         Map<String, String> issueTypes = new HashMap<>();
-        issueTypes.put( "add", "Story,Epic" );
-        issueTypes.put( "fix", "Defect" );
-        issueTypes.put( "update", "Improvement" );
+        issueTypes.put("add", "Story,Epic");
+        issueTypes.put("fix", "Defect");
+        issueTypes.put("update", "Improvement");
 
-        try
-        {
-            ims.applyConfiguration( issueTypes );
-        }
-        catch ( MojoExecutionException e )
-        {
+        try {
+            ims.applyConfiguration(issueTypes);
+        } catch (MojoExecutionException e) {
             fail();
         }
     }
 
-    public void testApplyingInvalidCustomIssueTypes()
-    {
+    public void testApplyingInvalidCustomIssueTypes() {
         Map<String, String> issueTypes = new HashMap<>();
-        issueTypes.put( "new", "Story,Epic" );
+        issueTypes.put("new", "Story,Epic");
 
-        try
-        {
-            ims.applyConfiguration( issueTypes );
-            fail( "Exception not thrown for invalid group name" );
-        }
-        catch ( MojoExecutionException ignored )
-        {
+        try {
+            ims.applyConfiguration(issueTypes);
+            fail("Exception not thrown for invalid group name");
+        } catch (MojoExecutionException ignored) {
 
         }
     }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.resource.loader;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.resource.loader;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.resource.loader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -36,12 +35,10 @@ import org.apache.velocity.util.StringUtils;
 
 /**
  * Resource Loader for external projects.
- * 
+ *
  * @version $Id$
  */
-public class ProjectResourceLoader
-    extends ResourceLoader
-{
+public class ProjectResourceLoader extends ResourceLoader {
     /**
      * The paths to search for templates.
      */
@@ -53,26 +50,24 @@ public class ProjectResourceLoader
      */
     private Hashtable<String, String> templatePaths = new Hashtable<>();
 
-    public void init( ExtendedProperties configuration )
-    {
-        rsvc.getLog().info( "ProjectResourceLoader : initialization starting." );
+    public void init(ExtendedProperties configuration) {
+        rsvc.getLog().info("ProjectResourceLoader : initialization starting.");
 
-        String separator = System.getProperty( "file.separator" );
+        String separator = System.getProperty("file.separator");
 
-        String path = System.getProperty( "user.dir" ) + separator + "src" + separator + "main" + separator
-            + "resources" + separator;
+        String path = System.getProperty("user.dir") + separator + "src" + separator + "main" + separator + "resources"
+                + separator;
 
-        rsvc.getLog().info( "path :" + path );
+        rsvc.getLog().info("path :" + path);
 
         paths = new ArrayList<>();
 
-        paths.add( path );
+        paths.add(path);
 
-        for ( String path1 : paths )
-        {
-            rsvc.getLog().info( "ProjectResourceLoader : adding path '" + path1 + "'" );
+        for (String path1 : paths) {
+            rsvc.getLog().info("ProjectResourceLoader : adding path '" + path1 + "'");
         }
-        rsvc.getLog().info( "ProjectResourceLoader : initialization complete." );
+        rsvc.getLog().info("ProjectResourceLoader : initialization complete.");
     }
 
     /**
@@ -82,54 +77,47 @@ public class ProjectResourceLoader
      * @return InputStream containing the template
      * @throws ResourceNotFoundException if template not found in the file template path.
      */
-    public synchronized InputStream getResourceStream( String templateName )
-        throws ResourceNotFoundException
-    {
+    public synchronized InputStream getResourceStream(String templateName) throws ResourceNotFoundException {
         /*
          * Make sure we have a valid templateName.
          */
-        if ( templateName == null || templateName.length() == 0 )
-        {
+        if (templateName == null || templateName.length() == 0) {
             /*
              * If we don't get a properly formed templateName then there's not much we can do. So we'll forget about
              * trying to search any more paths for the template.
              */
-            throw new ResourceNotFoundException( "Need to specify a file name or file path!" );
+            throw new ResourceNotFoundException("Need to specify a file name or file path!");
         }
 
-        String template = StringUtils.normalizePath( templateName );
-        if ( template == null || template.length() == 0 )
-        {
+        String template = StringUtils.normalizePath(templateName);
+        if (template == null || template.length() == 0) {
             String msg = "Project Resource loader error : argument " + template
-                + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
+                    + " contains .. and may be trying to access " + "content outside of template root.  Rejected.";
 
-            rsvc.getLog().error( "ProjectResourceLoader : " + msg );
+            rsvc.getLog().error("ProjectResourceLoader : " + msg);
 
-            throw new ResourceNotFoundException( msg );
+            throw new ResourceNotFoundException(msg);
         }
 
         /*
          * if a / leads off, then just nip that :)
          */
-        if ( template.startsWith( "/" ) )
-        {
-            template = template.substring( 1 );
+        if (template.startsWith("/")) {
+            template = template.substring(1);
         }
 
         // MCHANGES-118 adding the basedir path
-        paths.add( (String) rsvc.getApplicationAttribute( "baseDirectory" ) );
+        paths.add((String) rsvc.getApplicationAttribute("baseDirectory"));
 
-        for ( String path : paths )
-        {
-            InputStream inputStream = findTemplate( path, template );
+        for (String path : paths) {
+            InputStream inputStream = findTemplate(path, template);
 
-            if ( inputStream != null )
-            {
+            if (inputStream != null) {
                 /*
                  * Store the path that this template came from so that we can check its modification time.
                  */
 
-                templatePaths.put( templateName, path );
+                templatePaths.put(templateName, path);
                 return inputStream;
             }
         }
@@ -139,32 +127,25 @@ public class ProjectResourceLoader
          */
         String msg = "ProjectResourceLoader Error: cannot find resource " + template;
 
-        throw new ResourceNotFoundException( msg );
+        throw new ResourceNotFoundException(msg);
     }
 
     /**
      * Try to find a template given a normalized path.
-     * 
+     *
      * @param path a normalized path
      * @return InputStream input stream that will be parsed
      */
-    private InputStream findTemplate( String path, String template )
-    {
-        try
-        {
-            File file = new File( path, template );
+    private InputStream findTemplate(String path, String template) {
+        try {
+            File file = new File(path, template);
 
-            if ( file.canRead() )
-            {
-                return new BufferedInputStream( new FileInputStream( file.getAbsolutePath() ) );
-            }
-            else
-            {
+            if (file.canRead()) {
+                return new BufferedInputStream(new FileInputStream(file.getAbsolutePath()));
+            } else {
                 return null;
             }
-        }
-        catch ( FileNotFoundException fnfe )
-        {
+        } catch (FileNotFoundException fnfe) {
             /*
              * log and convert to a general Velocity ResourceNotFoundException
              */
@@ -177,8 +158,7 @@ public class ProjectResourceLoader
      * which is earlier in the path; so we should search the path and see if the file we find that way is the same as
      * the one that we have cached.
      */
-    public boolean isSourceModified( Resource resource )
-    {
+    public boolean isSourceModified(Resource resource) {
         /*
          * we assume that the file needs to be reloaded; if we find the original file and it's unchanged, then we'll
          * flip this.
@@ -186,34 +166,29 @@ public class ProjectResourceLoader
         boolean modified = true;
 
         String fileName = resource.getName();
-        String path = templatePaths.get( fileName );
+        String path = templatePaths.get(fileName);
         File currentFile = null;
 
-        for ( int i = 0; currentFile == null && i < paths.size(); i++ )
-        {
-            String testPath = paths.get( i );
-            File testFile = new File( testPath, fileName );
-            if ( testFile.canRead() )
-            {
+        for (int i = 0; currentFile == null && i < paths.size(); i++) {
+            String testPath = paths.get(i);
+            File testFile = new File(testPath, fileName);
+            if (testFile.canRead()) {
                 currentFile = testFile;
             }
         }
-        File file = new File( path, fileName );
-        if ( currentFile == null || !file.exists() )
-        {
+        File file = new File(path, fileName);
+        if (currentFile == null || !file.exists()) {
             /*
              * noop: if the file is missing now (either the cached file is gone, or the file can no longer be found)
              * then we leave modified alone (it's set to true); a reload attempt will be done, which will either use a
              * new template or fail with an appropriate message about how the file couldn't be found.
              */
-        }
-        else if ( currentFile.equals( file ) && file.canRead() )
-        {
+        } else if (currentFile.equals(file) && file.canRead()) {
             /*
              * if only if currentFile is the same as file and file.lastModified() is the same as
              * resource.getLastModified(), then we should use the cached version.
              */
-            modified = ( file.lastModified() != resource.getLastModified() );
+            modified = (file.lastModified() != resource.getLastModified());
         }
 
         /*
@@ -222,17 +197,13 @@ public class ProjectResourceLoader
         return modified;
     }
 
-    public long getLastModified( Resource resource )
-    {
-        String path = templatePaths.get( resource.getName() );
-        File file = new File( path, resource.getName() );
+    public long getLastModified(Resource resource) {
+        String path = templatePaths.get(resource.getName());
+        File file = new File(path, resource.getName());
 
-        if ( file.canRead() )
-        {
+        if (file.canRead()) {
             return file.lastModified();
-        }
-        else
-        {
+        } else {
             return 0;
         }
     }

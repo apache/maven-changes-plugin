@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 /**
  * This is a runtime exception class that is thrown by the
@@ -26,9 +25,7 @@ package org.apache.maven.plugins.changes;
  *
  * @author <a href="mailto:szgabsz91@gmail.com">Gabor Szabo</a>
  */
-public class ChangesXMLRuntimeException
-    extends RuntimeException
-{
+public class ChangesXMLRuntimeException extends RuntimeException {
     /** The serialVersionUID **/
     private static final long serialVersionUID = -8059557047280992301L;
 
@@ -37,9 +34,8 @@ public class ChangesXMLRuntimeException
      *
      * @param msg the exception message.
      */
-    public ChangesXMLRuntimeException( String msg )
-    {
-        super( msg );
+    public ChangesXMLRuntimeException(String msg) {
+        super(msg);
     }
 
     /**
@@ -48,8 +44,7 @@ public class ChangesXMLRuntimeException
      * @param msg the exception message.
      * @param cause the cause.
      */
-    public ChangesXMLRuntimeException( String msg, Throwable cause )
-    {
-        super( msg, cause );
+    public ChangesXMLRuntimeException(String msg, Throwable cause) {
+        super(msg, cause);
     }
 }

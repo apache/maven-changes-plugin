@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,12 +16,13 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
+
+import java.util.ResourceBundle;
 
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-
-import java.util.ResourceBundle;
 
 /**
  * An abstract super class that helps when generating a report on issues.
@@ -32,57 +31,45 @@ import java.util.ResourceBundle;
  * @version $Id$
  * @since 2.4
  */
-public abstract class AbstractIssuesReportGenerator
-{
+public abstract class AbstractIssuesReportGenerator {
     protected String author;
 
     protected String title;
 
-    public AbstractIssuesReportGenerator()
-    {
-    }
+    public AbstractIssuesReportGenerator() {}
 
-    public String getAuthor()
-    {
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor( String author )
-    {
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle( String title )
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    protected void sinkBeginReport( Sink sink, ResourceBundle bundle )
-    {
+    protected void sinkBeginReport(Sink sink, ResourceBundle bundle) {
         sink.head();
 
         String title;
-        if ( this.title != null )
-        {
+        if (this.title != null) {
             title = this.title;
-        }
-        else
-        {
-            title = bundle.getString( "report.issues.header" );
+        } else {
+            title = bundle.getString("report.issues.header");
         }
         sink.title();
-        sink.text( title );
+        sink.text(title);
         sink.title_();
 
-        if ( author != null && !author.isEmpty() )
-        {
+        if (author != null && !author.isEmpty()) {
             sink.author();
-            sink.text( author );
+            sink.text(author);
             sink.author_();
         }
 
@@ -94,38 +81,32 @@ public abstract class AbstractIssuesReportGenerator
 
         sink.sectionTitle1();
 
-        sink.text( title );
+        sink.text(title);
 
         sink.sectionTitle1_();
     }
 
-    protected void sinkCell( Sink sink, String text )
-    {
+    protected void sinkCell(Sink sink, String text) {
         sink.tableCell();
 
-        if ( text != null )
-        {
-            sink.text( text );
-        }
-        else
-        {
+        if (text != null) {
+            sink.text(text);
+        } else {
             sink.nonBreakingSpace();
         }
 
         sink.tableCell_();
     }
 
-    protected void sinkCellLink( Sink sink, String text, String link )
-    {
+    protected void sinkCellLink(Sink sink, String text, String link) {
         sink.tableCell();
 
-        sinkLink( sink, text, link );
+        sinkLink(sink, text, link);
 
         sink.tableCell_();
     }
 
-    protected void sinkEndReport( Sink sink )
-    {
+    protected void sinkEndReport(Sink sink) {
         sink.section1_();
 
         sink.body_();
@@ -135,67 +116,54 @@ public abstract class AbstractIssuesReportGenerator
         sink.close();
     }
 
-    protected void sinkFigure( Sink sink, String image, String altText )
-    {
+    protected void sinkFigure(Sink sink, String image, String altText) {
         SinkEventAttributes attributes = new SinkEventAttributeSet();
-        attributes.addAttribute( "alt", altText );
-        attributes.addAttribute( "title", altText );
+        attributes.addAttribute("alt", altText);
+        attributes.addAttribute("title", altText);
 
-        sink.figureGraphics( image, attributes );
+        sink.figureGraphics(image, attributes);
     }
 
-    protected void sinkHeader( Sink sink, String header )
-    {
+    protected void sinkHeader(Sink sink, String header) {
         sink.tableHeaderCell();
 
-        sink.text( header );
+        sink.text(header);
 
         sink.tableHeaderCell_();
     }
 
-    protected void sinkLink( Sink sink, String text, String link )
-    {
-        sink.link( link );
+    protected void sinkLink(Sink sink, String text, String link) {
+        sink.link(link);
 
-        sink.text( text );
+        sink.text(text);
 
         sink.link_();
     }
 
-    protected void sinkShowTypeIcon( Sink sink, String type )
-    {
+    protected void sinkShowTypeIcon(Sink sink, String type) {
         String image = "";
         String altText = "";
 
-        if ( type == null )
-        {
+        if (type == null) {
             image = "images/icon_help_sml.gif";
             altText = "Unknown";
-        }
-        else if ( type.equals( "fix" ) )
-        {
+        } else if (type.equals("fix")) {
             image = "images/fix.gif";
             altText = "Fix";
-        }
-        else if ( type.equals( "update" ) )
-        {
+        } else if (type.equals("update")) {
             image = "images/update.gif";
             altText = "Update";
-        }
-        else if ( type.equals( "add" ) )
-        {
+        } else if (type.equals("add")) {
             image = "images/add.gif";
             altText = "Add";
-        }
-        else if ( type.equals( "remove" ) )
-        {
+        } else if (type.equals("remove")) {
             image = "images/remove.gif";
             altText = "Remove";
         }
 
         sink.tableCell();
 
-        sinkFigure( sink, image, altText );
+        sinkFigure(sink, image, altText);
 
         sink.tableCell_();
     }

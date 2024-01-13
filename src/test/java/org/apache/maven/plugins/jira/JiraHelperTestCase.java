@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,12 +16,11 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import junit.framework.TestCase;
+package org.apache.maven.plugins.jira;
 
 import java.util.Map;
 
-import org.apache.maven.plugins.jira.JiraHelper;
+import junit.framework.TestCase;
 
 /**
  * Tests for the JiraHelper class.
@@ -32,48 +29,43 @@ import org.apache.maven.plugins.jira.JiraHelper;
  * @version $Id$
  * @since 2.4
  */
-public class JiraHelperTestCase
-    extends TestCase
-{
-    public void testGetJiraUrlAndProjectId()
-    {
+public class JiraHelperTestCase extends TestCase {
+    public void testGetJiraUrlAndProjectId() {
         Map<String, String> map;
 
-        map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/DOXIA" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
+        map = JiraHelper.getJiraUrlAndProjectId("https://issues.apache.org/jira/browse/DOXIA");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
 
         // MCHANGES-218
-        map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/DOXIA/" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
+        map = JiraHelper.getJiraUrlAndProjectId("https://issues.apache.org/jira/browse/DOXIA/");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
 
         // MCHANGES-222
-        map =
-            JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=11761&reset=true" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
-        map = JiraHelper.getJiraUrlAndProjectId( "https://issues.apache.org/jira/browse/MSHARED/component/13380" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
+        map = JiraHelper.getJiraUrlAndProjectId(
+                "https://issues.apache.org/jira/secure/IssueNavigator.jspa?pid=11761&reset=true");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
+        map = JiraHelper.getJiraUrlAndProjectId("https://issues.apache.org/jira/browse/MSHARED/component/13380");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
     }
 
-    public void testGetJiraUrlAndProjectName()
-    {
+    public void testGetJiraUrlAndProjectName() {
         Map<String, String> map;
-        map = JiraHelper.getJiraUrlAndProjectName( "https://issues.apache.org/jira/browse/DOXIA/" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
-        assertEquals( "DOXIA", map.get( "project" ) );
+        map = JiraHelper.getJiraUrlAndProjectName("https://issues.apache.org/jira/browse/DOXIA/");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
+        assertEquals("DOXIA", map.get("project"));
 
-        map = JiraHelper.getJiraUrlAndProjectName( "https://issues.apache.org/jira/browse/DOXIA" );
-        assertEquals( "https://issues.apache.org/jira", map.get( "url" ) );
-        assertEquals( "DOXIA", map.get( "project" ) );
+        map = JiraHelper.getJiraUrlAndProjectName("https://issues.apache.org/jira/browse/DOXIA");
+        assertEquals("https://issues.apache.org/jira", map.get("url"));
+        assertEquals("DOXIA", map.get("project"));
     }
 
-    public void testGetBaseUrl()
-    {
+    public void testGetBaseUrl() {
         String expected = "http://www.jira.com";
-        String actual = JiraHelper.getBaseUrl( "http://www.jira.com/context/test?werewrew" );
-        assertEquals( expected, actual );
+        String actual = JiraHelper.getBaseUrl("http://www.jira.com/context/test?werewrew");
+        assertEquals(expected, actual);
 
         expected = "https://www.jira.com";
-        actual = JiraHelper.getBaseUrl( "https://www.jira.com/context/test?werewrew" );
-        assertEquals( expected, actual );
+        actual = JiraHelper.getBaseUrl("https://www.jira.com/context/test?werewrew");
+        assertEquals(expected, actual);
     }
 }

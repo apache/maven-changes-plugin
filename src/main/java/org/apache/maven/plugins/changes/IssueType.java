@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,42 +16,38 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 /**
  * The types of issues that can be used in a <code>changes.xml</code> file.
  *
  * @version $Id$
  */
-public enum IssueType
-{
-    ADD( "add" ), FIX( "fix" ), UPDATE( "update" ), REMOVE( "remove" );
+public enum IssueType {
+    ADD("add"),
+    FIX("fix"),
+    UPDATE("update"),
+    REMOVE("remove");
 
     private String configurationKey;
 
-    IssueType( String configurationKey )
-    {
+    IssueType(String configurationKey) {
         this.configurationKey = configurationKey;
     }
 
-    public String configurationKey()
-    {
+    public String configurationKey() {
         return configurationKey;
     }
 
-    public String modelRepresentation()
-    {
+    public String modelRepresentation() {
         return name().toLowerCase();
     }
 
-    public static IssueType lookupByKey( String key )
-    {
+    public static IssueType lookupByKey(String key) {
         IssueType type;
-        try
-        {
-            type = IssueType.valueOf( key.toUpperCase() );
-        }
-        catch ( IllegalArgumentException e )
-        {
+        try {
+            type = IssueType.valueOf(key.toUpperCase());
+        } catch (IllegalArgumentException e) {
             type = null;
         }
         return type;

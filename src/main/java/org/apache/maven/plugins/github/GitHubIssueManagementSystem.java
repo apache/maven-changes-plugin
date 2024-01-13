@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.github;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.github;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.github;
 
 import org.apache.maven.plugins.changes.IssueType;
 import org.apache.maven.plugins.issues.AbstractIssueManagementSystem;
@@ -25,26 +24,21 @@ import org.apache.maven.plugins.issues.AbstractIssueManagementSystem;
 /**
  * @since 2.8
  */
-public class GitHubIssueManagementSystem
-    extends AbstractIssueManagementSystem
-{
+public class GitHubIssueManagementSystem extends AbstractIssueManagementSystem {
 
     private static final String DEFAULT_ADD_TYPE = "enhancement";
 
     private static final String DEFAULT_FIX_TYPE = "bug";
 
-    public GitHubIssueManagementSystem()
-    {
+    public GitHubIssueManagementSystem() {
         super();
         // The standard issue types for GitHub
-        issueTypeMap.put( DEFAULT_ADD_TYPE, IssueType.ADD );
-        issueTypeMap.put( DEFAULT_FIX_TYPE, IssueType.FIX );
+        issueTypeMap.put(DEFAULT_ADD_TYPE, IssueType.ADD);
+        issueTypeMap.put(DEFAULT_FIX_TYPE, IssueType.FIX);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Github";
     }
-
 }

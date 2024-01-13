@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.io.File;
 import java.text.ParseException;
@@ -38,14 +37,12 @@ import org.apache.maven.plugins.changes.model.Release;
  * @author Dennis Lundberg
  * @since 2.4
  */
-@Mojo( name = "changes-check", threadSafe = true )
-public class ChangesCheckMojo
-    extends AbstractChangesMojo
-{
+@Mojo(name = "changes-check", threadSafe = true)
+public class ChangesCheckMojo extends AbstractChangesMojo {
     /**
      * The format that a correct release date should have. This value will be used as a pattern to try to parse a date.
      */
-    @Parameter( property = "changes.releaseDateFormat", defaultValue = "yyyy-MM-dd" )
+    @Parameter(property = "changes.releaseDateFormat", defaultValue = "yyyy-MM-dd")
     private String releaseDateFormat;
 
     /**
@@ -53,19 +50,19 @@ public class ChangesCheckMojo
      *
      * @since 2.10
      */
-    @Parameter( property = "changes.releaseDateLocale" )
+    @Parameter(property = "changes.releaseDateLocale")
     private String releaseDateLocale;
 
     /**
      * Version of the artifact.
      */
-    @Parameter( property = "changes.version", defaultValue = "${project.version}", required = true )
+    @Parameter(property = "changes.version", defaultValue = "${project.version}", required = true)
     private String version;
 
     /**
      * The path of the <code>changes.xml</code> file that will be checked.
      */
-    @Parameter( property = "changes.xmlPath", defaultValue = "src/changes/changes.xml" )
+    @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
 
     /**
@@ -73,7 +70,7 @@ public class ChangesCheckMojo
      *
      * @since 2.7
      */
-    @Parameter( property = "changes.skipSnapshots", defaultValue = "false" )
+    @Parameter(property = "changes.skipSnapshots", defaultValue = "false")
     private boolean skipSnapshots;
 
     /**
@@ -81,37 +78,24 @@ public class ChangesCheckMojo
      *
      * @throws MojoExecutionException in case of errors.
      */
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the changes check in this project because it's not the Execution Root" );
-        }
-        else
-        {
-            if ( this.version.endsWith( "-SNAPSHOT" ) && this.skipSnapshots )
-            {
-                getLog().info( "Skipping snapshot version '" + this.version + "'." );
-            }
-            else if ( xmlPath.exists() )
-            {
-                ChangesXML xml = new ChangesXML( xmlPath, getLog() );
-                ReleaseUtils releaseUtils = new ReleaseUtils( getLog() );
-                Release release =
-                    releaseUtils.getLatestRelease( xml.getReleaseList(), version );
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the changes check in this project because it's not the Execution Root");
+        } else {
+            if (this.version.endsWith("-SNAPSHOT") && this.skipSnapshots) {
+                getLog().info("Skipping snapshot version '" + this.version + "'.");
+            } else if (xmlPath.exists()) {
+                ChangesXML xml = new ChangesXML(xmlPath, getLog());
+                ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
+                Release release = releaseUtils.getLatestRelease(xml.getReleaseList(), version);
 
-                if ( !isValidDate( release.getDateRelease(), releaseDateFormat, releaseDateLocale ) )
-                {
-                    throw new MojoExecutionException( "The file " + xmlPath.getAbsolutePath()
-                        + " has an invalid release date." );
-
+                if (!isValidDate(release.getDateRelease(), releaseDateFormat, releaseDateLocale)) {
+                    throw new MojoExecutionException(
+                            "The file " + xmlPath.getAbsolutePath() + " has an invalid release date.");
                 }
-            }
-            else
-            {
-                getLog().warn( "The file " + xmlPath.getAbsolutePath() + " does not exist." );
+            } else {
+                getLog().warn("The file " + xmlPath.getAbsolutePath() + " does not exist.");
             }
         }
     }
@@ -124,9 +108,8 @@ public class ChangesCheckMojo
      * @param pattern A pattern that can be used by {@link SimpleDateFormat}
      * @return <code>true</code> if the string can be parsed as a date using the pattern, otherwise <code>false</code>
      */
-    protected static boolean isValidDate( String string, String pattern )
-    {
-        return isValidDate( string, pattern, null );
+    protected static boolean isValidDate(String string, String pattern) {
+        return isValidDate(string, pattern, null);
     }
 
     /**
@@ -137,55 +120,43 @@ public class ChangesCheckMojo
      * @param locale A locale that can be used by {@link SimpleDateFormat}
      * @return <code>true</code> if the string can be parsed as a date using the pattern, otherwise <code>false</code>
      */
-    protected static boolean isValidDate( String string, String pattern, String locale )
-    {
-        if ( StringUtils.isEmpty( string ) )
-        {
+    protected static boolean isValidDate(String string, String pattern, String locale) {
+        if (StringUtils.isEmpty(string)) {
             return false;
         }
 
-        if ( StringUtils.isEmpty( pattern ) )
-        {
+        if (StringUtils.isEmpty(pattern)) {
             return false;
         }
 
-        try
-        {
+        try {
             Locale usedLocale = null;
 
-            if ( StringUtils.isEmpty( locale ) )
-            {
+            if (StringUtils.isEmpty(locale)) {
                 // No locale specified, use the default locale as default value
                 // The same behavior as before the locale parameter was added
                 usedLocale = Locale.getDefault();
-            }
-            else
-            {
+            } else {
                 // Try to find the specified locale on this system
                 Locale[] locales = Locale.getAvailableLocales();
-                for ( Locale value : locales )
-                {
-                    if ( value.toString().equals( locale ) )
-                    {
+                for (Locale value : locales) {
+                    if (value.toString().equals(locale)) {
                         usedLocale = value;
                         break;
                     }
                 }
 
-                if ( usedLocale == null )
-                {
+                if (usedLocale == null) {
                     // The use specified locale was not found on this system,
                     // use the default locale as default value
                     usedLocale = Locale.getDefault();
                 }
             }
 
-            SimpleDateFormat df = new SimpleDateFormat( pattern, usedLocale );
-            df.parse( string );
+            SimpleDateFormat df = new SimpleDateFormat(pattern, usedLocale);
+            df.parse(string);
             return true;
-        }
-        catch ( ParseException e )
-        {
+        } catch (ParseException e) {
             return false;
         }
     }

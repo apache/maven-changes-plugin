@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.plugins.changes;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.io.File;
 import java.util.List;
@@ -33,96 +32,78 @@ import org.xml.sax.SAXParseException;
 
 /**
  * Goal which validate the <code>changes.xml</code> file.
- * 
+ *
  * @author Olivier Lamy
  * @version $Id$
  * @since 2.1
  */
-@Mojo( name = "changes-validate", threadSafe = true )
-public class ChangesValidatorMojo
-    extends AbstractChangesMojo
-{
+@Mojo(name = "changes-validate", threadSafe = true)
+public class ChangesValidatorMojo extends AbstractChangesMojo {
 
     /**
      */
-    @Component( role = ChangesSchemaValidator.class, hint = "default" )
+    @Component(role = ChangesSchemaValidator.class, hint = "default")
     private ChangesSchemaValidator changesSchemaValidator;
 
     /**
      * The changes xsd version.
      */
-    @Parameter( property = "changes.xsdVersion", defaultValue = "1.0.0" )
+    @Parameter(property = "changes.xsdVersion", defaultValue = "1.0.0")
     private String changesXsdVersion;
 
     /**
      * Mojo failure if validation failed. If not and validation failed only a warning will be logged.
      */
-    @Parameter( property = "changes.validate.failed", defaultValue = "false" )
+    @Parameter(property = "changes.validate.failed", defaultValue = "false")
     private boolean failOnError;
 
     /**
      * The path of the <code>changes.xml</code> file that will be converted into an HTML report.
      */
-    @Parameter( property = "changes.xmlPath", defaultValue = "src/changes/changes.xml" )
+    @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
 
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
      */
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the changes validate in this project because it's not the Execution Root" );
-        }
-        else
-        {
-            if ( !xmlPath.exists() )
-            {
-                getLog().warn( "changes.xml file " + xmlPath.getAbsolutePath() + " does not exist." );
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the changes validate in this project because it's not the Execution Root");
+        } else {
+            if (!xmlPath.exists()) {
+                getLog().warn("changes.xml file " + xmlPath.getAbsolutePath() + " does not exist.");
                 return;
             }
 
-            try
-            {
+            try {
                 XmlValidationHandler xmlValidationHandler =
-                    changesSchemaValidator.validateXmlWithSchema( xmlPath, changesXsdVersion, failOnError );
+                        changesSchemaValidator.validateXmlWithSchema(xmlPath, changesXsdVersion, failOnError);
                 boolean hasErrors = !xmlValidationHandler.getErrors().isEmpty();
-                if ( hasErrors )
-                {
-                    logSchemaValidation( xmlValidationHandler.getErrors() );
-                    if ( failOnError )
-                    {
-                        throw new MojoExecutionException( "changes.xml file " + xmlPath.getAbsolutePath()
-                            + " is not valid, see previous errors." );
-                    }
-                    else
-                    {
-                        getLog().info( " skip previous validation errors due to failOnError=false." );
+                if (hasErrors) {
+                    logSchemaValidation(xmlValidationHandler.getErrors());
+                    if (failOnError) {
+                        throw new MojoExecutionException("changes.xml file " + xmlPath.getAbsolutePath()
+                                + " is not valid, see previous errors.");
+                    } else {
+                        getLog().info(" skip previous validation errors due to failOnError=false.");
                     }
                 }
-            }
-            catch ( SchemaValidatorException e )
-            {
-                if ( failOnError )
-                {
-                    throw new MojoExecutionException( "failed to validate changes.xml file " + xmlPath.getAbsolutePath()
-                        + ": " + e.getMessage(), e );
+            } catch (SchemaValidatorException e) {
+                if (failOnError) {
+                    throw new MojoExecutionException(
+                            "failed to validate changes.xml file " + xmlPath.getAbsolutePath() + ": " + e.getMessage(),
+                            e);
                 }
             }
         }
     }
 
-    private void logSchemaValidation( List<SAXParseException> errors )
-    {
-        getLog().warn( "failed to validate changes.xml file " + xmlPath.getAbsolutePath() );
-        getLog().warn( "validation errors: " );
-        for ( SAXParseException error : errors )
-        {
-            getLog().warn( error.getMessage() );
+    private void logSchemaValidation(List<SAXParseException> errors) {
+        getLog().warn("failed to validate changes.xml file " + xmlPath.getAbsolutePath());
+        getLog().warn("validation errors: ");
+        for (SAXParseException error : errors) {
+            getLog().warn(error.getMessage());
         }
     }
-
 }

@@ -1,7 +1,3 @@
-package org.apache.maven.plugins.issues;
-
-import org.apache.maven.plugins.issues.Issue;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,6 +16,7 @@ import org.apache.maven.plugins.issues.Issue;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
 
 import junit.framework.TestCase;
 
@@ -29,48 +26,40 @@ import junit.framework.TestCase;
  * @author Dennis Lundberg
  * @version $Id$
  */
-public class IssueTestCase
-    extends TestCase
-{
+public class IssueTestCase extends TestCase {
     Issue issue;
 
-    protected void setUp()
-    {
+    protected void setUp() {
         issue = new Issue();
     }
 
-    public void testGetSetAssignee()
-    {
-        issue.setAssignee( "assignee" );
+    public void testGetSetAssignee() {
+        issue.setAssignee("assignee");
 
-        assertEquals( "assignee", issue.getAssignee() );
+        assertEquals("assignee", issue.getAssignee());
     }
 
-    public void testGetSetKey()
-    {
-        issue.setKey( "key" );
+    public void testGetSetKey() {
+        issue.setKey("key");
 
-        assertEquals( "key", issue.getKey() );
+        assertEquals("key", issue.getKey());
     }
 
-    public void testGetSetResolution()
-    {
-        issue.setResolution( "resolution" );
+    public void testGetSetResolution() {
+        issue.setResolution("resolution");
 
-        assertEquals( "resolution", issue.getResolution() );
+        assertEquals("resolution", issue.getResolution());
     }
 
-    public void testGetSetStatus()
-    {
-        issue.setStatus( "status" );
+    public void testGetSetStatus() {
+        issue.setStatus("status");
 
-        assertEquals( "status", issue.getStatus() );
+        assertEquals("status", issue.getStatus());
     }
 
-    public void testGetSetSummary()
-    {
-        issue.setSummary( "summary" );
+    public void testGetSetSummary() {
+        issue.setSummary("summary");
 
-        assertEquals( "summary", issue.getSummary() );
+        assertEquals("summary", issue.getSummary());
     }
 }

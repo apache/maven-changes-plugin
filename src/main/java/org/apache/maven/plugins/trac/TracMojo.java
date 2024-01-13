@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.trac;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.trac;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.trac;
 
 import java.net.MalformedURLException;
 import java.util.HashMap;
@@ -43,10 +42,8 @@ import org.apache.xmlrpc.XmlRpcException;
  * @version $Id$
  * @since 2.1
  */
-@Mojo( name = "trac-report", threadSafe = true )
-public class TracMojo
-    extends AbstractChangesReport
-{
+@Mojo(name = "trac-report", threadSafe = true)
+public class TracMojo extends AbstractChangesReport {
     /**
      * Deprecated Trac columns.
      */
@@ -57,33 +54,32 @@ public class TracMojo
      */
     private static final Map<String, Integer> TRAC_COLUMNS = new HashMap<>();
 
-    static
-    {
-        DEPRECATED_TRAC_COLUMNS.put( "changed", IssuesReportHelper.COLUMN_UPDATED );
-        DEPRECATED_TRAC_COLUMNS.put( "component", IssuesReportHelper.COLUMN_COMPONENT );
-        DEPRECATED_TRAC_COLUMNS.put( "created", IssuesReportHelper.COLUMN_CREATED );
-        DEPRECATED_TRAC_COLUMNS.put( "id", IssuesReportHelper.COLUMN_ID );
-        DEPRECATED_TRAC_COLUMNS.put( "milestone", IssuesReportHelper.COLUMN_FIX_VERSION );
-        DEPRECATED_TRAC_COLUMNS.put( "owner", IssuesReportHelper.COLUMN_ASSIGNEE );
-        DEPRECATED_TRAC_COLUMNS.put( "priority", IssuesReportHelper.COLUMN_PRIORITY );
-        DEPRECATED_TRAC_COLUMNS.put( "reporter", IssuesReportHelper.COLUMN_REPORTER );
-        DEPRECATED_TRAC_COLUMNS.put( "resolution", IssuesReportHelper.COLUMN_RESOLUTION );
-        DEPRECATED_TRAC_COLUMNS.put( "status", IssuesReportHelper.COLUMN_STATUS );
-        DEPRECATED_TRAC_COLUMNS.put( "summary", IssuesReportHelper.COLUMN_SUMMARY );
-        DEPRECATED_TRAC_COLUMNS.put( "type", IssuesReportHelper.COLUMN_TYPE );
+    static {
+        DEPRECATED_TRAC_COLUMNS.put("changed", IssuesReportHelper.COLUMN_UPDATED);
+        DEPRECATED_TRAC_COLUMNS.put("component", IssuesReportHelper.COLUMN_COMPONENT);
+        DEPRECATED_TRAC_COLUMNS.put("created", IssuesReportHelper.COLUMN_CREATED);
+        DEPRECATED_TRAC_COLUMNS.put("id", IssuesReportHelper.COLUMN_ID);
+        DEPRECATED_TRAC_COLUMNS.put("milestone", IssuesReportHelper.COLUMN_FIX_VERSION);
+        DEPRECATED_TRAC_COLUMNS.put("owner", IssuesReportHelper.COLUMN_ASSIGNEE);
+        DEPRECATED_TRAC_COLUMNS.put("priority", IssuesReportHelper.COLUMN_PRIORITY);
+        DEPRECATED_TRAC_COLUMNS.put("reporter", IssuesReportHelper.COLUMN_REPORTER);
+        DEPRECATED_TRAC_COLUMNS.put("resolution", IssuesReportHelper.COLUMN_RESOLUTION);
+        DEPRECATED_TRAC_COLUMNS.put("status", IssuesReportHelper.COLUMN_STATUS);
+        DEPRECATED_TRAC_COLUMNS.put("summary", IssuesReportHelper.COLUMN_SUMMARY);
+        DEPRECATED_TRAC_COLUMNS.put("type", IssuesReportHelper.COLUMN_TYPE);
 
-        TRAC_COLUMNS.put( "Assignee", IssuesReportHelper.COLUMN_ASSIGNEE );
-        TRAC_COLUMNS.put( "Component", IssuesReportHelper.COLUMN_COMPONENT );
-        TRAC_COLUMNS.put( "Created", IssuesReportHelper.COLUMN_CREATED );
-        TRAC_COLUMNS.put( "Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION );
-        TRAC_COLUMNS.put( "Id", IssuesReportHelper.COLUMN_ID );
-        TRAC_COLUMNS.put( "Priority", IssuesReportHelper.COLUMN_PRIORITY );
-        TRAC_COLUMNS.put( "Reporter", IssuesReportHelper.COLUMN_REPORTER );
-        TRAC_COLUMNS.put( "Resolution", IssuesReportHelper.COLUMN_RESOLUTION );
-        TRAC_COLUMNS.put( "Status", IssuesReportHelper.COLUMN_STATUS );
-        TRAC_COLUMNS.put( "Summary", IssuesReportHelper.COLUMN_SUMMARY );
-        TRAC_COLUMNS.put( "Type", IssuesReportHelper.COLUMN_TYPE );
-        TRAC_COLUMNS.put( "Updated", IssuesReportHelper.COLUMN_UPDATED );
+        TRAC_COLUMNS.put("Assignee", IssuesReportHelper.COLUMN_ASSIGNEE);
+        TRAC_COLUMNS.put("Component", IssuesReportHelper.COLUMN_COMPONENT);
+        TRAC_COLUMNS.put("Created", IssuesReportHelper.COLUMN_CREATED);
+        TRAC_COLUMNS.put("Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION);
+        TRAC_COLUMNS.put("Id", IssuesReportHelper.COLUMN_ID);
+        TRAC_COLUMNS.put("Priority", IssuesReportHelper.COLUMN_PRIORITY);
+        TRAC_COLUMNS.put("Reporter", IssuesReportHelper.COLUMN_REPORTER);
+        TRAC_COLUMNS.put("Resolution", IssuesReportHelper.COLUMN_RESOLUTION);
+        TRAC_COLUMNS.put("Status", IssuesReportHelper.COLUMN_STATUS);
+        TRAC_COLUMNS.put("Summary", IssuesReportHelper.COLUMN_SUMMARY);
+        TRAC_COLUMNS.put("Type", IssuesReportHelper.COLUMN_TYPE);
+        TRAC_COLUMNS.put("Updated", IssuesReportHelper.COLUMN_UPDATED);
     }
 
     /**
@@ -97,13 +93,13 @@ public class TracMojo
      *
      * @since 2.2
      */
-    @Parameter( defaultValue = "Id,Type,Summary,Assignee,Reporter,Priority,Status,Resolution,Created,Updated" )
+    @Parameter(defaultValue = "Id,Type,Summary,Assignee,Reporter,Priority,Status,Resolution,Created,Updated")
     private String columnNames;
 
     /**
      * Defines the Trac query for searching ticket.
      */
-    @Parameter( defaultValue = "order=id" )
+    @Parameter(defaultValue = "order=id")
     private String query;
 
     /**
@@ -125,84 +121,65 @@ public class TracMojo
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
-    public boolean canGenerateReport()
-    {
+    public boolean canGenerateReport() {
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the Trac Report in this project because it's not the Execution Root" );
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the Trac Report in this project because it's not the Execution Root");
             return false;
         }
-        String message = ProjectUtils.validateIssueManagement( project, "Trac", "Trac Report" );
-        if ( message != null )
-        {
-            getLog().warn( message );
+        String message = ProjectUtils.validateIssueManagement(project, "Trac", "Trac Report");
+        if (message != null) {
+            getLog().warn(message);
         }
         return message == null;
     }
 
-    public void executeReport( Locale locale )
-        throws MavenReportException
-    {
+    public void executeReport(Locale locale) throws MavenReportException {
         // Validate parameters
         List<Integer> columnIds =
-            IssuesReportHelper.getColumnIds( columnNames, TRAC_COLUMNS, DEPRECATED_TRAC_COLUMNS, getLog() );
-        if ( columnIds.size() == 0 )
-        {
+                IssuesReportHelper.getColumnIds(columnNames, TRAC_COLUMNS, DEPRECATED_TRAC_COLUMNS, getLog());
+        if (columnIds.size() == 0) {
             // This can happen if the user has configured column names and they are all invalid
-            throw new MavenReportException( "maven-changes-plugin: None of the configured columnNames '" + columnNames
-                + "' are valid." );
+            throw new MavenReportException(
+                    "maven-changes-plugin: None of the configured columnNames '" + columnNames + "' are valid.");
         }
 
-        try
-        {
+        try {
             // Download issues
             TracDownloader issueDownloader = new TracDownloader();
-            configureIssueDownloader( issueDownloader );
+            configureIssueDownloader(issueDownloader);
 
             List<Issue> issueList = issueDownloader.getIssueList();
 
             // Generate the report
-            IssuesReportGenerator report = new IssuesReportGenerator( IssuesReportHelper.toIntArray( columnIds ) );
+            IssuesReportGenerator report = new IssuesReportGenerator(IssuesReportHelper.toIntArray(columnIds));
 
-            if ( issueList.isEmpty() )
-            {
-                report.doGenerateEmptyReport( getBundle( locale ), getSink() );
-                getLog().warn( "No ticket has matched." );
+            if (issueList.isEmpty()) {
+                report.doGenerateEmptyReport(getBundle(locale), getSink());
+                getLog().warn("No ticket has matched.");
+            } else {
+                report.doGenerateReport(getBundle(locale), getSink(), issueList);
             }
-            else
-            {
-                report.doGenerateReport( getBundle( locale ), getSink(), issueList );
-            }
-        }
-        catch ( MalformedURLException e )
-        {
+        } catch (MalformedURLException e) {
             // Rethrow this error so that the build fails
-            throw new MavenReportException( "The Trac URL is incorrect." );
-        }
-        catch ( XmlRpcException e )
-        {
+            throw new MavenReportException("The Trac URL is incorrect.");
+        } catch (XmlRpcException e) {
             // Rethrow this error so that the build fails
-            throw new MavenReportException( "XmlRpc Error.", e );
-        }
-        catch ( Exception e )
-        {
+            throw new MavenReportException("XmlRpc Error.", e);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public String getDescription( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.description" );
+    public String getDescription(Locale locale) {
+        return getBundle(locale).getString("report.issues.description");
     }
 
-    public String getName( Locale locale )
-    {
-        return getBundle( locale ).getString( "report.issues.name" );
+    public String getName(Locale locale) {
+        return getBundle(locale).getString("report.issues.name");
     }
 
-    public String getOutputName()
-    {
+    public String getOutputName() {
         return "trac-report";
     }
 
@@ -210,19 +187,17 @@ public class TracMojo
     /* Private methods */
     /* --------------------------------------------------------------------- */
 
-    private ResourceBundle getBundle( Locale locale )
-    {
-        return ResourceBundle.getBundle( "trac-report", locale, this.getClass().getClassLoader() );
+    private ResourceBundle getBundle(Locale locale) {
+        return ResourceBundle.getBundle("trac-report", locale, this.getClass().getClassLoader());
     }
 
-    private void configureIssueDownloader( TracDownloader issueDownloader )
-    {
-        issueDownloader.setProject( project );
+    private void configureIssueDownloader(TracDownloader issueDownloader) {
+        issueDownloader.setProject(project);
 
-        issueDownloader.setQuery( query );
+        issueDownloader.setQuery(query);
 
-        issueDownloader.setTracPassword( tracPassword );
+        issueDownloader.setTracPassword(tracPassword);
 
-        issueDownloader.setTracUser( tracUser );
+        issueDownloader.setTracUser(tracUser);
     }
 }

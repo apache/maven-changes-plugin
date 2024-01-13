@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
@@ -29,15 +28,13 @@ import org.apache.maven.plugins.annotations.Parameter;
  * @version $Id$
  * @since 2.9
  */
-public abstract class AbstractChangesMojo
-    extends AbstractMojo
-{
+public abstract class AbstractChangesMojo extends AbstractMojo {
     /**
      * The current project base directory.
      *
      * @since 2.1
      */
-    @Parameter( property = "basedir", required = true )
+    @Parameter(property = "basedir", required = true)
     protected String basedir;
 
     /**
@@ -45,7 +42,7 @@ public abstract class AbstractChangesMojo
      *
      * @since 2.3
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession mavenSession;
 
     /**
@@ -54,7 +51,7 @@ public abstract class AbstractChangesMojo
      *
      * @since 2.9
      */
-    @Parameter( property = "changes.runOnlyAtExecutionRoot", defaultValue = "false" )
+    @Parameter(property = "changes.runOnlyAtExecutionRoot", defaultValue = "false")
     protected boolean runOnlyAtExecutionRoot;
 
     /**
@@ -63,18 +60,14 @@ public abstract class AbstractChangesMojo
      *
      * @return <code>true</code> if the current project is at the Execution Root
      */
-    protected boolean isThisTheExecutionRoot()
-    {
-        getLog().debug( "Root Folder:" + mavenSession.getExecutionRootDirectory() );
-        getLog().debug( "Current Folder:" + basedir );
-        boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase( basedir );
-        if ( result )
-        {
-            getLog().debug( "This is the execution root." );
-        }
-        else
-        {
-            getLog().debug( "This is NOT the execution root." );
+    protected boolean isThisTheExecutionRoot() {
+        getLog().debug("Root Folder:" + mavenSession.getExecutionRootDirectory());
+        getLog().debug("Current Folder:" + basedir);
+        boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase(basedir);
+        if (result) {
+            getLog().debug("This is the execution root.");
+        } else {
+            getLog().debug("This is NOT the execution root.");
         }
         return result;
     }

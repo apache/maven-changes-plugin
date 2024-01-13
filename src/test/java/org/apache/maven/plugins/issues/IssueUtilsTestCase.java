@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +16,13 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import junit.framework.TestCase;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.plugins.issues.IssueUtils;
+package org.apache.maven.plugins.issues;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import junit.framework.TestCase;
+import org.apache.maven.plugin.MojoExecutionException;
 
 /**
  * Tests for the IssueUtils class.
@@ -34,52 +31,41 @@ import java.util.List;
  * @version $Id$
  * @since 2.4
  */
-public class IssueUtilsTestCase
-    extends TestCase
-{
-    public void testFilterIssuesWithVersionPrefix()
-    {
+public class IssueUtilsTestCase extends TestCase {
+    public void testFilterIssuesWithVersionPrefix() {
         Issue issue_1;
         issue_1 = new Issue();
-        issue_1.setId( "1" );
-        issue_1.addFixVersion( "myPrefix-1.0" );
+        issue_1.setId("1");
+        issue_1.addFixVersion("myPrefix-1.0");
 
         Issue issue_2;
         issue_2 = new Issue();
-        issue_2.setId( "2" );
-        issue_2.addFixVersion( "1.0" );
+        issue_2.setId("2");
+        issue_2.addFixVersion("1.0");
 
         List<Issue> issueList = new ArrayList<>();
-        issueList.add( issue_1 );
-        issueList.add( issue_2 );
+        issueList.add(issue_1);
+        issueList.add(issue_2);
 
         List<Issue> filteredIssues;
-        try
-        {
-            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix( issueList, null );
-            assertEquals( 2, filteredIssues.size() );
+        try {
+            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix(issueList, null);
+            assertEquals(2, filteredIssues.size());
 
-            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix( issueList, "" );
-            assertEquals( 2, filteredIssues.size() );
+            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix(issueList, "");
+            assertEquals(2, filteredIssues.size());
 
-            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix( issueList, "myPrefix-" );
-            assertEquals( 1, filteredIssues.size() );
-        }
-        catch ( MojoExecutionException e )
-        {
-            fail( e.getMessage() );
+            filteredIssues = IssueUtils.filterIssuesWithVersionPrefix(issueList, "myPrefix-");
+            assertEquals(1, filteredIssues.size());
+        } catch (MojoExecutionException e) {
+            fail(e.getMessage());
         }
 
-        try
-        {
-            IssueUtils.filterIssuesWithVersionPrefix( issueList, "yourPrefix-" );
-            fail( "No issues should be found." );
-        }
-        catch ( MojoExecutionException e )
-        {
+        try {
+            IssueUtils.filterIssuesWithVersionPrefix(issueList, "yourPrefix-");
+            fail("No issues should be found.");
+        } catch (MojoExecutionException e) {
             // Expected
         }
-
     }
-
 }

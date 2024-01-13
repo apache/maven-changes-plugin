@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.announcement;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.announcement;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.announcement;
 
 /**
  * Defines the sender of the announcement if the list of developer is empty or if the sender is not a member of the
@@ -25,46 +24,38 @@ package org.apache.maven.plugins.announcement;
  *
  * @author Stephane Nicoll
  */
-public class MailSender
-{
+public class MailSender {
 
     private String name;
 
     private String email;
 
-    public MailSender()
-    {
+    public MailSender() {
         super();
     }
 
-    public MailSender( String name, String email )
-    {
+    public MailSender(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public String getEmail()
-    {
+    public String getEmail() {
         return email;
     }
 
-    public void setEmail( String email )
-    {
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return getName() + " (" + getEmail() + ")";
     }
 }

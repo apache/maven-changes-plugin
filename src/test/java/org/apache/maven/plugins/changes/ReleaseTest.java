@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,46 +24,37 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
 
-public class ReleaseTest
-    extends TestCase
-{
+public class ReleaseTest extends TestCase {
     Release release = new Release();
 
-    public ReleaseTest( String testName )
-    {
-        super( testName );
+    public ReleaseTest(String testName) {
+        super(testName);
     }
 
-    public static Test suite()
-    {
-        return new TestSuite( ReleaseTest.class );
+    public static Test suite() {
+        return new TestSuite(ReleaseTest.class);
     }
 
-    public void testGetSetVersion()
-    {
-        release.setVersion( "version" );
+    public void testGetSetVersion() {
+        release.setVersion("version");
 
-        assertEquals( "version", release.getVersion() );
+        assertEquals("version", release.getVersion());
     }
 
-    public void testGetSetDateRelease()
-    {
-        release.setDateRelease( "12-09-1979" );
+    public void testGetSetDateRelease() {
+        release.setDateRelease("12-09-1979");
 
-        assertEquals( "12-09-1979", release.getDateRelease() );
+        assertEquals("12-09-1979", release.getDateRelease());
     }
 
-    public void testGetSetAction()
-    {
+    public void testGetSetAction() {
         List<Action> actionList = new ArrayList<>();
 
-        release.setActions( actionList );
+        release.setActions(actionList);
 
-        assertEquals( actionList, release.getActions() );
+        assertEquals(actionList, release.getActions());
     }
-
 }

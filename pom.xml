@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -18,15 +17,14 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>maven-plugins</artifactId>
     <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-plugins</artifactId>
     <version>41</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <artifactId>maven-changes-plugin</artifactId>
@@ -55,8 +53,8 @@ under the License.
   <scm>
     <connection>scm:git:https://gitbox.apache.org/repos/asf/maven-changes-plugin.git</connection>
     <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/maven-changes-plugin.git</developerConnection>
-    <url>https://github.com/apache/maven-changes-plugin/tree/${project.scm.tag}</url>
     <tag>HEAD</tag>
+    <url>https://github.com/apache/maven-changes-plugin/tree/${project.scm.tag}</url>
   </scm>
   <issueManagement>
     <system>jira</system>
@@ -309,7 +307,7 @@ under the License.
       </exclusions>
     </dependency>
 
-      <!-- rest client for jira -->
+    <!-- rest client for jira -->
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-jaxrs</artifactId>
@@ -436,14 +434,22 @@ under the License.
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0.1</version><!-- cannot upgrade because of MODELLO-254 -->
+        <version>1.0.1</version>
+        <configuration>
+          <useJava5>true</useJava5>
+          <version>1.0.0</version>
+          <models>
+            <model>src/main/mdo/changes.mdo</model>
+          </models>
+        </configuration>
+        <!-- cannot upgrade because of MODELLO-254 -->
         <executions>
           <execution>
             <id>site-docs</id>
-            <phase>pre-site</phase>
             <goals>
               <goal>xdoc</goal>
             </goals>
+            <phase>pre-site</phase>
           </execution>
           <execution>
             <id>standard</id>
@@ -455,32 +461,25 @@ under the License.
           </execution>
           <execution>
             <id>generate-xsd</id>
-            <phase>generate-resources</phase>
             <goals>
               <goal>xsd</goal>
             </goals>
+            <phase>generate-resources</phase>
             <configuration>
               <outputDirectory>${project.build.outputDirectory}/META-INF/changes/xsd</outputDirectory>
             </configuration>
           </execution>
           <execution>
             <id>generate-xsd-site</id>
-            <phase>pre-site</phase>
             <goals>
               <goal>xsd</goal>
             </goals>
+            <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/xsd</outputDirectory>
             </configuration>
           </execution>
         </executions>
-        <configuration>
-          <useJava5>true</useJava5>
-          <version>1.0.0</version>
-          <models>
-            <model>src/main/mdo/changes.mdo</model>
-          </models>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.codehaus.plexus</groupId>
@@ -502,10 +501,10 @@ under the License.
         <executions>
           <execution>
             <id>patch-changes-xsd</id>
-            <phase>process-resources</phase>
             <goals>
               <goal>execute</goal>
             </goals>
+            <phase>process-resources</phase>
             <configuration>
               <source>${project.basedir}/src/main/script/patch-modello.groovy</source>
             </configuration>
