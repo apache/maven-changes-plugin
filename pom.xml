@@ -354,7 +354,12 @@ under the License.
     <dependency>
       <groupId>org.eclipse.mylyn.github</groupId>
       <artifactId>org.eclipse.egit.github.core</artifactId>
-      <version>2.1.5</version>
+      <version>5.3.0.201903130848-r</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -412,6 +417,16 @@ under the License.
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>eclipse-egit</id>
+      <url>https://repo.eclipse.org/content/repositories/egit-releases/</url>
+    </repository>
+  </repositories>
 
   <build>
     <plugins>
