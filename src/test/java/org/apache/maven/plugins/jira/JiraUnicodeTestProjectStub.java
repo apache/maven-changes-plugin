@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,21 +30,16 @@ import org.apache.maven.plugin.testing.stubs.MavenProjectStub;
 /**
  * @version $Id$
  */
-public class JiraUnicodeTestProjectStub
-    extends MavenProjectStub
-{
+public class JiraUnicodeTestProjectStub extends MavenProjectStub {
 
     /** {@inheritDoc} */
     @Override
-    public List<ArtifactRepository> getRemoteArtifactRepositories()
-    {
-        ArtifactRepositoryPolicy policy =
-            new ArtifactRepositoryPolicy( true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS,
-                                          ArtifactRepositoryPolicy.CHECKSUM_POLICY_IGNORE );
-        ArtifactRepository repository = new MavenArtifactRepository( "central", "https://repo.maven.apache.org/maven2",
-                                                                     new DefaultRepositoryLayout(), policy, policy );
+    public List<ArtifactRepository> getRemoteArtifactRepositories() {
+        ArtifactRepositoryPolicy policy = new ArtifactRepositoryPolicy(
+                true, ArtifactRepositoryPolicy.UPDATE_POLICY_ALWAYS, ArtifactRepositoryPolicy.CHECKSUM_POLICY_IGNORE);
+        ArtifactRepository repository = new MavenArtifactRepository(
+                "central", "https://repo.maven.apache.org/maven2", new DefaultRepositoryLayout(), policy, policy);
 
-        return Collections.singletonList( repository );
+        return Collections.singletonList(repository);
     }
-
 }

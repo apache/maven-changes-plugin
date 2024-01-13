@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
 
 /**
  * Builder for a URL which build up of host part, a context part and 0 or more parameters.
@@ -26,44 +25,35 @@ package org.apache.maven.plugins.jira;
  * @version $Id$
  * @since 2.8
  */
-public class UrlBuilder
-{
+public class UrlBuilder {
     private static final String AMPERSAND = "&";
 
     private static final String QUESTION_MARK = "?";
 
     private StringBuilder query = new StringBuilder();
 
-    public UrlBuilder( String url, String context )
-    {
-        query.append( url ).append( "/" ).append( context );
+    public UrlBuilder(String url, String context) {
+        query.append(url).append("/").append(context);
     }
 
-    public UrlBuilder addParameter( String key, String value )
-    {
-        if ( key != null && value != null )
-        {
-            if ( query.toString().contains( QUESTION_MARK ) )
-            {
-                query.append( AMPERSAND );
+    public UrlBuilder addParameter(String key, String value) {
+        if (key != null && value != null) {
+            if (query.toString().contains(QUESTION_MARK)) {
+                query.append(AMPERSAND);
+            } else {
+                query.append(QUESTION_MARK);
             }
-            else
-            {
-                query.append( QUESTION_MARK );
-            }
-            query.append( key ).append( "=" ).append( value );
+            query.append(key).append("=").append(value);
         }
         return this;
     }
 
-    public UrlBuilder addParameter( String key, int value )
-    {
-        addParameter( key, String.valueOf( value ) );
+    public UrlBuilder addParameter(String key, int value) {
+        addParameter(key, String.valueOf(value));
         return this;
     }
 
-    public String build()
-    {
+    public String build() {
         return query.toString();
     }
 }

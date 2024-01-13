@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +16,13 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
 
 import java.io.StringReader;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.plugins.jira.AbstractJiraDownloader;
-import org.apache.maven.plugins.jira.JiraXML;
 import org.xml.sax.InputSource;
 
 /**
@@ -33,36 +30,28 @@ import org.xml.sax.InputSource;
  *
  * @version $Id$
  */
-public class MockJiraDownloader
-    extends AbstractJiraDownloader
-{
+public class MockJiraDownloader extends AbstractJiraDownloader {
     @Override
-    public void doExecute()
-    {
+    public void doExecute() {
         // do nothing
     }
 
     private String jiraXml;
 
     @Override
-    public List<Issue> getIssueList()
-        throws MojoExecutionException
-    {
-        JiraXML jira = new JiraXML( log, jiraDatePattern );
-        InputSource inputSource = new InputSource( new StringReader( jiraXml ) );
-        jira.parse( inputSource );
-        log.info( "The JIRA version is '" + jira.getJiraVersion() + "'" );
+    public List<Issue> getIssueList() throws MojoExecutionException {
+        JiraXML jira = new JiraXML(log, jiraDatePattern);
+        InputSource inputSource = new InputSource(new StringReader(jiraXml));
+        jira.parse(inputSource);
+        log.info("The JIRA version is '" + jira.getJiraVersion() + "'");
         return jira.getIssueList();
     }
 
-    public void setJiraXml( String jiraXml )
-    {
+    public void setJiraXml(String jiraXml) {
         this.jiraXml = jiraXml;
     }
 
-    public String getJiraXml()
-    {
+    public String getJiraXml() {
         return jiraXml;
     }
-
 }

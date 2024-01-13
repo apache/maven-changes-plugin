@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
 
 import java.util.Map;
 
@@ -32,8 +31,7 @@ import org.apache.maven.plugins.changes.IssueType;
  *
  * @version $Id$
  */
-public interface IssueManagementSystem
-{
+public interface IssueManagementSystem {
 
     /**
      * Get a mapping of issue types used in this issue management system to the ones used in a changes.xml file.
@@ -56,7 +54,5 @@ public interface IssueManagementSystem
      *            changes.xml file
      * @throws MojoExecutionException If the configuration fails
      */
-    void applyConfiguration( Map<String, String> issueTypes )
-        throws MojoExecutionException;
-
+    void applyConfiguration(Map<String, String> issueTypes) throws MojoExecutionException;
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +16,15 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.commons.collections.bidimap.DualHashBidiMap;
-import org.apache.maven.plugin.logging.Log;
+package org.apache.maven.plugins.issues;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.bidimap.DualHashBidiMap;
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * A helper class for generation of reports based on issues.
@@ -34,8 +33,7 @@ import java.util.Map;
  * @version $Id$
  * @since 2.4
  */
-public class IssuesReportHelper
-{
+public class IssuesReportHelper {
     public static final int COLUMN_ASSIGNEE = 0;
 
     public static final int COLUMN_COMPONENT = 1;
@@ -71,9 +69,8 @@ public class IssuesReportHelper
      * @param allColumns A mapping from column name to column id
      * @return A List of column id:s
      */
-    public static List<Integer> getColumnIds( String columnNames, Map<String, Integer> allColumns )
-    {
-        return getColumnIds( columnNames, allColumns, null, null );
+    public static List<Integer> getColumnIds(String columnNames, Map<String, Integer> allColumns) {
+        return getColumnIds(columnNames, allColumns, null, null);
     }
 
     /**
@@ -87,34 +84,27 @@ public class IssuesReportHelper
      * @param log A log
      * @return A List of column id:s
      */
-    public static List<Integer> getColumnIds( String columnNames, Map<String, Integer> allColumns,
-                                              Map<String, Integer> deprecatedColumns, Log log )
-    {
+    public static List<Integer> getColumnIds(
+            String columnNames, Map<String, Integer> allColumns, Map<String, Integer> deprecatedColumns, Log log) {
         DualHashBidiMap bidiColumns = null;
         List<Integer> columnIds = new ArrayList<>();
-        String[] columnNamesArray = columnNames.split( "," );
+        String[] columnNamesArray = columnNames.split(",");
 
-        if ( deprecatedColumns != null )
-        {
-            bidiColumns = new DualHashBidiMap( allColumns );
+        if (deprecatedColumns != null) {
+            bidiColumns = new DualHashBidiMap(allColumns);
         }
 
         // Loop through the names of the columns, to validate each of them and add their id to the list
-        for ( String aColumnNamesArray : columnNamesArray )
-        {
+        for (String aColumnNamesArray : columnNamesArray) {
             String columnName = aColumnNamesArray.trim();
-            if ( allColumns.containsKey( columnName ) )
-            {
-                columnIds.add( allColumns.get( columnName ) );
-            }
-            else if ( deprecatedColumns != null && deprecatedColumns.containsKey( columnName ) )
-            {
-                Integer columnId = deprecatedColumns.get( columnName );
-                columnIds.add( columnId );
-                if ( log != null )
-                {
-                    log.warn( "The columnName '" + columnName + "' has been deprecated." + " Please use "
-                        + "the columnName '" + bidiColumns.getKey( columnId ) + "' instead." );
+            if (allColumns.containsKey(columnName)) {
+                columnIds.add(allColumns.get(columnName));
+            } else if (deprecatedColumns != null && deprecatedColumns.containsKey(columnName)) {
+                Integer columnId = deprecatedColumns.get(columnName);
+                columnIds.add(columnId);
+                if (log != null) {
+                    log.warn("The columnName '" + columnName + "' has been deprecated." + " Please use "
+                            + "the columnName '" + bidiColumns.getKey(columnId) + "' instead.");
                 }
             }
         }
@@ -127,19 +117,15 @@ public class IssuesReportHelper
      * @param values The values to print
      * @return A nicely formatted string of values.
      */
-    public static String printValues( List<String> values )
-    {
+    public static String printValues(List<String> values) {
         StringBuilder sb = new StringBuilder();
-        if ( values != null )
-        {
+        if (values != null) {
             Iterator<String> iterator = values.iterator();
-            while ( iterator.hasNext() )
-            {
+            while (iterator.hasNext()) {
                 String value = iterator.next();
-                sb.append( value );
-                if ( iterator.hasNext() )
-                {
-                    sb.append( ", " );
+                sb.append(value);
+                if (iterator.hasNext()) {
+                    sb.append(", ");
                 }
             }
         }
@@ -152,12 +138,10 @@ public class IssuesReportHelper
      * @param list The List to convert
      * @return An in array
      */
-    public static int[] toIntArray( List<Integer> list )
-    {
+    public static int[] toIntArray(List<Integer> list) {
         int[] intArray = new int[list.size()];
-        for ( int j = 0; j < intArray.length; j++ )
-        {
-            intArray[j] = list.get( j );
+        for (int j = 0; j < intArray.length; j++) {
+            intArray[j] = list.get(j);
         }
         return intArray;
     }

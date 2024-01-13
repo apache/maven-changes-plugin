@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,31 +16,26 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.jira;
 
-import org.apache.maven.plugins.jira.JiraMojo;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
 /**
  * Unit tests for {@link JiraMojo}.
- * 
+ *
  * @author jrh3k5
  * @since 2.8
  */
-
-public class JiraMojoTest
-    extends AbstractMojoTestCase
-{
+public class JiraMojoTest extends AbstractMojoTestCase {
     private final JiraMojo mojo = new JiraMojo();
 
     /**
      * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.
-     * 
+     *
      * @throws Exception If any errors occur during the test run.
      */
-    public void testCanGenerateReportSkipped()
-        throws Exception
-    {
-        setVariableValueToObject( mojo, "skip", Boolean.TRUE );
-        assertFalse( mojo.canGenerateReport() );
+    public void testCanGenerateReportSkipped() throws Exception {
+        setVariableValueToObject(mojo, "skip", Boolean.TRUE);
+        assertFalse(mojo.canGenerateReport());
     }
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.announcement;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.announcement;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.announcement;
 
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.AbstractChangesMojo;
@@ -28,15 +27,13 @@ import org.apache.maven.plugins.changes.AbstractChangesMojo;
  * @version $Id$
  * @since 2.3
  */
-public abstract class AbstractAnnouncementMojo
-    extends AbstractChangesMojo
-{
+public abstract class AbstractAnnouncementMojo extends AbstractChangesMojo {
     /**
      * This will cause the execution to be run only at the top of a given module tree. That is, run in the project
      * contained in the same folder where the mvn execution was launched.
      *
      * @since 2.3
      */
-    @Parameter( property = "announcement.runOnlyAtExecutionRoot", defaultValue = "false" )
+    @Parameter(property = "announcement.runOnlyAtExecutionRoot", defaultValue = "false")
     protected boolean runOnlyAtExecutionRoot;
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.plugins.issues;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,11 +16,12 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.plugin.MojoExecutionException;
+package org.apache.maven.plugins.issues;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.maven.plugin.MojoExecutionException;
 
 /**
  * A utility class for working with issue objects.
@@ -31,8 +30,7 @@ import java.util.List;
  * @version $Id$
  * @since 2.4
  */
-public class IssueUtils
-{
+public class IssueUtils {
     public static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
     /**
@@ -43,35 +41,29 @@ public class IssueUtils
      * @return A <code>List</code> of issues fixed in versions that match the supplied prefix
      * @throws org.apache.maven.plugin.MojoExecutionException If no issues could be found for the supplied prefix
      */
-    public static List<Issue> filterIssuesWithVersionPrefix( List<Issue> issues, String prefix )
-        throws MojoExecutionException
-    {
+    public static List<Issue> filterIssuesWithVersionPrefix(List<Issue> issues, String prefix)
+            throws MojoExecutionException {
         List<Issue> filteredIssues = new ArrayList<>();
         boolean isFound = false;
         Issue issue;
 
-        for ( Issue issue1 : issues )
-        {
+        for (Issue issue1 : issues) {
             issue = issue1;
 
-            if ( issue.getFixVersions() != null )
-            {
-                for ( String fixVersion : issue.getFixVersions() )
-                {
-                    if ( prefix == null || fixVersion.startsWith( prefix ) )
-                    {
+            if (issue.getFixVersions() != null) {
+                for (String fixVersion : issue.getFixVersions()) {
+                    if (prefix == null || fixVersion.startsWith(prefix)) {
                         isFound = true;
-                        filteredIssues.add( issue );
+                        filteredIssues.add(issue);
                         break;
                     }
                 }
             }
         }
 
-        if ( !isFound )
-        {
-            throw new MojoExecutionException( "Couldn't find any issues with a Fix Version prefix of '" + prefix
-                + "' among the supplied issues: " + toString( issues ) );
+        if (!isFound) {
+            throw new MojoExecutionException("Couldn't find any issues with a Fix Version prefix of '" + prefix
+                    + "' among the supplied issues: " + toString(issues));
         }
         return filteredIssues;
     }
@@ -86,45 +78,37 @@ public class IssueUtils
      * @return A <code>List</code> of issues for the supplied version
      * @throws org.apache.maven.plugin.MojoExecutionException If no issues could be found for the supplied version
      */
-    public static List<Issue> getIssuesForVersion( List<Issue> issues, String version )
-        throws MojoExecutionException
-    {
+    public static List<Issue> getIssuesForVersion(List<Issue> issues, String version) throws MojoExecutionException {
         List<Issue> issuesForVersion = new ArrayList<>();
         boolean isFound = false;
         Issue issue;
         String releaseVersion = version;
 
         // Remove "-SNAPSHOT" from the end of the version, if it's there
-        if ( version != null && version.endsWith( SNAPSHOT_SUFFIX ) )
-        {
-            releaseVersion = version.substring( 0, version.length() - SNAPSHOT_SUFFIX.length() );
+        if (version != null && version.endsWith(SNAPSHOT_SUFFIX)) {
+            releaseVersion = version.substring(0, version.length() - SNAPSHOT_SUFFIX.length());
         }
 
-        for ( Issue issue1 : issues )
-        {
+        for (Issue issue1 : issues) {
             issue = issue1;
 
-            if ( issue.getFixVersions() != null && issue.getFixVersions().contains( releaseVersion ) )
-            {
+            if (issue.getFixVersions() != null && issue.getFixVersions().contains(releaseVersion)) {
                 isFound = true;
-                issuesForVersion.add( issue );
+                issuesForVersion.add(issue);
             }
         }
 
-        if ( !isFound )
-        {
-            throw new MojoExecutionException( "Couldn't find any issues for the version '" + releaseVersion
-                + "' among the supplied issues: " + toString( issues ) );
+        if (!isFound) {
+            throw new MojoExecutionException("Couldn't find any issues for the version '" + releaseVersion
+                    + "' among the supplied issues: " + toString(issues));
         }
         return issuesForVersion;
     }
 
-    public static String toString( List<Issue> issues )
-    {
-        List<String> issueStrings = new ArrayList<>( issues.size() );
-        for ( Issue issue : issues )
-        {
-            issueStrings.add( issue.toString() );
+    public static String toString(List<Issue> issues) {
+        List<String> issueStrings = new ArrayList<>(issues.size());
+        for (Issue issue : issues) {
+            issueStrings.add(issue.toString());
         }
         return issueStrings.toString();
     }

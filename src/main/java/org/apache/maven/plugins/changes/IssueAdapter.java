@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,16 +16,17 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.plugins.changes.model.Action;
-import org.apache.maven.plugins.changes.model.Release;
-import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.plugins.issues.IssueManagementSystem;
+package org.apache.maven.plugins.changes;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.maven.plugins.changes.model.Action;
+import org.apache.maven.plugins.changes.model.Release;
+import org.apache.maven.plugins.issues.Issue;
+import org.apache.maven.plugins.issues.IssueManagementSystem;
 
 /**
  * An adapter that can adapt data models from other issue management system to the data models used in the changes.xml
@@ -37,8 +36,7 @@ import java.util.Map;
  * @version $Id$
  * @since 2.4
  */
-public class IssueAdapter
-{
+public class IssueAdapter {
     private static final String UNKNOWN_ISSUE_TYPE = "";
 
     private IssueManagementSystem ims;
@@ -48,13 +46,11 @@ public class IssueAdapter
      *
      * @param ims The issue management system that has the data that should be adapted
      */
-    public IssueAdapter( IssueManagementSystem ims )
-    {
+    public IssueAdapter(IssueManagementSystem ims) {
         this.ims = ims;
     }
 
-    private Map<String, IssueType> getIssueTypeMap()
-    {
+    private Map<String, IssueType> getIssueTypeMap() {
         return ims.getIssueTypeMap();
     }
 
@@ -64,38 +60,33 @@ public class IssueAdapter
      * @param issues The issues
      * @return A list of releases
      */
-    public List<Release> getReleases( List<Issue> issues )
-    {
+    public List<Release> getReleases(List<Issue> issues) {
         // A Map of releases keyed by fixVersion
         Map<String, Release> releasesMap = new HashMap<>();
 
         // Loop through all issues looking for fixVersions
-        for ( Issue issue : issues )
-        {
+        for (Issue issue : issues) {
             // Do NOT create a release for issues that lack a fixVersion
-            if ( issue.getFixVersions() != null )
-            {
-                for ( String fixVersion : issue.getFixVersions() )
-                {
+            if (issue.getFixVersions() != null) {
+                for (String fixVersion : issue.getFixVersions()) {
                     // Try to get a matching Release from the map
-                    Release release = releasesMap.get( fixVersion );
-                    if ( release == null )
-                    {
+                    Release release = releasesMap.get(fixVersion);
+                    if (release == null) {
                         // Add a new Release to the Map if it wasn't there
                         release = new Release();
-                        release.setVersion( fixVersion );
-                        releasesMap.put( fixVersion, release );
+                        release.setVersion(fixVersion);
+                        releasesMap.put(fixVersion, release);
                     }
 
                     // Add this issue as an Action to this release
-                    Action action = createAction( issue );
-                    release.addAction( action );
+                    Action action = createAction(issue);
+                    release.addAction(action);
                 }
             }
         }
 
         // Extract the releases from the Map to a List
-        return new ArrayList<>( releasesMap.values() );
+        return new ArrayList<>(releasesMap.values());
     }
 
     /**
@@ -104,31 +95,27 @@ public class IssueAdapter
      * @param issue The issue to extract the information from
      * @return An <code>Action</code>
      */
-    public Action createAction( Issue issue )
-    {
+    public Action createAction(Issue issue) {
         Action action = new Action();
 
         // @todo We need to add something like issue.getPresentationIdentifier() to be able to support other IMSes
         // beside JIRA
-        action.setIssue( issue.getKey() );
+        action.setIssue(issue.getKey());
 
         // Try to map the IMS-specific issue type to one that is used in a changes.xml file
         IssueType type;
-        if ( getIssueTypeMap().containsKey( issue.getType() ) )
-        {
-            type = getIssueTypeMap().get( issue.getType() );
-            action.setType( type.modelRepresentation() );
-        }
-        else
-        {
-            action.setType( UNKNOWN_ISSUE_TYPE );
+        if (getIssueTypeMap().containsKey(issue.getType())) {
+            type = getIssueTypeMap().get(issue.getType());
+            action.setType(type.modelRepresentation());
+        } else {
+            action.setType(UNKNOWN_ISSUE_TYPE);
         }
 
-        action.setDev( issue.getAssignee() );
+        action.setDev(issue.getAssignee());
 
-        action.setDueTo( issue.getReporter() == null ? "" : issue.getReporter() );
+        action.setDueTo(issue.getReporter() == null ? "" : issue.getReporter());
 
-        action.setAction( issue.getSummary() );
+        action.setAction(issue.getSummary());
         return action;
     }
 }

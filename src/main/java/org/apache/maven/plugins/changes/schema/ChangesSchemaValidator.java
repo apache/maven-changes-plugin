@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes.schema;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.plugins.changes.schema;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes.schema;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes.schema;
 
 import java.io.File;
 
@@ -26,8 +25,7 @@ import java.io.File;
  * @since 28 juil. 2008
  * @version $Id$
  */
-public interface ChangesSchemaValidator
-{
+public interface ChangesSchemaValidator {
     /**
      * @param file File to validate.
      * @param schemaVersion Schema version.
@@ -35,7 +33,6 @@ public interface ChangesSchemaValidator
      * @return {@link XmlValidationHandler}
      * @throws SchemaValidatorException if validation failed.
      */
-    XmlValidationHandler validateXmlWithSchema( File file, String schemaVersion, boolean failOnValidationError )
-        throws SchemaValidatorException;
-
+    XmlValidationHandler validateXmlWithSchema(File file, String schemaVersion, boolean failOnValidationError)
+            throws SchemaValidatorException;
 }

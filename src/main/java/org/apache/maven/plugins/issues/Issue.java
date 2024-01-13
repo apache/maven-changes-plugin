@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,8 +29,7 @@ import java.util.List;
  * @version $Id$
  * @since 2.4
  */
-public class Issue
-{
+public class Issue {
     private String assignee;
 
     private List<String> comments;
@@ -66,195 +64,155 @@ public class Issue
 
     private String version;
 
-    public Issue()
-    {
-    }
+    public Issue() {}
 
-    public String getAssignee()
-    {
+    public String getAssignee() {
         return assignee;
     }
 
-    public void setAssignee( String assignee )
-    {
+    public void setAssignee(String assignee) {
         this.assignee = assignee;
     }
 
-    public List<String> getComments()
-    {
+    public List<String> getComments() {
         return comments;
     }
 
-    public void addComment( String comment )
-    {
-        if ( comments == null )
-        {
+    public void addComment(String comment) {
+        if (comments == null) {
             comments = new ArrayList<>();
         }
-        comments.add( comment );
+        comments.add(comment);
     }
 
-    public List<String> getComponents()
-    {
+    public List<String> getComponents() {
         return components;
     }
 
-    public void addComponent( String component )
-    {
-        if ( components == null )
-        {
+    public void addComponent(String component) {
+        if (components == null) {
             components = new ArrayList<>();
         }
-        components.add( component );
+        components.add(component);
     }
 
-    public Date getCreated()
-    {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated( Date created )
-    {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
-    public List<String> getFixVersions()
-    {
+    public List<String> getFixVersions() {
         return fixVersions;
     }
 
-    public void addFixVersion( String fixVersion )
-    {
-        if ( fixVersions == null )
-        {
+    public void addFixVersion(String fixVersion) {
+        if (fixVersions == null) {
             fixVersions = new ArrayList<>();
         }
-        fixVersions.add( fixVersion );
+        fixVersions.add(fixVersion);
     }
 
-    public String getId()
-    {
+    public String getId() {
         return id;
     }
 
-    public void setId( String id )
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getKey()
-    {
+    public String getKey() {
         return key;
     }
 
-    public void setKey( String key )
-    {
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public String getLink()
-    {
+    public String getLink() {
         return link;
     }
 
-    public void setLink( String link )
-    {
+    public void setLink(String link) {
         this.link = link;
     }
 
-    public String getPriority()
-    {
+    public String getPriority() {
         return priority;
     }
 
-    public void setPriority( String priority )
-    {
+    public void setPriority(String priority) {
         this.priority = priority;
     }
 
-    public String getReporter()
-    {
+    public String getReporter() {
         return reporter;
     }
 
-    public void setReporter( String reporter )
-    {
+    public void setReporter(String reporter) {
         this.reporter = reporter;
     }
 
-    public String getResolution()
-    {
+    public String getResolution() {
         return resolution;
     }
 
-    public void setResolution( String resolution )
-    {
+    public void setResolution(String resolution) {
         this.resolution = resolution;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus( String status )
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getSummary()
-    {
+    public String getSummary() {
         return summary;
     }
 
-    public void setSummary( String summary )
-    {
+    public void setSummary(String summary) {
         this.summary = summary;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle( String title )
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getType()
-    {
+    public String getType() {
         return type;
     }
 
-    public void setType( String type )
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Date getUpdated()
-    {
+    public Date getUpdated() {
         return updated;
     }
 
-    public void setUpdated( Date updated )
-    {
+    public void setUpdated(Date updated) {
         this.updated = updated;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion( String version )
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return this.getClass().getSimpleName() + "[id='" + this.getId() + "'" + ", title='" + this.getTitle() + "'"
-            + ", fixVersions='" + this.getFixVersions() + "'" + "]";
+                + ", fixVersions='" + this.getFixVersions() + "'" + "]";
     }
 }

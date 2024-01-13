@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.issues;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.issues;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.issues;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +35,10 @@ import org.apache.maven.plugins.changes.IssueType;
  *
  * @version $Id$
  */
-public abstract class AbstractIssueManagementSystem
-    implements IssueManagementSystem
-{
+public abstract class AbstractIssueManagementSystem implements IssueManagementSystem {
     protected Map<String, IssueType> issueTypeMap;
 
-    protected AbstractIssueManagementSystem()
-    {
+    protected AbstractIssueManagementSystem() {
         issueTypeMap = new HashMap<>();
     }
 
@@ -50,8 +46,7 @@ public abstract class AbstractIssueManagementSystem
      * (non-Javadoc)
      * @see org.apache.maven.plugins.issues.IssueManagementSystem#getIssueTypeMap()
      */
-    public Map<String, IssueType> getIssueTypeMap()
-    {
+    public Map<String, IssueType> getIssueTypeMap() {
         return issueTypeMap;
     }
 
@@ -65,21 +60,16 @@ public abstract class AbstractIssueManagementSystem
      * (non-Javadoc)
      * @see org.apache.maven.plugins.issues.IssueManagementSystem#applyConfiguration(java.util.Map)
      */
-    public void applyConfiguration( Map<String, String> issueTypes )
-        throws MojoExecutionException
-    {
-        for ( Map.Entry<String, String> me : issueTypes.entrySet() )
-        {
-            IssueType type = IssueType.lookupByKey( me.getKey() );
-            if ( type == null )
-            {
-                throw new MojoExecutionException( "Invalid issue action " + me.getKey() );
+    public void applyConfiguration(Map<String, String> issueTypes) throws MojoExecutionException {
+        for (Map.Entry<String, String> me : issueTypes.entrySet()) {
+            IssueType type = IssueType.lookupByKey(me.getKey());
+            if (type == null) {
+                throw new MojoExecutionException("Invalid issue action " + me.getKey());
             }
             String imsTypes = me.getValue();
-            String[] imsTypeArray = imsTypes.split( "," );
-            for ( String imsType : imsTypeArray )
-            {
-                issueTypeMap.put( imsType, type );
+            String[] imsTypeArray = imsTypes.split(",");
+            for (String imsType : imsTypeArray) {
+                issueTypeMap.put(imsType, type);
             }
         }
     }

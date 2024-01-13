@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.github;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,15 @@ package org.apache.maven.plugins.github;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.github;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.issues.Issue;
@@ -32,19 +39,10 @@ import org.eclipse.egit.github.core.Label;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.IssueService;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @since 2.8
  */
-public class GitHubDownloader
-{
+public class GitHubDownloader {
 
     /**
      * The github client.
@@ -76,175 +74,148 @@ public class GitHubDownloader
      */
     private String githubIssueURL;
 
-    public GitHubDownloader( MavenProject project, String githubScheme, int githubPort, boolean includeOpenIssues,
-                             boolean onlyMilestoneIssues )
-                                 throws MalformedURLException
-    {
+    public GitHubDownloader(
+            MavenProject project,
+            String githubScheme,
+            int githubPort,
+            boolean includeOpenIssues,
+            boolean onlyMilestoneIssues)
+            throws MalformedURLException {
         this.includeOpenIssues = includeOpenIssues;
         this.onlyMilestoneIssues = onlyMilestoneIssues;
 
-        URL githubURL = new URL( project.getIssueManagement().getUrl() );
+        URL githubURL = new URL(project.getIssueManagement().getUrl());
 
         // The githubclient prefers to connect to 'github.com' using the api domain, unlike github enterprise
         // which can connect fine using its domain, so for github.com use empty constructor
-        if ( githubURL.getHost().equalsIgnoreCase( "github.com" ) )
-        {
+        if (githubURL.getHost().equalsIgnoreCase("github.com")) {
             this.client = new GitHubClient();
-        }
-        else
-        {
-            this.client = new GitHubClient( githubURL.getHost(), githubPort, githubScheme );
+        } else {
+            this.client = new GitHubClient(githubURL.getHost(), githubPort, githubScheme);
         }
 
         this.githubIssueURL = project.getIssueManagement().getUrl();
-        if ( !this.githubIssueURL.endsWith( "/" ) )
-        {
+        if (!this.githubIssueURL.endsWith("/")) {
             this.githubIssueURL = this.githubIssueURL + "/";
         }
 
         String urlPath = githubURL.getPath();
-        if ( urlPath.startsWith( "/" ) )
-        {
-            urlPath = urlPath.substring( 1 );
+        if (urlPath.startsWith("/")) {
+            urlPath = urlPath.substring(1);
         }
 
-        if ( urlPath.endsWith( "/" ) )
-        {
-            urlPath = urlPath.substring( 0, urlPath.length() - 2 );
+        if (urlPath.endsWith("/")) {
+            urlPath = urlPath.substring(0, urlPath.length() - 2);
         }
 
-        String[] urlPathParts = urlPath.split( "/" );
+        String[] urlPathParts = urlPath.split("/");
 
-        if ( urlPathParts.length != 3 )
-        {
-            throw new MalformedURLException( "GitHub issue management URL must look like, "
-                + "[GITHUB_DOMAIN]/[OWNER]/[REPO]/issues" );
+        if (urlPathParts.length != 3) {
+            throw new MalformedURLException(
+                    "GitHub issue management URL must look like, " + "[GITHUB_DOMAIN]/[OWNER]/[REPO]/issues");
         }
 
         this.githubOwner = urlPathParts[0];
         this.githubRepo = urlPathParts[1];
     }
 
-    protected Issue createIssue( org.eclipse.egit.github.core.Issue githubIssue )
-    {
+    protected Issue createIssue(org.eclipse.egit.github.core.Issue githubIssue) {
         Issue issue = new Issue();
 
-        issue.setKey( String.valueOf( githubIssue.getNumber() ) );
-        issue.setId( String.valueOf( githubIssue.getNumber() ) );
+        issue.setKey(String.valueOf(githubIssue.getNumber()));
+        issue.setId(String.valueOf(githubIssue.getNumber()));
 
-        issue.setLink( this.githubIssueURL + githubIssue.getNumber() );
+        issue.setLink(this.githubIssueURL + githubIssue.getNumber());
 
-        issue.setCreated( githubIssue.getCreatedAt() );
+        issue.setCreated(githubIssue.getCreatedAt());
 
-        issue.setUpdated( githubIssue.getUpdatedAt() );
+        issue.setUpdated(githubIssue.getUpdatedAt());
 
-        if ( githubIssue.getAssignee() != null )
-        {
-            if ( githubIssue.getAssignee().getName() != null )
-            {
-                issue.setAssignee( githubIssue.getAssignee().getName() );
-            }
-            else
-            {
-                issue.setAssignee( githubIssue.getAssignee().getLogin() );
+        if (githubIssue.getAssignee() != null) {
+            if (githubIssue.getAssignee().getName() != null) {
+                issue.setAssignee(githubIssue.getAssignee().getName());
+            } else {
+                issue.setAssignee(githubIssue.getAssignee().getLogin());
             }
         }
 
-        issue.setTitle( githubIssue.getTitle() );
+        issue.setTitle(githubIssue.getTitle());
 
-        issue.setSummary( githubIssue.getTitle() );
+        issue.setSummary(githubIssue.getTitle());
 
-        if ( githubIssue.getMilestone() != null )
-        {
-            issue.addFixVersion( githubIssue.getMilestone().getTitle() );
+        if (githubIssue.getMilestone() != null) {
+            issue.addFixVersion(githubIssue.getMilestone().getTitle());
         }
 
-        issue.setReporter( githubIssue.getUser().getLogin() );
+        issue.setReporter(githubIssue.getUser().getLogin());
 
-        if ( githubIssue.getClosedAt() != null )
-        {
-            issue.setStatus( "closed" );
-        }
-        else
-        {
-            issue.setStatus( "open" );
+        if (githubIssue.getClosedAt() != null) {
+            issue.setStatus("closed");
+        } else {
+            issue.setStatus("open");
         }
 
         List<Label> labels = githubIssue.getLabels();
-        if ( labels != null && !labels.isEmpty() )
-        {
-            issue.setType( labels.get( 0 ).getName() );
+        if (labels != null && !labels.isEmpty()) {
+            issue.setType(labels.get(0).getName());
         }
 
         return issue;
     }
 
-    public List<Issue> getIssueList()
-        throws IOException
-    {
+    public List<Issue> getIssueList() throws IOException {
         List<Issue> issueList = new ArrayList<>();
 
-        IssueService service = new IssueService( client );
+        IssueService service = new IssueService(client);
         Map<String, String> issueFilter = new HashMap<>();
 
-        if ( includeOpenIssues )
-        {
+        if (includeOpenIssues) {
             // Adding open issues
 
-            for ( org.eclipse.egit.github.core.Issue issue : service.getIssues( githubOwner, githubRepo, issueFilter ) )
-            {
-                if ( !onlyMilestoneIssues || issue.getMilestone() != null )
-                {
-                    issueList.add( createIssue( issue ) );
+            for (org.eclipse.egit.github.core.Issue issue : service.getIssues(githubOwner, githubRepo, issueFilter)) {
+                if (!onlyMilestoneIssues || issue.getMilestone() != null) {
+                    issueList.add(createIssue(issue));
                 }
             }
         }
 
         // Adding closed issues
 
-        issueFilter.put( "state", "closed" );
+        issueFilter.put("state", "closed");
 
-        for ( org.eclipse.egit.github.core.Issue issue : service.getIssues( githubOwner, githubRepo, issueFilter ) )
-        {
-            if ( !onlyMilestoneIssues || issue.getMilestone() != null )
-            {
-                issueList.add( createIssue( issue ) );
+        for (org.eclipse.egit.github.core.Issue issue : service.getIssues(githubOwner, githubRepo, issueFilter)) {
+            if (!onlyMilestoneIssues || issue.getMilestone() != null) {
+                issueList.add(createIssue(issue));
             }
         }
 
         return issueList;
     }
 
-    public void configureAuthentication( SettingsDecrypter decrypter, String githubAPIServerId, Settings settings,
-                                         Log log )
-    {
+    public void configureAuthentication(
+            SettingsDecrypter decrypter, String githubAPIServerId, Settings settings, Log log) {
         boolean configured = false;
 
         List<Server> servers = settings.getServers();
 
-        for ( Server server : servers )
-        {
-            if ( server.getId().equals( githubAPIServerId ) )
-            {
-                SettingsDecryptionResult result = decrypter.decrypt( new DefaultSettingsDecryptionRequest( server ) );
-                for ( SettingsProblem problem : result.getProblems() )
-                {
-                    log.error( problem.getMessage(), problem.getException() );
+        for (Server server : servers) {
+            if (server.getId().equals(githubAPIServerId)) {
+                SettingsDecryptionResult result = decrypter.decrypt(new DefaultSettingsDecryptionRequest(server));
+                for (SettingsProblem problem : result.getProblems()) {
+                    log.error(problem.getMessage(), problem.getException());
                 }
                 server = result.getServer();
                 String user = server.getUsername();
                 String password = server.getPassword();
-                this.client.setCredentials( user, password );
+                this.client.setCredentials(user, password);
 
                 configured = true;
                 break;
             }
         }
 
-        if ( !configured )
-        {
-            log.warn( "Can't find server id [" + githubAPIServerId + "] configured in githubAPIServerId." );
+        if (!configured) {
+            log.warn("Can't find server id [" + githubAPIServerId + "] configured in githubAPIServerId.");
         }
     }
-
 }

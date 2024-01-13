@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,108 +16,100 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
-import org.apache.maven.plugins.changes.IssueAdapter;
-import org.apache.maven.plugins.changes.IssueType;
+import junit.framework.TestCase;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.issues.Issue;
 import org.apache.maven.plugins.issues.IssueManagementSystem;
 import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
-
-import junit.framework.TestCase;
 
 /**
  * @author Alan Parkinson
  * @version $Id$
  * @since 2.6
  */
-public class IssueAdapterTest
-    extends TestCase
-{
+public class IssueAdapterTest extends TestCase {
 
-    public void testDefaultIssueTypeMapping()
-    {
-        IssueAdapter adapter = new IssueAdapter( new JIRAIssueManagmentSystem() );
+    public void testDefaultIssueTypeMapping() {
+        IssueAdapter adapter = new IssueAdapter(new JIRAIssueManagmentSystem());
 
-        Issue issue = createIssue( "TST-1", "New Feature" );
-        Action action = adapter.createAction( issue );
-        assertEquals( "add", action.getType() );
+        Issue issue = createIssue("TST-1", "New Feature");
+        Action action = adapter.createAction(issue);
+        assertEquals("add", action.getType());
 
-        issue = createIssue( "TST-2", "Bug" );
-        action = adapter.createAction( issue );
-        assertEquals( "fix", action.getType() );
+        issue = createIssue("TST-2", "Bug");
+        action = adapter.createAction(issue);
+        assertEquals("fix", action.getType());
 
-        issue = createIssue( "TST-3", "Improvement" );
-        action = adapter.createAction( issue );
-        assertEquals( "update", action.getType() );
+        issue = createIssue("TST-3", "Improvement");
+        action = adapter.createAction(issue);
+        assertEquals("update", action.getType());
 
-        issue = createIssue( "TST-4", "Unknown Type" );
-        action = adapter.createAction( issue );
-        assertEquals( "", action.getType() );
+        issue = createIssue("TST-4", "Unknown Type");
+        action = adapter.createAction(issue);
+        assertEquals("", action.getType());
     }
 
-    public void testCustomIssueTypeMappingOveridesDefaultMapping()
-    {
+    public void testCustomIssueTypeMappingOveridesDefaultMapping() {
         IssueManagementSystem ims = new JIRAIssueManagmentSystem();
 
         ims.getIssueTypeMap().clear();
-        IssueAdapter adapter = new IssueAdapter( ims );
+        IssueAdapter adapter = new IssueAdapter(ims);
 
-        Issue issue = createIssue( "TST-1", "New Feature" );
-        Action action = adapter.createAction( issue );
-        assertEquals( "", action.getType() );
+        Issue issue = createIssue("TST-1", "New Feature");
+        Action action = adapter.createAction(issue);
+        assertEquals("", action.getType());
 
-        issue = createIssue( "TST-2", "Bug" );
-        action = adapter.createAction( issue );
-        assertEquals( "", action.getType() );
+        issue = createIssue("TST-2", "Bug");
+        action = adapter.createAction(issue);
+        assertEquals("", action.getType());
 
-        issue = createIssue( "TST-3", "Improvement" );
-        action = adapter.createAction( issue );
-        assertEquals( "", action.getType() );
+        issue = createIssue("TST-3", "Improvement");
+        action = adapter.createAction(issue);
+        assertEquals("", action.getType());
 
-        issue = createIssue( "TST-4", "Unknown Type" );
-        action = adapter.createAction( issue );
-        assertEquals( "", action.getType() );
+        issue = createIssue("TST-4", "Unknown Type");
+        action = adapter.createAction(issue);
+        assertEquals("", action.getType());
     }
 
-    public void testCustomIssueTypeMapping()
-    {
+    public void testCustomIssueTypeMapping() {
         IssueManagementSystem ims = new JIRAIssueManagmentSystem();
-        ims.getIssueTypeMap().put( "Story", IssueType.ADD );
-        ims.getIssueTypeMap().put( "Epic", IssueType.ADD );
-        ims.getIssueTypeMap().put( "Defect", IssueType.FIX );
-        ims.getIssueTypeMap().put( "Error", IssueType.FIX );
-        IssueAdapter adapter = new IssueAdapter( ims );
+        ims.getIssueTypeMap().put("Story", IssueType.ADD);
+        ims.getIssueTypeMap().put("Epic", IssueType.ADD);
+        ims.getIssueTypeMap().put("Defect", IssueType.FIX);
+        ims.getIssueTypeMap().put("Error", IssueType.FIX);
+        IssueAdapter adapter = new IssueAdapter(ims);
 
-        Issue issue = createIssue( "TST-1", "Story" );
-        Action action = adapter.createAction( issue );
-        assertEquals( "add", action.getType() );
+        Issue issue = createIssue("TST-1", "Story");
+        Action action = adapter.createAction(issue);
+        assertEquals("add", action.getType());
 
-        issue = createIssue( "TST-2", "Epic" );
-        action = adapter.createAction( issue );
-        assertEquals( "add", action.getType() );
+        issue = createIssue("TST-2", "Epic");
+        action = adapter.createAction(issue);
+        assertEquals("add", action.getType());
 
-        issue = createIssue( "TST-3", "Error" );
-        action = adapter.createAction( issue );
-        assertEquals( "fix", action.getType() );
+        issue = createIssue("TST-3", "Error");
+        action = adapter.createAction(issue);
+        assertEquals("fix", action.getType());
 
-        issue = createIssue( "TST-4", "Defect" );
-        action = adapter.createAction( issue );
-        assertEquals( "fix", action.getType() );
+        issue = createIssue("TST-4", "Defect");
+        action = adapter.createAction(issue);
+        assertEquals("fix", action.getType());
 
         // Test the default mapping for "update" hasn't been overridden
-        issue = createIssue( "TST-5", "Improvement" );
-        action = adapter.createAction( issue );
-        assertEquals( "update", action.getType() );
+        issue = createIssue("TST-5", "Improvement");
+        action = adapter.createAction(issue);
+        assertEquals("update", action.getType());
     }
 
-    private Issue createIssue( String key, String type )
-    {
+    private Issue createIssue(String key, String type) {
         Issue issue = new Issue();
-        issue.setKey( key );
-        issue.setType( type );
-        issue.setAssignee( "A User" );
-        issue.setSummary( "The title of this issue" );
+        issue.setKey(key);
+        issue.setType(type);
+        issue.setAssignee("A User");
+        issue.setSummary("The title of this issue");
         return issue;
     }
 }

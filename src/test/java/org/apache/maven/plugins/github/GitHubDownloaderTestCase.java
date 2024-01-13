@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.github;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,18 +16,14 @@ package org.apache.maven.plugins.github;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.any;
+package org.apache.maven.plugins.github;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import junit.framework.TestCase;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.issues.Issue;
@@ -46,103 +40,94 @@ import org.apache.maven.settings.crypto.SettingsDecryptionResult;
 import org.eclipse.egit.github.core.User;
 import org.mockito.ArgumentCaptor;
 
-import junit.framework.TestCase;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class GitHubDownloaderTestCase
-    extends TestCase
-{
+public class GitHubDownloaderTestCase extends TestCase {
 
-    public void testCreateIssue()
-        throws IOException
-    {
+    public void testCreateIssue() throws IOException {
         IssueManagement issueManagement = newGitHubIssueManagement();
-        GitHubDownloader gitHubDownloader = newGitHubDownloader( issueManagement );
+        GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
 
         org.eclipse.egit.github.core.Issue githubIssue = new org.eclipse.egit.github.core.Issue();
-        githubIssue.setNumber( 1 );
-        githubIssue.setBody( "Body" );
-        githubIssue.setTitle( "Title" );
+        githubIssue.setNumber(1);
+        githubIssue.setBody("Body");
+        githubIssue.setTitle("Title");
         User user = new User();
-        githubIssue.setUser( user );
+        githubIssue.setUser(user);
 
-        Issue issue = gitHubDownloader.createIssue( githubIssue );
+        Issue issue = gitHubDownloader.createIssue(githubIssue);
 
-        assertEquals( Integer.toString( githubIssue.getNumber() ), issue.getId() );
-        assertEquals( Integer.toString( githubIssue.getNumber() ), issue.getKey() );
-        assertEquals( githubIssue.getTitle(), issue.getTitle() );
-        assertEquals( githubIssue.getTitle(), issue.getSummary() );
-        assertEquals( issueManagement.getUrl() + githubIssue.getNumber(), issue.getLink() );
+        assertEquals(Integer.toString(githubIssue.getNumber()), issue.getId());
+        assertEquals(Integer.toString(githubIssue.getNumber()), issue.getKey());
+        assertEquals(githubIssue.getTitle(), issue.getTitle());
+        assertEquals(githubIssue.getTitle(), issue.getSummary());
+        assertEquals(issueManagement.getUrl() + githubIssue.getNumber(), issue.getLink());
     }
 
-    public void testConfigureAuthenticationWithProblems()
-        throws Exception
-    {
+    public void testConfigureAuthenticationWithProblems() throws Exception {
         IssueManagement issueManagement = newGitHubIssueManagement();
-        GitHubDownloader gitHubDownloader = newGitHubDownloader( issueManagement );
+        GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
         Settings settings = new Settings();
-        Server server = newServer( "github-server" );
-        settings.addServer( server );
-        SettingsDecrypter decrypter = mock( SettingsDecrypter.class );
-        SettingsDecryptionResult result = mock( SettingsDecryptionResult.class );
-        Log log = mock( Log.class );
-        when( result.getProblems() ).thenReturn( Collections.<SettingsProblem>singletonList(
-                new DefaultSettingsProblem( "Ups " + server.getId(), Severity.ERROR, null, -1, -1, null ) ) );
-        when( result.getServer() ).thenReturn( server );
-        when( decrypter.decrypt( any( SettingsDecryptionRequest.class ) ) ).thenReturn( result );
+        Server server = newServer("github-server");
+        settings.addServer(server);
+        SettingsDecrypter decrypter = mock(SettingsDecrypter.class);
+        SettingsDecryptionResult result = mock(SettingsDecryptionResult.class);
+        Log log = mock(Log.class);
+        when(result.getProblems())
+                .thenReturn(Collections.<SettingsProblem>singletonList(
+                        new DefaultSettingsProblem("Ups " + server.getId(), Severity.ERROR, null, -1, -1, null)));
+        when(result.getServer()).thenReturn(server);
+        when(decrypter.decrypt(any(SettingsDecryptionRequest.class))).thenReturn(result);
 
-        gitHubDownloader.configureAuthentication( decrypter, "github-server", settings, log );
+        gitHubDownloader.configureAuthentication(decrypter, "github-server", settings, log);
 
-        verify( log ).error( "Ups github-server", null );
-        ArgumentCaptor<SettingsDecryptionRequest> argument = ArgumentCaptor.forClass( SettingsDecryptionRequest.class );
-        verify( decrypter ).decrypt( argument.capture() );
+        verify(log).error("Ups github-server", null);
+        ArgumentCaptor<SettingsDecryptionRequest> argument = ArgumentCaptor.forClass(SettingsDecryptionRequest.class);
+        verify(decrypter).decrypt(argument.capture());
         List<Server> servers = argument.getValue().getServers();
-        assertEquals( 1, servers.size() );
-        assertSame( server, servers.get( 0 ) );
+        assertEquals(1, servers.size());
+        assertSame(server, servers.get(0));
     }
 
-    public void testConfigureAuthenticationWithNoServer()
-        throws Exception
-    {
+    public void testConfigureAuthenticationWithNoServer() throws Exception {
         IssueManagement issueManagement = newGitHubIssueManagement();
-        GitHubDownloader gitHubDownloader = newGitHubDownloader( issueManagement );
+        GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
         Settings settings = new Settings();
-        Server server = newServer( "not-the-right-one" );
-        settings.addServer( server );
-        SettingsDecrypter decrypter = mock( SettingsDecrypter.class );
-        SettingsDecryptionResult result = mock( SettingsDecryptionResult.class );
-        Log log = mock( Log.class );
-        when( result.getProblems() ).thenReturn( Collections.<SettingsProblem>emptyList() );
-        when( result.getServer() ).thenReturn( server );
-        when( decrypter.decrypt( new DefaultSettingsDecryptionRequest( server ) ) ).thenReturn( result );
+        Server server = newServer("not-the-right-one");
+        settings.addServer(server);
+        SettingsDecrypter decrypter = mock(SettingsDecrypter.class);
+        SettingsDecryptionResult result = mock(SettingsDecryptionResult.class);
+        Log log = mock(Log.class);
+        when(result.getProblems()).thenReturn(Collections.<SettingsProblem>emptyList());
+        when(result.getServer()).thenReturn(server);
+        when(decrypter.decrypt(new DefaultSettingsDecryptionRequest(server))).thenReturn(result);
 
-        gitHubDownloader.configureAuthentication( decrypter, "github-server", settings, log );
+        gitHubDownloader.configureAuthentication(decrypter, "github-server", settings, log);
 
-        verify( log ).warn( "Can't find server id [github-server] configured in githubAPIServerId." );
+        verify(log).warn("Can't find server id [github-server] configured in githubAPIServerId.");
     }
 
-    private Server newServer( String id )
-    {
+    private Server newServer(String id) {
         Server server = new Server();
-        server.setId( id );
-        server.setUsername( "some-user" );
-        server.setPassword( "Sup3rSecret" );
+        server.setId(id);
+        server.setUsername("some-user");
+        server.setPassword("Sup3rSecret");
         return server;
     }
 
-    private GitHubDownloader newGitHubDownloader( IssueManagement issueManagement )
-        throws MalformedURLException
-    {
+    private GitHubDownloader newGitHubDownloader(IssueManagement issueManagement) throws MalformedURLException {
         MavenProject mavenProject = new MavenProject();
-        mavenProject.setIssueManagement( issueManagement );
-        return new GitHubDownloader( mavenProject, "https", 80, true, false );
+        mavenProject.setIssueManagement(issueManagement);
+        return new GitHubDownloader(mavenProject, "https", 80, true, false);
     }
 
-    private IssueManagement newGitHubIssueManagement()
-    {
+    private IssueManagement newGitHubIssueManagement() {
         IssueManagement issueManagement = new IssueManagement();
-        issueManagement.setSystem( "GitHub" );
-        issueManagement.setUrl( "https://github.com/dadoonet/spring-elasticsearch/issues/" );
+        issueManagement.setSystem("GitHub");
+        issueManagement.setUrl("https://github.com/dadoonet/spring-elasticsearch/issues/");
         return issueManagement;
     }
-
 }

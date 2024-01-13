@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.trac;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.trac;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.trac;
 
 import org.apache.maven.plugins.changes.IssueType;
 import org.apache.maven.plugins.issues.AbstractIssueManagementSystem;
@@ -27,28 +26,23 @@ import org.apache.maven.plugins.issues.AbstractIssueManagementSystem;
  *
  * @version $Id$
  */
-public class TracIssueManagmentSystem
-    extends AbstractIssueManagementSystem
-{
+public class TracIssueManagmentSystem extends AbstractIssueManagementSystem {
     private static final String DEFAULT_ADD_TYPE = "New Feature";
 
     private static final String DEFAULT_FIX_TYPE = "Bug";
 
     private static final String DEFAULT_UPDATE_TYPE = "Improvement";
 
-    public TracIssueManagmentSystem()
-    {
+    public TracIssueManagmentSystem() {
         super();
         // The standard issue types for Trac (probably wrong)
-        issueTypeMap.put( DEFAULT_ADD_TYPE, IssueType.ADD );
-        issueTypeMap.put( DEFAULT_FIX_TYPE, IssueType.FIX );
-        issueTypeMap.put( DEFAULT_UPDATE_TYPE, IssueType.UPDATE );
+        issueTypeMap.put(DEFAULT_ADD_TYPE, IssueType.ADD);
+        issueTypeMap.put(DEFAULT_FIX_TYPE, IssueType.FIX);
+        issueTypeMap.put(DEFAULT_UPDATE_TYPE, IssueType.UPDATE);
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Trac";
     }
-
 }

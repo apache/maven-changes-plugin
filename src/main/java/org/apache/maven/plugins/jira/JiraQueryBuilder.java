@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,10 +16,11 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.plugin.logging.Log;
+package org.apache.maven.plugins.jira;
 
 import java.util.List;
+
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * An interface for building a search query for JIRA.
@@ -30,41 +29,40 @@ import java.util.List;
  * @version $Id$
  * @since 2.8
  */
-public interface JiraQueryBuilder
-{
+public interface JiraQueryBuilder {
     String build();
 
-    JiraQueryBuilder components( String components );
+    JiraQueryBuilder components(String components);
 
-    JiraQueryBuilder components( List<String> components );
+    JiraQueryBuilder components(List<String> components);
 
-    JiraQueryBuilder filter( String filter );
+    JiraQueryBuilder filter(String filter);
 
-    JiraQueryBuilder fixVersion( String fixVersion );
+    JiraQueryBuilder fixVersion(String fixVersion);
 
-    JiraQueryBuilder fixVersionIds( String fixVersionIds );
+    JiraQueryBuilder fixVersionIds(String fixVersionIds);
 
-    JiraQueryBuilder fixVersionIds( List<String> fixVersionIds );
+    JiraQueryBuilder fixVersionIds(List<String> fixVersionIds);
 
     Log getLog();
 
-    JiraQueryBuilder priorityIds( String priorityIds );
+    JiraQueryBuilder priorityIds(String priorityIds);
 
-    JiraQueryBuilder priorityIds( List<String> priorityIds );
+    JiraQueryBuilder priorityIds(List<String> priorityIds);
 
-    JiraQueryBuilder project( String project );
+    JiraQueryBuilder project(String project);
 
-    JiraQueryBuilder resolutionIds( String resolutionIds );
+    JiraQueryBuilder resolutionIds(String resolutionIds);
 
-    JiraQueryBuilder resolutionIds( List<String> resolutionIds );
+    JiraQueryBuilder resolutionIds(List<String> resolutionIds);
 
-    JiraQueryBuilder sortColumnNames( String sortColumnNames );
+    JiraQueryBuilder sortColumnNames(String sortColumnNames);
 
-    JiraQueryBuilder statusIds( String statusIds );
+    JiraQueryBuilder statusIds(String statusIds);
 
-    JiraQueryBuilder statusIds( List<String> statusIds );
+    JiraQueryBuilder statusIds(List<String> statusIds);
 
-    JiraQueryBuilder typeIds( String typeIds );
+    JiraQueryBuilder typeIds(String typeIds);
 
-    JiraQueryBuilder typeIds( List<String> typeIds );
+    JiraQueryBuilder typeIds(List<String> typeIds);
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes.schema;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -9,7 +7,7 @@ package org.apache.maven.plugins.changes.schema;
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
@@ -18,15 +16,14 @@ package org.apache.maven.plugins.changes.schema;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes.schema;
 
 /**
  * @author Olivier Lamy
  * @since 28 juil. 2008
  * @version $Id$
  */
-public class SchemaValidatorException
-    extends Exception
-{
+public class SchemaValidatorException extends Exception {
 
     /**
      * Generated serial UID.
@@ -37,9 +34,7 @@ public class SchemaValidatorException
      * @param message Message.
      * @param cause Cause.
      */
-    public SchemaValidatorException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public SchemaValidatorException(String message, Throwable cause) {
+        super(message, cause);
     }
-
 }

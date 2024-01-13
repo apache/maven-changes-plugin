@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,67 +16,57 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.apache.maven.plugins.changes.model.Action;
 
-public class ActionTest
-    extends TestCase
-{
+public class ActionTest extends TestCase {
     Action action = new Action();
 
-    public ActionTest( String testName )
-    {
-        super( testName );
+    public ActionTest(String testName) {
+        super(testName);
     }
 
-    public static Test suite()
-    {
-        return new TestSuite( ActionTest.class );
+    public static Test suite() {
+        return new TestSuite(ActionTest.class);
     }
 
-    public void testGetSetAction()
-    {
-        action.setAction( "action" );
+    public void testGetSetAction() {
+        action.setAction("action");
 
-        assertEquals( "action", action.getAction() );
+        assertEquals("action", action.getAction());
     }
 
-    public void testGetSetDev()
-    {
-        action.setDev( "developer" );
+    public void testGetSetDev() {
+        action.setDev("developer");
 
-        assertEquals( "developer", action.getDev() );
+        assertEquals("developer", action.getDev());
     }
 
-    public void testGetSetType()
-    {
-        action.setType( "type" );
+    public void testGetSetType() {
+        action.setType("type");
 
-        assertEquals( "type", action.getType() );
+        assertEquals("type", action.getType());
     }
 
-    public void testGetSetIssue()
-    {
-        action.setIssue( "issue" );
+    public void testGetSetIssue() {
+        action.setIssue("issue");
 
-        assertEquals( "issue", action.getIssue() );
+        assertEquals("issue", action.getIssue());
     }
 
-    public void testGetSetDueTo()
-    {
-        action.setDueTo( "due-to" );
+    public void testGetSetDueTo() {
+        action.setDueTo("due-to");
 
-        assertEquals( "due-to", action.getDueTo() );
+        assertEquals("due-to", action.getDueTo());
     }
 
-    public void testGetSetDueToEmail()
-    {
-        action.setDueToEmail( "due-to-mail" );
+    public void testGetSetDueToEmail() {
+        action.setDueToEmail("due-to-mail");
 
-        assertEquals( "due-to-mail", action.getDueToEmail() );
+        assertEquals("due-to-mail", action.getDueToEmail());
     }
 }

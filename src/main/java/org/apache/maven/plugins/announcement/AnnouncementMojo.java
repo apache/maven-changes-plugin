@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.announcement;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.announcement;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.announcement;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,10 +66,8 @@ import org.codehaus.plexus.velocity.VelocityComponent;
  * @version $Id$
  * @since 2.0-beta-2
  */
-@Mojo( name = "announcement-generate", threadSafe = true )
-public class AnnouncementMojo
-    extends AbstractAnnouncementMojo
-{
+@Mojo(name = "announcement-generate", threadSafe = true)
+public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private static final String CHANGES_XML = "changes.xml";
 
     private static final String JIRA = "JIRA";
@@ -85,7 +82,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.announcementFile" )
+    @Parameter(property = "changes.announcementFile")
     private String announcementFile;
 
     /**
@@ -98,30 +95,30 @@ public class AnnouncementMojo
 
     /**
      */
-    @Parameter( property = "project.artifactId", readonly = true )
+    @Parameter(property = "project.artifactId", readonly = true)
     private String artifactId;
 
     /**
      * Name of the team that develops the artifact. This parameter will be passed to the template.
      */
-    @Parameter( property = "changes.developmentTeam", defaultValue = "${project.name} team", required = true )
+    @Parameter(property = "changes.developmentTeam", defaultValue = "${project.name} team", required = true)
     private String developmentTeam;
 
     /**
      * The name of the artifact to be used in the announcement.
      */
-    @Parameter( property = "changes.finalName", defaultValue = "${project.build.finalName}", required = true )
+    @Parameter(property = "changes.finalName", defaultValue = "${project.build.finalName}", required = true)
     private String finalName;
 
     /**
      */
-    @Parameter( property = "project.groupId", readonly = true )
+    @Parameter(property = "project.groupId", readonly = true)
     private String groupId;
 
     /**
      * Short description or introduction of the released artifact. This parameter will be passed to the template.
      */
-    @Parameter( defaultValue = "${project.description}" )
+    @Parameter(defaultValue = "${project.description}")
     private String introduction;
 
     /**
@@ -156,7 +153,7 @@ public class AnnouncementMojo
      *
      * @since 2.10
      */
-    @Parameter( defaultValue = "${project.build.directory}/announcement", required = true )
+    @Parameter(defaultValue = "${project.build.directory}/announcement", required = true)
     private File announcementDirectory;
 
     /**
@@ -171,19 +168,19 @@ public class AnnouncementMojo
     /**
      * Packaging structure for the artifact.
      */
-    @Parameter( property = "project.packaging", readonly = true )
+    @Parameter(property = "project.packaging", readonly = true)
     private String packaging;
 
     /**
      * The Maven Project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     private MavenProject project;
 
     /**
      * The Velocity template used to format the announcement.
      */
-    @Parameter( property = "changes.template", defaultValue = "announcement.vm", required = true )
+    @Parameter(property = "changes.template", defaultValue = "announcement.vm", required = true)
     private String template;
 
     /**
@@ -194,7 +191,10 @@ public class AnnouncementMojo
      * </p>
      */
     // CHECKSTYLE_OFF: LineLength
-    @Parameter( property = "changes.templateDirectory", defaultValue = "org/apache/maven/plugins/announcement", required = true )
+    @Parameter(
+            property = "changes.templateDirectory",
+            defaultValue = "org/apache/maven/plugins/announcement",
+            required = true)
     private String templateDirectory;
     // CHECKSTYLE_ON: LineLength
 
@@ -203,7 +203,7 @@ public class AnnouncementMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.templateEncoding", defaultValue = "${project.build.sourceEncoding}" )
+    @Parameter(property = "changes.templateEncoding", defaultValue = "${project.build.sourceEncoding}")
     private String templateEncoding;
 
     /**
@@ -213,13 +213,13 @@ public class AnnouncementMojo
      *
      * @since 2.10
      */
-    @Parameter( property = "changes.useJql", defaultValue = "false" )
+    @Parameter(property = "changes.useJql", defaultValue = "false")
     private boolean useJql;
 
     /**
      * Distribution URL of the artifact. This parameter will be passed to the template.
      */
-    @Parameter( property = "project.url" )
+    @Parameter(property = "project.url")
     private String url;
 
     /**
@@ -232,7 +232,7 @@ public class AnnouncementMojo
     /**
      * Velocity Component.
      */
-    @Component( role = VelocityComponent.class, hint = "maven-changes-plugin" )
+    @Component(role = VelocityComponent.class, hint = "maven-changes-plugin")
     private VelocityComponent velocity;
 
     /**
@@ -244,7 +244,7 @@ public class AnnouncementMojo
     /**
      * Version of the artifact.
      */
-    @Parameter( property = "changes.version", defaultValue = "${project.version}", required = true )
+    @Parameter(property = "changes.version", defaultValue = "${project.version}", required = true)
     private String version;
 
     /**
@@ -253,7 +253,7 @@ public class AnnouncementMojo
      * @parameter expression="${basedir}/src/changes/changes.xml"
      * @required
      */
-    @Parameter( defaultValue = "${basedir}/src/changes/changes.xml" )
+    @Parameter(defaultValue = "${basedir}/src/changes/changes.xml")
     private File xmlPath;
 
     // =======================================//
@@ -275,7 +275,7 @@ public class AnnouncementMojo
      * @deprecated Since version 2.4 this parameter has been deprecated. Please use the issueManagementSystems parameter
      *             instead.
      */
-    @Parameter( property = "generateJiraAnnouncement" )
+    @Parameter(property = "generateJiraAnnouncement")
     private Boolean generateJiraAnnouncement;
 
     /**
@@ -285,7 +285,7 @@ public class AnnouncementMojo
      * @deprecated Since version 2.4 this parameter has been deprecated. Please use the issueManagementSystems parameter
      *             instead.
      */
-    @Parameter( property = "changes.jiraMerge" )
+    @Parameter(property = "changes.jiraMerge")
     private Boolean jiraMerge;
 
     /**
@@ -293,7 +293,7 @@ public class AnnouncementMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.jiraPassword" )
+    @Parameter(property = "changes.jiraPassword")
     private String jiraPassword;
 
     /**
@@ -301,7 +301,7 @@ public class AnnouncementMojo
      *
      * @since 2.1
      */
-    @Parameter( property = "changes.jiraUser" )
+    @Parameter(property = "changes.jiraUser")
     private String jiraUser;
 
     /**
@@ -309,13 +309,13 @@ public class AnnouncementMojo
      *
      * @since 3.0.0
      */
-    @Parameter( property = "changes.jiraServerId" )
+    @Parameter(property = "changes.jiraServerId")
     private String jiraServerId;
 
     /**
      * Path to the JIRA XML file, which will be parsed.
      */
-    @Parameter( defaultValue = "${project.build.directory}/jira-announcement.xml", required = true, readonly = true )
+    @Parameter(defaultValue = "${project.build.directory}/jira-announcement.xml", required = true, readonly = true)
     private File jiraXML;
 
     /**
@@ -324,7 +324,7 @@ public class AnnouncementMojo
      * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "nbEntries".
      * </p>
      */
-    @Parameter( property = "changes.maxEntries", defaultValue = "25", required = true )
+    @Parameter(property = "changes.maxEntries", defaultValue = "25", required = true)
     private int maxEntries;
 
     /**
@@ -334,13 +334,13 @@ public class AnnouncementMojo
      * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "resolutionId".
      * </p>
      */
-    @Parameter( property = "changes.resolutionIds", defaultValue = "Fixed" )
+    @Parameter(property = "changes.resolutionIds", defaultValue = "Fixed")
     private String resolutionIds;
 
     /**
      * Settings XML configuration.
      */
-    @Parameter( defaultValue = "${settings}", readonly = true, required = true )
+    @Parameter(defaultValue = "${settings}", readonly = true, required = true)
     private Settings settings;
 
     /**
@@ -350,7 +350,7 @@ public class AnnouncementMojo
      * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "statusId".
      * </p>
      */
-    @Parameter( property = "changes.statusIds", defaultValue = "Closed" )
+    @Parameter(property = "changes.statusIds", defaultValue = "Closed")
     private String statusIds;
 
     /**
@@ -358,7 +358,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.webUser" )
+    @Parameter(property = "changes.webUser")
     private String webUser;
 
     /**
@@ -366,7 +366,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.webPassword" )
+    @Parameter(property = "changes.webPassword")
     private String webPassword;
 
     /**
@@ -379,7 +379,7 @@ public class AnnouncementMojo
      *
      * @since 2.5
      */
-    @Parameter( property = "changes.versionPrefix" )
+    @Parameter(property = "changes.versionPrefix")
     private String versionPrefix;
 
     /**
@@ -390,7 +390,7 @@ public class AnnouncementMojo
      *
      * @since 2.11
      */
-    @Parameter( property = "changes.jiraConnectionTimeout", defaultValue = "36000" )
+    @Parameter(property = "changes.jiraConnectionTimeout", defaultValue = "36000")
     private int jiraConnectionTimeout;
 
     /**
@@ -401,7 +401,7 @@ public class AnnouncementMojo
      *
      * @since 2.11
      */
-    @Parameter( property = "changes.jiraReceiveTimout", defaultValue = "32000" )
+    @Parameter(property = "changes.jiraReceiveTimout", defaultValue = "32000")
     private int jiraReceiveTimout;
 
     // =======================================//
@@ -413,7 +413,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.tracPassword" )
+    @Parameter(property = "changes.tracPassword")
     private String tracPassword;
 
     /**
@@ -421,7 +421,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( defaultValue = "order=id" )
+    @Parameter(defaultValue = "order=id")
     private String tracQuery;
 
     /**
@@ -429,7 +429,7 @@ public class AnnouncementMojo
      *
      * @since 2.4
      */
-    @Parameter( property = "changes.tracUser" )
+    @Parameter(property = "changes.tracUser")
     private String tracUser;
 
     // =======================================//
@@ -438,18 +438,18 @@ public class AnnouncementMojo
 
     /**
      * The scheme of your github api domain. Only use if using github enterprise.
-     * 
+     *
      * @since 2.9
      */
-    @Parameter( defaultValue = "http", property = "changes.githubAPIScheme" )
+    @Parameter(defaultValue = "http", property = "changes.githubAPIScheme")
     private String githubAPIScheme;
 
     /**
      * The port of your github api domain. Only use if using github enterprise.
-     * 
+     *
      * @since 2.9
      */
-    @Parameter( defaultValue = "80", property = "changes.githubAPIPort" )
+    @Parameter(defaultValue = "80", property = "changes.githubAPIPort")
     private int githubAPIPort;
 
     /**
@@ -458,16 +458,16 @@ public class AnnouncementMojo
      *
      * @since 2.12
      */
-    @Parameter( defaultValue = "github" )
+    @Parameter(defaultValue = "github")
     private String githubAPIServerId;
 
     /**
      * Boolean which says if we should include open github issues in the announcement.
      */
-    @Parameter( defaultValue = "false" )
+    @Parameter(defaultValue = "false")
     private boolean includeOpenIssues;
 
-    private ReleaseUtils releaseUtils = new ReleaseUtils( getLog() );
+    private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private ChangesXML xml;
 
@@ -480,94 +480,70 @@ public class AnnouncementMojo
      *
      * @throws MojoExecutionException in case of errors
      */
-    public void execute()
-        throws MojoExecutionException
-    {
+    public void execute() throws MojoExecutionException {
         // Fail build fast if it is using deprecated parameters
-        failIfUsingDeprecatedParameter( outputDirectory, "outputDirectory", "announcementDirectory" );
-        failIfUsingDeprecatedParameter( generateJiraAnnouncement, "generateJiraAnnouncement",
-                                        "issueManagementSystems " );
-        failIfUsingDeprecatedParameter( jiraMerge, "jiraMerge", "issueManagementSystems " );
+        failIfUsingDeprecatedParameter(outputDirectory, "outputDirectory", "announcementDirectory");
+        failIfUsingDeprecatedParameter(generateJiraAnnouncement, "generateJiraAnnouncement", "issueManagementSystems ");
+        failIfUsingDeprecatedParameter(jiraMerge, "jiraMerge", "issueManagementSystems ");
 
         // Run only at the execution root
-        if ( runOnlyAtExecutionRoot && !isThisTheExecutionRoot() )
-        {
-            getLog().info( "Skipping the announcement generation in this project because it's not the Execution Root" );
-        }
-        else
-        {
-            if ( issueManagementSystems == null )
-            {
+        if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
+            getLog().info("Skipping the announcement generation in this project because it's not the Execution Root");
+        } else {
+            if (issueManagementSystems == null) {
                 issueManagementSystems = new ArrayList<>();
             }
 
-            if ( issueManagementSystems.isEmpty() )
-            {
-                issueManagementSystems.add( CHANGES_XML );
+            if (issueManagementSystems.isEmpty()) {
+                issueManagementSystems.add(CHANGES_XML);
             }
 
             // Fetch releases from the configured issue management systems
             List<Release> releases = null;
-            if ( issueManagementSystems.contains( CHANGES_XML ) )
-            {
-                if ( getXmlPath().exists() )
-                {
-                    ChangesXML changesXML = new ChangesXML( getXmlPath(), getLog() );
+            if (issueManagementSystems.contains(CHANGES_XML)) {
+                if (getXmlPath().exists()) {
+                    ChangesXML changesXML = new ChangesXML(getXmlPath(), getLog());
                     List<Release> changesReleases = changesXML.getReleaseList();
-                    releases = releaseUtils.mergeReleases( null, changesReleases );
-                    getLog().info( "Including issues from file " + getXmlPath() + " in announcement..." );
-                }
-                else
-                {
-                    getLog().warn( "changes.xml file " + getXmlPath().getAbsolutePath() + " does not exist." );
+                    releases = releaseUtils.mergeReleases(null, changesReleases);
+                    getLog().info("Including issues from file " + getXmlPath() + " in announcement...");
+                } else {
+                    getLog().warn("changes.xml file " + getXmlPath().getAbsolutePath() + " does not exist.");
                 }
             }
 
-            if ( issueManagementSystems.contains( JIRA ) )
-            {
-                String message = ProjectUtils.validateIssueManagement( project, JIRA, "JIRA announcement" );
-                if ( message == null )
-                {
+            if (issueManagementSystems.contains(JIRA)) {
+                String message = ProjectUtils.validateIssueManagement(project, JIRA, "JIRA announcement");
+                if (message == null) {
                     List<Release> jiraReleases = getJiraReleases();
-                    releases = releaseUtils.mergeReleases( releases, jiraReleases );
-                    getLog().info( "Including issues from JIRA in announcement..." );
-                }
-                else
-                {
-                    throw new MojoExecutionException( "Something is wrong with the Issue Management section. "
-                        + message );
+                    releases = releaseUtils.mergeReleases(releases, jiraReleases);
+                    getLog().info("Including issues from JIRA in announcement...");
+                } else {
+                    throw new MojoExecutionException(
+                            "Something is wrong with the Issue Management section. " + message);
                 }
             }
 
-            if ( issueManagementSystems.contains( TRAC ) )
-            {
-                String message = ProjectUtils.validateIssueManagement( project, TRAC, "Trac announcement" );
-                if ( message == null )
-                {
+            if (issueManagementSystems.contains(TRAC)) {
+                String message = ProjectUtils.validateIssueManagement(project, TRAC, "Trac announcement");
+                if (message == null) {
                     List<Release> tracReleases = getTracReleases();
-                    releases = releaseUtils.mergeReleases( releases, tracReleases );
-                    getLog().info( "Including issues from Trac in announcement..." );
-                }
-                else
-                {
-                    throw new MojoExecutionException( "Something is wrong with the Issue Management section. "
-                                    + message );
+                    releases = releaseUtils.mergeReleases(releases, tracReleases);
+                    getLog().info("Including issues from Trac in announcement...");
+                } else {
+                    throw new MojoExecutionException(
+                            "Something is wrong with the Issue Management section. " + message);
                 }
             }
 
-            if ( issueManagementSystems.contains( GIT_HUB ) )
-            {
-                String message = ProjectUtils.validateIssueManagement( project, GIT_HUB, "GitHub announcement" );
-                if ( message == null )
-                {
+            if (issueManagementSystems.contains(GIT_HUB)) {
+                String message = ProjectUtils.validateIssueManagement(project, GIT_HUB, "GitHub announcement");
+                if (message == null) {
                     List<Release> gitHubReleases = getGitHubReleases();
-                    releases = releaseUtils.mergeReleases( releases, gitHubReleases );
-                    getLog().info( "Including issues from GitHub in announcement..." );
-                }
-                else
-                {
-                    throw new MojoExecutionException( "Something is wrong with the Issue Management section. "
-                                    + message );
+                    releases = releaseUtils.mergeReleases(releases, gitHubReleases);
+                    getLog().info("Including issues from GitHub in announcement...");
+                } else {
+                    throw new MojoExecutionException(
+                            "Something is wrong with the Issue Management section. " + message);
                 }
             }
 
@@ -581,25 +557,20 @@ public class AnnouncementMojo
             // For help with these steps, you can have a look at how this has been done for JIRA or Trac
 
             // Generate the report
-            if ( releases == null || releases.isEmpty() )
-            {
-                throw new MojoExecutionException( "No releases found in any of the "
-                    + "configured issue management systems." );
-            }
-            else
-            {
-                doGenerate( releases );
+            if (releases == null || releases.isEmpty()) {
+                throw new MojoExecutionException(
+                        "No releases found in any of the " + "configured issue management systems.");
+            } else {
+                doGenerate(releases);
             }
         }
     }
 
-    private void failIfUsingDeprecatedParameter( Object value, String name, String replacement )
-        throws MojoExecutionException
-    {
-        if ( value != null )
-        {
-            throw new MojoExecutionException( "You are using the old parameter '" + name + "'. " + "You must use '"
-                + replacement + "' instead." );
+    private void failIfUsingDeprecatedParameter(Object value, String name, String replacement)
+            throws MojoExecutionException {
+        if (value != null) {
+            throw new MojoExecutionException(
+                    "You are using the old parameter '" + name + "'. " + "You must use '" + replacement + "' instead.");
         }
     }
 
@@ -609,73 +580,60 @@ public class AnnouncementMojo
      * @param releases A <code>List</code> of <code>Release</code>s
      * @throws MojoExecutionException in case of errors
      */
-    public void doGenerate( List<Release> releases )
-        throws MojoExecutionException
-    {
-        String version = ( versionPrefix == null ? "" : versionPrefix ) + getVersion();
+    public void doGenerate(List<Release> releases) throws MojoExecutionException {
+        String version = (versionPrefix == null ? "" : versionPrefix) + getVersion();
 
-        getLog().debug( "Generating announcement for version [" + version + "]. Found these releases: "
-            + ReleaseUtils.toString( releases ) );
+        getLog().debug("Generating announcement for version [" + version + "]. Found these releases: "
+                + ReleaseUtils.toString(releases));
 
-        doGenerate( releases, releaseUtils.getLatestRelease( releases, version ) );
+        doGenerate(releases, releaseUtils.getLatestRelease(releases, version));
     }
 
-    protected void doGenerate( List<Release> releases, Release release )
-        throws MojoExecutionException
-    {
-        try
-        {
-            ToolManager toolManager = new ToolManager( true );
+    protected void doGenerate(List<Release> releases, Release release) throws MojoExecutionException {
+        try {
+            ToolManager toolManager = new ToolManager(true);
             Context context = toolManager.createContext();
 
-            if ( getIntroduction() == null || getIntroduction().equals( "" ) )
-            {
-                setIntroduction( getUrl() );
+            if (getIntroduction() == null || getIntroduction().equals("")) {
+                setIntroduction(getUrl());
             }
 
-            context.put( "releases", releases );
+            context.put("releases", releases);
 
-            context.put( "groupId", getGroupId() );
+            context.put("groupId", getGroupId());
 
-            context.put( "artifactId", getArtifactId() );
+            context.put("artifactId", getArtifactId());
 
-            context.put( "version", getVersion() );
+            context.put("version", getVersion());
 
-            context.put( "packaging", getPackaging() );
+            context.put("packaging", getPackaging());
 
-            context.put( "url", getUrl() );
+            context.put("url", getUrl());
 
-            context.put( "release", release );
+            context.put("release", release);
 
-            context.put( "introduction", getIntroduction() );
+            context.put("introduction", getIntroduction());
 
-            context.put( "developmentTeam", getDevelopmentTeam() );
+            context.put("developmentTeam", getDevelopmentTeam());
 
-            context.put( "finalName", getFinalName() );
+            context.put("finalName", getFinalName());
 
-            context.put( "urlDownload", getUrlDownload() );
+            context.put("urlDownload", getUrlDownload());
 
-            context.put( "project", project );
+            context.put("project", project);
 
-            if ( announceParameters == null )
-            {
+            if (announceParameters == null) {
                 // empty Map to prevent NPE in velocity execution
-                context.put( "announceParameters", Collections.emptyMap() );
-            }
-            else
-            {
-                context.put( "announceParameters", announceParameters );
+                context.put("announceParameters", Collections.emptyMap());
+            } else {
+                context.put("announceParameters", announceParameters);
             }
 
-            processTemplate( context, announcementDirectory, template, announcementFile );
-        }
-        catch ( ResourceNotFoundException rnfe )
-        {
-            throw new MojoExecutionException( "Resource not found.", rnfe );
-        }
-        catch ( VelocityException ve )
-        {
-            throw new MojoExecutionException( ve.toString(), ve );
+            processTemplate(context, announcementDirectory, template, announcementFile);
+        } catch (ResourceNotFoundException rnfe) {
+            throw new MojoExecutionException("Resource not found.", rnfe);
+        } catch (VelocityException ve) {
+            throw new MojoExecutionException(ve.toString(), ve);
         }
     }
 
@@ -689,192 +647,153 @@ public class AnnouncementMojo
      * @throws VelocityException in case of errors.
      * @throws MojoExecutionException in case of errors.
      */
-    public void processTemplate( Context context, File outputDirectory, String template, String announcementFile )
-        throws VelocityException, MojoExecutionException
-    {
+    public void processTemplate(Context context, File outputDirectory, String template, String announcementFile)
+            throws VelocityException, MojoExecutionException {
         File f;
 
         // Use the name of the template as a default value
-        if ( announcementFile == null || announcementFile.isEmpty() )
-        {
+        if (announcementFile == null || announcementFile.isEmpty()) {
             announcementFile = template;
         }
 
-        try
-        {
-            f = new File( outputDirectory, announcementFile );
+        try {
+            f = new File(outputDirectory, announcementFile);
 
-            if ( !f.getParentFile().exists() )
-            {
+            if (!f.getParentFile().exists()) {
                 f.getParentFile().mkdirs();
             }
 
             VelocityEngine engine = velocity.getEngine();
 
-            engine.setApplicationAttribute( "baseDirectory", basedir );
+            engine.setApplicationAttribute("baseDirectory", basedir);
 
-            if ( templateEncoding == null || templateEncoding.isEmpty() )
-            {
+            if (templateEncoding == null || templateEncoding.isEmpty()) {
                 templateEncoding = ReaderFactory.FILE_ENCODING;
-                getLog().warn( "File encoding has not been set, using platform encoding " + templateEncoding
-                    + ", i.e. build is platform dependent!" );
+                getLog().warn("File encoding has not been set, using platform encoding " + templateEncoding
+                        + ", i.e. build is platform dependent!");
             }
 
-            Writer writer = new OutputStreamWriter( new FileOutputStream( f ), templateEncoding );
+            Writer writer = new OutputStreamWriter(new FileOutputStream(f), templateEncoding);
 
-            Template velocityTemplate = engine.getTemplate( templateDirectory + "/" + template, templateEncoding );
+            Template velocityTemplate = engine.getTemplate(templateDirectory + "/" + template, templateEncoding);
 
-            velocityTemplate.merge( context, writer );
+            velocityTemplate.merge(context, writer);
 
             writer.flush();
 
             writer.close();
 
-            getLog().info( "Created template " + f );
-        }
-
-        catch ( ResourceNotFoundException rnfe )
-        {
-            throw new ResourceNotFoundException( "Template not found. ( " + templateDirectory + "/" + template + " )" );
-        }
-        catch ( VelocityException ve )
-        {
-            throw new VelocityException( ve.toString() );
-        }
-
-        catch ( Exception e )
-        {
-            if ( e.getCause() != null )
-            {
-                getLog().warn( e.getCause() );
+            getLog().info("Created template " + f);
+        } catch (ResourceNotFoundException rnfe) {
+            throw new ResourceNotFoundException("Template not found. ( " + templateDirectory + "/" + template + " )");
+        } catch (VelocityException ve) {
+            throw new VelocityException(ve.toString());
+        } catch (Exception e) {
+            if (e.getCause() != null) {
+                getLog().warn(e.getCause());
             }
-            throw new MojoExecutionException( e.toString(), e.getCause() );
+            throw new MojoExecutionException(e.toString(), e.getCause());
         }
     }
 
-    protected List<Release> getJiraReleases()
-        throws MojoExecutionException
-    {
+    protected List<Release> getJiraReleases() throws MojoExecutionException {
         AbstractJiraDownloader jiraDownloader = new AdaptiveJiraDownloader();
 
         File jiraXMLFile = jiraXML;
 
-        jiraDownloader.setLog( getLog() );
+        jiraDownloader.setLog(getLog());
 
-        jiraDownloader.setOutput( jiraXMLFile );
+        jiraDownloader.setOutput(jiraXMLFile);
 
-        jiraDownloader.setStatusIds( statusIds );
+        jiraDownloader.setStatusIds(statusIds);
 
-        jiraDownloader.setResolutionIds( resolutionIds );
+        jiraDownloader.setResolutionIds(resolutionIds);
 
-        jiraDownloader.setMavenProject( project );
+        jiraDownloader.setMavenProject(project);
 
-        jiraDownloader.setSettings( settings );
+        jiraDownloader.setSettings(settings);
 
-        jiraDownloader.setNbEntries( maxEntries );
+        jiraDownloader.setNbEntries(maxEntries);
 
-        jiraDownloader.setFilter( filter );
+        jiraDownloader.setFilter(filter);
 
-        if ( jiraServerId != null )
-        {
-            final Server server = mavenSession.getSettings().getServer( jiraServerId );
-            jiraDownloader.setJiraUser( server.getUsername() );
-            jiraDownloader.setJiraPassword( server.getPassword() );
-        }
-        else
-        {
-            jiraDownloader.setJiraUser( jiraUser );
-            jiraDownloader.setJiraPassword( jiraPassword );
+        if (jiraServerId != null) {
+            final Server server = mavenSession.getSettings().getServer(jiraServerId);
+            jiraDownloader.setJiraUser(server.getUsername());
+            jiraDownloader.setJiraPassword(server.getPassword());
+        } else {
+            jiraDownloader.setJiraUser(jiraUser);
+            jiraDownloader.setJiraPassword(jiraPassword);
         }
 
-        jiraDownloader.setUseJql( useJql );
+        jiraDownloader.setUseJql(useJql);
 
-        jiraDownloader.setWebUser( webUser );
+        jiraDownloader.setWebUser(webUser);
 
-        jiraDownloader.setWebPassword( webPassword );
+        jiraDownloader.setWebPassword(webPassword);
 
-        jiraDownloader.setConnectionTimeout( jiraConnectionTimeout );
+        jiraDownloader.setConnectionTimeout(jiraConnectionTimeout);
 
-        jiraDownloader.setReceiveTimout( jiraReceiveTimout );
+        jiraDownloader.setReceiveTimout(jiraReceiveTimout);
 
-        try
-        {
+        try {
             jiraDownloader.doExecute();
 
             List<Issue> issueList = jiraDownloader.getIssueList();
 
-            if ( versionPrefix != null && !versionPrefix.isEmpty() )
-            {
+            if (versionPrefix != null && !versionPrefix.isEmpty()) {
                 int originalNumberOfIssues = issueList.size();
-                issueList = IssueUtils.filterIssuesWithVersionPrefix( issueList, versionPrefix );
-                getLog().debug( "Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
-                    + " that matched the versionPrefix '" + versionPrefix + "'." );
+                issueList = IssueUtils.filterIssuesWithVersionPrefix(issueList, versionPrefix);
+                getLog().debug("Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
+                        + " that matched the versionPrefix '" + versionPrefix + "'.");
             }
 
-            return getReleases( issueList, new JIRAIssueManagmentSystem() );
-        }
-        catch ( Exception e )
-        {
-            throw new MojoExecutionException( "Failed to extract issues from JIRA.", e );
+            return getReleases(issueList, new JIRAIssueManagmentSystem());
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to extract issues from JIRA.", e);
         }
     }
 
-    private List<Release> getReleases( List<Issue> issues, IssueManagementSystem ims )
-        throws MojoExecutionException
-    {
-        if ( issueTypes != null )
-        {
-            ims.applyConfiguration( issueTypes );
+    private List<Release> getReleases(List<Issue> issues, IssueManagementSystem ims) throws MojoExecutionException {
+        if (issueTypes != null) {
+            ims.applyConfiguration(issueTypes);
         }
-        if ( issues.isEmpty() )
-        {
+        if (issues.isEmpty()) {
             return Collections.emptyList();
-        }
-        else
-        {
-            IssueAdapter adapter = new IssueAdapter( ims );
-            return adapter.getReleases( issues );
+        } else {
+            IssueAdapter adapter = new IssueAdapter(ims);
+            return adapter.getReleases(issues);
         }
     }
 
-    protected List<Release> getTracReleases()
-        throws MojoExecutionException
-    {
+    protected List<Release> getTracReleases() throws MojoExecutionException {
         TracDownloader issueDownloader = new TracDownloader();
 
-        issueDownloader.setProject( project );
+        issueDownloader.setProject(project);
 
-        issueDownloader.setQuery( tracQuery );
+        issueDownloader.setQuery(tracQuery);
 
-        issueDownloader.setTracPassword( tracPassword );
+        issueDownloader.setTracPassword(tracPassword);
 
-        issueDownloader.setTracUser( tracUser );
+        issueDownloader.setTracUser(tracUser);
 
-        try
-        {
-            return getReleases( issueDownloader.getIssueList(), new TracIssueManagmentSystem() );
-        }
-        catch ( Exception e )
-        {
-            throw new MojoExecutionException( "Failed to extract issues from Trac.", e );
+        try {
+            return getReleases(issueDownloader.getIssueList(), new TracIssueManagmentSystem());
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to extract issues from Trac.", e);
         }
     }
 
-    protected List<Release> getGitHubReleases()
-        throws MojoExecutionException
-    {
-        try
-        {
+    protected List<Release> getGitHubReleases() throws MojoExecutionException {
+        try {
             GitHubDownloader issueDownloader =
-                new GitHubDownloader( project, githubAPIScheme, githubAPIPort, includeOpenIssues, true );
+                    new GitHubDownloader(project, githubAPIScheme, githubAPIPort, includeOpenIssues, true);
 
-            issueDownloader.configureAuthentication( settingsDecrypter, githubAPIServerId, settings, getLog() );
+            issueDownloader.configureAuthentication(settingsDecrypter, githubAPIServerId, settings, getLog());
 
-            return getReleases( issueDownloader.getIssueList(), new GitHubIssueManagementSystem() );
-        }
-        catch ( Exception e )
-        {
-            throw new MojoExecutionException( "Failed to extract issues from GitHub.", e );
+            return getReleases(issueDownloader.getIssueList(), new GitHubIssueManagementSystem());
+        } catch (Exception e) {
+            throw new MojoExecutionException("Failed to extract issues from GitHub.", e);
         }
     }
 
@@ -882,143 +801,115 @@ public class AnnouncementMojo
      * accessors
      */
 
-    public String getArtifactId()
-    {
+    public String getArtifactId() {
         return artifactId;
     }
 
-    public void setArtifactId( String artifactId )
-    {
+    public void setArtifactId(String artifactId) {
         this.artifactId = artifactId;
     }
 
-    public String getDevelopmentTeam()
-    {
+    public String getDevelopmentTeam() {
         return developmentTeam;
     }
 
-    public void setDevelopmentTeam( String developmentTeam )
-    {
+    public void setDevelopmentTeam(String developmentTeam) {
         this.developmentTeam = developmentTeam;
     }
 
-    public String getFinalName()
-    {
+    public String getFinalName() {
         return finalName;
     }
 
-    public void setFinalName( String finalName )
-    {
+    public void setFinalName(String finalName) {
         this.finalName = finalName;
     }
 
-    public String getGroupId()
-    {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId( String groupId )
-    {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 
-    public String getIntroduction()
-    {
+    public String getIntroduction() {
         return introduction;
     }
 
-    public void setIntroduction( String introduction )
-    {
+    public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
-    public void setIssueTypes( Map<String, String> issueTypes )
-    {
+    public void setIssueTypes(Map<String, String> issueTypes) {
         this.issueTypes = issueTypes;
     }
 
-    public Map<String, String> getIssueTypes()
-    {
+    public Map<String, String> getIssueTypes() {
         return issueTypes;
     }
 
-    public File getAnnouncementDirectory()
-    {
+    public File getAnnouncementDirectory() {
         return announcementDirectory;
     }
 
-    public void setAnnouncementDirectory( File announcementDirectory )
-    {
+    public void setAnnouncementDirectory(File announcementDirectory) {
         this.announcementDirectory = announcementDirectory;
     }
 
-    public String getPackaging()
-    {
+    public String getPackaging() {
         return packaging;
     }
 
-    public void setPackaging( String packaging )
-    {
+    public void setPackaging(String packaging) {
         this.packaging = packaging;
     }
 
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl( String url )
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public String getUrlDownload()
-    {
+    public String getUrlDownload() {
         return urlDownload;
     }
 
-    public void setUrlDownload( String urlDownload )
-    {
+    public void setUrlDownload(String urlDownload) {
         this.urlDownload = urlDownload;
     }
 
-    public VelocityComponent getVelocity()
-    {
+    public VelocityComponent getVelocity() {
         return velocity;
     }
 
-    public void setVelocity( VelocityComponent velocity )
-    {
+    public void setVelocity(VelocityComponent velocity) {
         this.velocity = velocity;
     }
 
-    public String getVersion()
-    {
+    public String getVersion() {
         return version;
     }
 
-    public void setVersion( String version )
-    {
+    public void setVersion(String version) {
         this.version = version;
     }
 
-    public ChangesXML getXml()
-    {
+    public ChangesXML getXml() {
         return xml;
     }
 
-    public void setXml( ChangesXML xml )
-    {
+    public void setXml(ChangesXML xml) {
         this.xml = xml;
     }
 
-    public File getXmlPath()
-    {
+    public File getXmlPath() {
         return xmlPath;
     }
 
-    public void setXmlPath( File xmlPath )
-    {
+    public void setXmlPath(File xmlPath) {
         this.xmlPath = xmlPath;
     }
 }

@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,16 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.artifact.Artifact;
@@ -44,30 +52,19 @@ import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverExcepti
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
 /**
  * Base class with the things that should be in AbstractMavenReport anyway. Note: This file was copied from r415312 of
  * AbstractProjectInfoReport in maven-project-info-reports, as a work-around to MCHANGES-88.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public abstract class AbstractChangesReport
-    extends AbstractMavenReport
-{
+public abstract class AbstractChangesReport extends AbstractMavenReport {
     /**
      * The current project base directory.
      *
      * @since 2.10
      */
-    @Parameter( property = "basedir", required = true )
+    @Parameter(property = "basedir", required = true)
     protected String basedir;
 
     /**
@@ -75,7 +72,7 @@ public abstract class AbstractChangesReport
      * from the default build lifecycle. If the goal is run indirectly as part of a site generation, the output
      * directory configured in the Maven Site Plugin is used instead.
      */
-    @Parameter( defaultValue = "${project.reporting.outputDirectory}" )
+    @Parameter(defaultValue = "${project.reporting.outputDirectory}")
     private File outputDirectory;
 
     /**
@@ -85,7 +82,7 @@ public abstract class AbstractChangesReport
      *
      * @since 2.4
      */
-    @Parameter( property = "outputEncoding", defaultValue = "${project.reporting.outputEncoding}" )
+    @Parameter(property = "outputEncoding", defaultValue = "${project.reporting.outputEncoding}")
     private String outputEncoding;
 
     /**
@@ -94,7 +91,7 @@ public abstract class AbstractChangesReport
      *
      * @since 2.10
      */
-    @Parameter( property = "changes.runOnlyAtExecutionRoot", defaultValue = "false" )
+    @Parameter(property = "changes.runOnlyAtExecutionRoot", defaultValue = "false")
     protected boolean runOnlyAtExecutionRoot;
 
     /**
@@ -102,7 +99,7 @@ public abstract class AbstractChangesReport
      *
      * @since 2.10
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
     protected MavenSession mavenSession;
 
     /**
@@ -114,7 +111,7 @@ public abstract class AbstractChangesReport
     /**
      * The Maven Project.
      */
-    @Parameter( defaultValue = "${project}", readonly = true, required = true )
+    @Parameter(defaultValue = "${project}", readonly = true, required = true)
     protected MavenProject project;
 
     /**
@@ -128,80 +125,66 @@ public abstract class AbstractChangesReport
     @Component
     protected I18N i18n;
 
-    private Artifact getSkinArtifact()
-        throws MojoExecutionException
-    {
+    private Artifact getSkinArtifact() throws MojoExecutionException {
         Skin skin = Skin.getDefaultSkin();
         DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
-        coordinate.setGroupId( skin.getGroupId() );
-        coordinate.setArtifactId( skin.getArtifactId() );
-        coordinate.setVersion( skin.getVersion() );
-        ProjectBuildingRequest pbr = new DefaultProjectBuildingRequest( mavenSession.getProjectBuildingRequest() );
-        pbr.setRemoteRepositories( project.getRemoteArtifactRepositories() );
-        try
-        {
-            return resolver.resolveArtifact( pbr, coordinate ).getArtifact();
-        }
-        catch ( ArtifactResolverException e )
-        {
-            throw new MojoExecutionException( "Couldn't resolve the skin.", e );
+        coordinate.setGroupId(skin.getGroupId());
+        coordinate.setArtifactId(skin.getArtifactId());
+        coordinate.setVersion(skin.getVersion());
+        ProjectBuildingRequest pbr = new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
+        pbr.setRemoteRepositories(project.getRemoteArtifactRepositories());
+        try {
+            return resolver.resolveArtifact(pbr, coordinate).getArtifact();
+        } catch (ArtifactResolverException e) {
+            throw new MojoExecutionException("Couldn't resolve the skin.", e);
         }
     }
 
-    public void execute()
-        throws MojoExecutionException
-    {
-        if ( !canGenerateReport() )
-        {
+    public void execute() throws MojoExecutionException {
+        if (!canGenerateReport()) {
             return;
         }
 
         // TODO: push to a helper? Could still be improved by taking more of the site information from the site plugin
         Writer writer = null;
-        try
-        {
+        try {
             DecorationModel model = new DecorationModel();
-            model.setBody( new Body() );
+            model.setBody(new Body());
             Map<String, String> attributes = new HashMap<>();
-            attributes.put( "outputEncoding", getOutputEncoding() );
+            attributes.put("outputEncoding", getOutputEncoding());
             Locale locale = Locale.getDefault();
-            SiteRenderingContext siteContext = siteRenderer.createContextForSkin( getSkinArtifact(), attributes,
-                                                                                  model, getName( locale ), locale );
-            siteContext.setOutputEncoding( getOutputEncoding() );
+            SiteRenderingContext siteContext =
+                    siteRenderer.createContextForSkin(getSkinArtifact(), attributes, model, getName(locale), locale);
+            siteContext.setOutputEncoding(getOutputEncoding());
 
-            RenderingContext context = new RenderingContext( outputDirectory, getOutputName() + ".html" );
+            RenderingContext context = new RenderingContext(outputDirectory, getOutputName() + ".html");
 
-            SiteRendererSink sink = new SiteRendererSink( context );
-            generate( sink, null, locale );
+            SiteRendererSink sink = new SiteRendererSink(context);
+            generate(sink, null, locale);
 
             outputDirectory.mkdirs();
 
-            File file = new File( outputDirectory, getOutputName() + ".html" );
-            writer = new OutputStreamWriter( new FileOutputStream( file ), getOutputEncoding() );
+            File file = new File(outputDirectory, getOutputName() + ".html");
+            writer = new OutputStreamWriter(new FileOutputStream(file), getOutputEncoding());
 
-            siteRenderer.generateDocument( writer, sink, siteContext );
+            siteRenderer.generateDocument(writer, sink, siteContext);
 
             writer.close();
             writer = null;
 
-            siteRenderer.copyResources( siteContext, outputDirectory );
-        }
-        catch ( RendererException | IOException | MavenReportException e )
-        {
-            throw new MojoExecutionException( "An error has occurred in " + getName( Locale.ENGLISH )
-                + " report generation.", e );
-        }
-        finally
-        {
-            IOUtils.closeQuietly( writer );
+            siteRenderer.copyResources(siteContext, outputDirectory);
+        } catch (RendererException | IOException | MavenReportException e) {
+            throw new MojoExecutionException(
+                    "An error has occurred in " + getName(Locale.ENGLISH) + " report generation.", e);
+        } finally {
+            IOUtils.closeQuietly(writer);
         }
     }
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#getOutputDirectory()
      */
-    protected String getOutputDirectory()
-    {
+    protected String getOutputDirectory() {
         return outputDirectory.getAbsolutePath();
     }
 
@@ -211,24 +194,21 @@ public abstract class AbstractChangesReport
      * @return The effective reporting output file encoding, never <code>null</code>.
      * @since 2.4
      */
-    protected String getOutputEncoding()
-    {
-        return ( outputEncoding != null ) ? outputEncoding : ReaderFactory.UTF_8;
+    protected String getOutputEncoding() {
+        return (outputEncoding != null) ? outputEncoding : ReaderFactory.UTF_8;
     }
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
      */
-    protected MavenProject getProject()
-    {
+    protected MavenProject getProject() {
         return project;
     }
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#getSiteRenderer()
      */
-    protected Renderer getSiteRenderer()
-    {
+    protected Renderer getSiteRenderer() {
         return siteRenderer;
     }
 
@@ -238,18 +218,14 @@ public abstract class AbstractChangesReport
      *
      * @return <code>true</code> if the current project is at the Execution Root
      */
-    protected boolean isThisTheExecutionRoot()
-    {
-        getLog().debug( "Root Folder:" + mavenSession.getExecutionRootDirectory() );
-        getLog().debug( "Current Folder:" + basedir );
-        boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase( basedir );
-        if ( result )
-        {
-            getLog().debug( "This is the execution root." );
-        }
-        else
-        {
-            getLog().debug( "This is NOT the execution root." );
+    protected boolean isThisTheExecutionRoot() {
+        getLog().debug("Root Folder:" + mavenSession.getExecutionRootDirectory());
+        getLog().debug("Current Folder:" + basedir);
+        boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase(basedir);
+        if (result) {
+            getLog().debug("This is the execution root.");
+        } else {
+            getLog().debug("This is NOT the execution root.");
         }
         return result;
     }

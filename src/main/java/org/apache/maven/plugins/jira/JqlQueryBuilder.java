@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.jira;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,13 +16,14 @@ package org.apache.maven.plugins.jira;
  * specific language governing permissions and limitations
  * under the License.
  */
-
-import org.apache.maven.plugin.logging.Log;
+package org.apache.maven.plugins.jira;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
+
+import org.apache.maven.plugin.logging.Log;
 
 /**
  * Builder for a JIRA query using the JIRA query language. Only a limited set of JQL is supported.
@@ -33,9 +32,7 @@ import java.util.Locale;
  * @version $Id$
  * @since 2.8
  */
-public class JqlQueryBuilder
-    implements JiraQueryBuilder
-{
+public class JqlQueryBuilder implements JiraQueryBuilder {
     private String filter = "";
 
     private boolean urlEncode = true;
@@ -49,59 +46,45 @@ public class JqlQueryBuilder
 
     private StringBuilder query = new StringBuilder();
 
-    public JqlQueryBuilder( Log log )
-    {
+    public JqlQueryBuilder(Log log) {
         this.log = log;
     }
 
-    public String build()
-    {
-        try
-        {
+    public String build() {
+        try {
             String jqlQuery;
             // If the user has defined a filter - use that
-            if ( ( this.filter != null ) && ( this.filter.length() > 0 ) )
-            {
+            if ((this.filter != null) && (this.filter.length() > 0)) {
                 jqlQuery = filter;
-            }
-            else
-            {
+            } else {
                 jqlQuery = query.toString() + orderBy.toString();
             }
 
-            if ( urlEncode )
-            {
-                getLog().debug( "Encoding JQL query " + jqlQuery );
-                String encodedQuery = URLEncoder.encode( jqlQuery, "UTF-8" );
-                getLog().debug( "Encoded JQL query " + encodedQuery );
+            if (urlEncode) {
+                getLog().debug("Encoding JQL query " + jqlQuery);
+                String encodedQuery = URLEncoder.encode(jqlQuery, "UTF-8");
+                getLog().debug("Encoded JQL query " + encodedQuery);
                 return encodedQuery;
-            }
-            else
-            {
+            } else {
                 return jqlQuery;
             }
-        }
-        catch ( UnsupportedEncodingException e )
-        {
-            getLog().error( "Unable to encode JQL query with UTF-8", e );
-            throw new RuntimeException( e );
+        } catch (UnsupportedEncodingException e) {
+            getLog().error("Unable to encode JQL query with UTF-8", e);
+            throw new RuntimeException(e);
         }
     }
 
-    public JiraQueryBuilder components( String components )
-    {
-        addCommaSeparatedValues( "component", components );
+    public JiraQueryBuilder components(String components) {
+        addCommaSeparatedValues("component", components);
         return this;
     }
 
-    public JiraQueryBuilder components( List<String> components )
-    {
-        addValues( "component", components );
+    public JiraQueryBuilder components(List<String> components) {
+        addValues("component", components);
         return this;
     }
 
-    public JiraQueryBuilder filter( String filter )
-    {
+    public JiraQueryBuilder filter(String filter) {
         this.filter = filter;
         return this;
     }
@@ -113,9 +96,8 @@ public class JqlQueryBuilder
      * @param fixVersion a single fix version
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersion( String fixVersion )
-    {
-        addSingleValue( "fixVersion", fixVersion );
+    public JiraQueryBuilder fixVersion(String fixVersion) {
+        addSingleValue("fixVersion", fixVersion);
         return this;
     }
 
@@ -126,109 +108,92 @@ public class JqlQueryBuilder
      * @param fixVersionIds a comma-separated list of version ids.
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersionIds( String fixVersionIds )
-    {
-        addCommaSeparatedValues( "fixVersion", fixVersionIds );
+    public JiraQueryBuilder fixVersionIds(String fixVersionIds) {
+        addCommaSeparatedValues("fixVersion", fixVersionIds);
         return this;
     }
 
     /**
      * Add a sequence of version IDs already in a list.
-     * 
+     *
      * @param fixVersionIds the version ids.
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersionIds( List<String> fixVersionIds )
-    {
-        addValues( "fixVersion", fixVersionIds );
+    public JiraQueryBuilder fixVersionIds(List<String> fixVersionIds) {
+        addValues("fixVersion", fixVersionIds);
         return this;
     }
 
-    public Log getLog()
-    {
+    public Log getLog() {
         return log;
     }
 
-    public JiraQueryBuilder priorityIds( String priorityIds )
-    {
-        addCommaSeparatedValues( "priority", priorityIds );
+    public JiraQueryBuilder priorityIds(String priorityIds) {
+        addCommaSeparatedValues("priority", priorityIds);
         return this;
     }
 
-    public JiraQueryBuilder priorityIds( List<String> priorityIds )
-    {
-        addValues( "priority", priorityIds );
+    public JiraQueryBuilder priorityIds(List<String> priorityIds) {
+        addValues("priority", priorityIds);
         return this;
     }
 
-    public JiraQueryBuilder project( String project )
-    {
-        addSingleValue( "project", project );
+    public JiraQueryBuilder project(String project) {
+        addSingleValue("project", project);
         return this;
     }
 
-    public JiraQueryBuilder resolutionIds( String resolutionIds )
-    {
-        addCommaSeparatedValues( "resolution", resolutionIds );
+    public JiraQueryBuilder resolutionIds(String resolutionIds) {
+        addCommaSeparatedValues("resolution", resolutionIds);
         return this;
     }
 
-    public JiraQueryBuilder resolutionIds( List<String> resolutionIds )
-    {
-        addValues( "resolution", resolutionIds );
+    public JiraQueryBuilder resolutionIds(List<String> resolutionIds) {
+        addValues("resolution", resolutionIds);
         return this;
     }
 
-    public JiraQueryBuilder sortColumnNames( String sortColumnNames )
-    {
-        if ( sortColumnNames != null )
-        {
-            orderBy.append( " ORDER BY " );
+    public JiraQueryBuilder sortColumnNames(String sortColumnNames) {
+        if (sortColumnNames != null) {
+            orderBy.append(" ORDER BY ");
 
-            String[] sortColumnNamesArray = sortColumnNames.split( "," );
+            String[] sortColumnNamesArray = sortColumnNames.split(",");
 
-            for ( int i = 0; i < sortColumnNamesArray.length - 1; i++ )
-            {
-                addSingleSortColumn( sortColumnNamesArray[i] );
-                orderBy.append( ", " );
+            for (int i = 0; i < sortColumnNamesArray.length - 1; i++) {
+                addSingleSortColumn(sortColumnNamesArray[i]);
+                orderBy.append(", ");
             }
-            addSingleSortColumn( sortColumnNamesArray[sortColumnNamesArray.length - 1] );
+            addSingleSortColumn(sortColumnNamesArray[sortColumnNamesArray.length - 1]);
         }
         return this;
     }
 
-    public JiraQueryBuilder statusIds( String statusIds )
-    {
-        addCommaSeparatedValues( "status", statusIds );
+    public JiraQueryBuilder statusIds(String statusIds) {
+        addCommaSeparatedValues("status", statusIds);
         return this;
     }
 
-    public JiraQueryBuilder statusIds( List<String> statusIds )
-    {
-        addValues( "status", statusIds );
+    public JiraQueryBuilder statusIds(List<String> statusIds) {
+        addValues("status", statusIds);
         return this;
     }
 
-    public JiraQueryBuilder typeIds( String typeIds )
-    {
-        addCommaSeparatedValues( "type", typeIds );
+    public JiraQueryBuilder typeIds(String typeIds) {
+        addCommaSeparatedValues("type", typeIds);
         return this;
     }
 
-    public JiraQueryBuilder typeIds( List<String> typeIds )
-    {
-        addValues( "type", typeIds );
+    public JiraQueryBuilder typeIds(List<String> typeIds) {
+        addValues("type", typeIds);
         return this;
     }
 
-    public JiraQueryBuilder urlEncode( boolean doEncoding )
-    {
+    public JiraQueryBuilder urlEncode(boolean doEncoding) {
         urlEncode = doEncoding;
         return this;
     }
 
-    public boolean urlEncode()
-    {
+    public boolean urlEncode() {
         return urlEncode;
     }
 
@@ -236,93 +201,74 @@ public class JqlQueryBuilder
     /* Private methods */
     /* --------------------------------------------------------------------- */
 
-    private void addCommaSeparatedValues( String key, String values )
-    {
-        if ( values != null )
-        {
-            if ( query.length() > 0 )
-            {
-                query.append( " AND " );
+    private void addCommaSeparatedValues(String key, String values) {
+        if (values != null) {
+            if (query.length() > 0) {
+                query.append(" AND ");
             }
 
-            query.append( key ).append( " in (" );
+            query.append(key).append(" in (");
 
-            String[] valuesArr = values.split( "," );
+            String[] valuesArr = values.split(",");
 
-            for ( int i = 0; i < ( valuesArr.length - 1 ); i++ )
-            {
-                trimAndQuoteValue( valuesArr[i] );
-                query.append( ", " );
+            for (int i = 0; i < (valuesArr.length - 1); i++) {
+                trimAndQuoteValue(valuesArr[i]);
+                query.append(", ");
             }
-            trimAndQuoteValue( valuesArr[valuesArr.length - 1] );
-            query.append( ")" );
+            trimAndQuoteValue(valuesArr[valuesArr.length - 1]);
+            query.append(")");
         }
     }
 
-    private void addValues( String key, List<String> values )
-    {
-        if ( values != null && values.size() > 0 )
-        {
-            if ( query.length() > 0 )
-            {
-                query.append( " AND " );
+    private void addValues(String key, List<String> values) {
+        if (values != null && values.size() > 0) {
+            if (query.length() > 0) {
+                query.append(" AND ");
             }
 
-            query.append( key ).append( " in (" );
+            query.append(key).append(" in (");
 
-            for ( int i = 0; i < ( values.size() - 1 ); i++ )
-            {
-                trimAndQuoteValue( values.get( i ) );
-                query.append( ", " );
+            for (int i = 0; i < (values.size() - 1); i++) {
+                trimAndQuoteValue(values.get(i));
+                query.append(", ");
             }
-            trimAndQuoteValue( values.get( values.size() - 1 ) );
-            query.append( ")" );
+            trimAndQuoteValue(values.get(values.size() - 1));
+            query.append(")");
         }
     }
 
-    private void addSingleSortColumn( String name )
-    {
+    private void addSingleSortColumn(String name) {
         boolean descending = false;
-        name = name.trim().toLowerCase( Locale.ENGLISH );
-        if ( name.endsWith( "desc" ) )
-        {
+        name = name.trim().toLowerCase(Locale.ENGLISH);
+        if (name.endsWith("desc")) {
             descending = true;
-            name = name.substring( 0, name.length() - 4 ).trim();
-        }
-        else if ( name.endsWith( "asc" ) )
-        {
+            name = name.substring(0, name.length() - 4).trim();
+        } else if (name.endsWith("asc")) {
             descending = false;
-            name = name.substring( 0, name.length() - 3 ).trim();
+            name = name.substring(0, name.length() - 3).trim();
         }
         // Strip any spaces from the column name, or it will trip up JIRA's JQL parser
-        name = name.replaceAll( " ", "" );
-        orderBy.append( name );
-        orderBy.append( descending ? " DESC" : " ASC" );
+        name = name.replaceAll(" ", "");
+        orderBy.append(name);
+        orderBy.append(descending ? " DESC" : " ASC");
     }
 
-    private void addSingleValue( String key, String value )
-    {
-        if ( value != null )
-        {
-            if ( query.length() > 0 )
-            {
-                query.append( " AND " );
+    private void addSingleValue(String key, String value) {
+        if (value != null) {
+            if (query.length() > 0) {
+                query.append(" AND ");
             }
-            query.append( key ).append( " = " );
-            trimAndQuoteValue( value );
+            query.append(key).append(" = ");
+            trimAndQuoteValue(value);
         }
     }
 
-    private void trimAndQuoteValue( String value )
-    {
+    private void trimAndQuoteValue(String value) {
         String trimmedValue = value.trim();
-        if ( trimmedValue.contains( " " ) || trimmedValue.contains( "." ) )
-        {
-            query.append( "\"" ).append( trimmedValue ).append( "\"" );
-        }
-        else
-        {
-            query.append( trimmedValue );
+        if (trimmedValue.contains(" ") || trimmedValue.contains(".")) {
+            query.append("\"").append(trimmedValue).append("\"");
+        } else {
+            query.append(trimmedValue);
         }
     }
 }

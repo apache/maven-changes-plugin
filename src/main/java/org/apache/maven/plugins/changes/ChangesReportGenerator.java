@@ -1,5 +1,3 @@
-package org.apache.maven.plugins.changes;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,6 +16,7 @@ package org.apache.maven.plugins.changes;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.maven.plugins.changes;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,7 +26,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
@@ -44,9 +42,7 @@ import org.apache.maven.plugins.issues.AbstractIssuesReportGenerator;
  *
  * @version $Id$
  */
-public class ChangesReportGenerator
-    extends AbstractIssuesReportGenerator
-{
+public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
 
     /**
      * The token in {@link #issueLinksPerSystem} denoting the base URL for the issue management.
@@ -89,88 +85,71 @@ public class ChangesReportGenerator
      */
     private List<Release> releaseList;
 
-    public ChangesReportGenerator()
-    {
+    public ChangesReportGenerator() {
         issueLinksPerSystem = new HashMap<>();
     }
 
-    public ChangesReportGenerator( List<Release> releaseList )
-    {
+    public ChangesReportGenerator(List<Release> releaseList) {
         this();
         this.releaseList = releaseList;
     }
 
-    public boolean isEscapeHTML()
-    {
+    public boolean isEscapeHTML() {
         return escapeHTML;
     }
 
-    public void setEscapeHTML( boolean escapeHTML )
-    {
+    public void setEscapeHTML(boolean escapeHTML) {
         this.escapeHTML = escapeHTML;
     }
 
-    public String getSystem()
-    {
+    public String getSystem() {
         return system;
     }
 
-    public void setSystem( String system )
-    {
+    public void setSystem(String system) {
         this.system = system;
     }
 
-    public void setTeam( final String team )
-    {
+    public void setTeam(final String team) {
         this.team = team;
     }
 
-    public String getTeam()
-    {
+    public String getTeam() {
         return team;
     }
 
-    public void setUrl( String url )
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
-    public String getUrl()
-    {
+    public String getUrl() {
         return url;
     }
 
-    public Map<String, String> getIssueLinksPerSystem()
-    {
+    public Map<String, String> getIssueLinksPerSystem() {
         return issueLinksPerSystem;
     }
 
-    public void setIssueLinksPerSystem( Map<String, String> issueLinksPerSystem )
-    {
-        if ( this.issueLinksPerSystem != null && issueLinksPerSystem == null )
-        {
+    public void setIssueLinksPerSystem(Map<String, String> issueLinksPerSystem) {
+        if (this.issueLinksPerSystem != null && issueLinksPerSystem == null) {
             return;
         }
         this.issueLinksPerSystem = issueLinksPerSystem;
     }
 
-    public boolean isAddActionDate()
-    {
+    public boolean isAddActionDate() {
         return addActionDate;
     }
 
-    public void setAddActionDate( boolean addActionDate )
-    {
+    public void setAddActionDate(boolean addActionDate) {
         this.addActionDate = addActionDate;
     }
 
-    public boolean isLinkToFeed()
-    {
+    public boolean isLinkToFeed() {
         return linkToFeed;
     }
 
-    public void setLinkToFeed( boolean generateLinkTofeed )
-    {
+    public void setLinkToFeed(boolean generateLinkTofeed) {
         this.linkToFeed = generateLinkTofeed;
     }
 
@@ -180,46 +159,40 @@ public class ChangesReportGenerator
      * @param system The issue management system
      * @return <code>true</code> if issue links can be generated, <code>false</code> otherwise.
      */
-    public boolean canGenerateIssueLinks( String system )
-    {
-        if ( !this.issueLinksPerSystem.containsKey( system ) )
-        {
+    public boolean canGenerateIssueLinks(String system) {
+        if (!this.issueLinksPerSystem.containsKey(system)) {
             return false;
         }
-        String issueLink = this.issueLinksPerSystem.get( system );
+        String issueLink = this.issueLinksPerSystem.get(system);
 
         // If the issue link entry is blank then no links are possible
-        if ( StringUtils.isBlank( issueLink ) )
-        {
+        if (StringUtils.isBlank(issueLink)) {
             return false;
         }
 
         // If the %URL% token is used then the issue management system URL must be set.
-        if ( issueLink.contains( URL_TOKEN ) && StringUtils.isBlank( getUrl() ) )
-        {
+        if (issueLink.contains(URL_TOKEN) && StringUtils.isBlank(getUrl())) {
             return false;
         }
         return true;
     }
 
-    public void doGenerateEmptyReport( ResourceBundle bundle, Sink sink, String message )
-    {
-        sinkBeginReport( sink, bundle );
+    public void doGenerateEmptyReport(ResourceBundle bundle, Sink sink, String message) {
+        sinkBeginReport(sink, bundle);
 
-        sink.text( message );
+        sink.text(message);
 
-        sinkEndReport( sink );
+        sinkEndReport(sink);
     }
 
-    public void doGenerateReport( ResourceBundle bundle, Sink sink )
-    {
-        sinkBeginReport( sink, bundle );
+    public void doGenerateReport(ResourceBundle bundle, Sink sink) {
+        sinkBeginReport(sink, bundle);
 
-        constructReleaseHistory( sink, bundle, releaseList );
+        constructReleaseHistory(sink, bundle, releaseList);
 
-        constructReleases( sink, bundle, releaseList );
+        constructReleases(sink, bundle, releaseList);
 
-        sinkEndReport( sink );
+        sinkEndReport(sink);
     }
 
     /**
@@ -229,76 +202,61 @@ public class ChangesReportGenerator
      * @param bundle Resource bundle
      * @param action Action to generate content for
      */
-    private void constructAction( Sink sink, ResourceBundle bundle, Action action )
-    {
+    private void constructAction(Sink sink, ResourceBundle bundle, Action action) {
         sink.tableRow();
 
-        sinkShowTypeIcon( sink, action.getType() );
+        sinkShowTypeIcon(sink, action.getType());
 
         sink.tableCell();
 
         String actionDescription = action.getAction();
 
-        if ( escapeHTML )
-        {
-            sink.text( actionDescription );
-        }
-        else
-        {
-            sink.rawText( actionDescription );
+        if (escapeHTML) {
+            sink.text(actionDescription);
+        } else {
+            sink.rawText(actionDescription);
         }
 
         // no null check needed classes from modello return a new ArrayList
-        if ( StringUtils.isNotEmpty( action.getIssue() ) || ( !action.getFixedIssues().isEmpty() ) )
-        {
-            if ( StringUtils.isNotBlank( actionDescription ) && !actionDescription.endsWith( "." ) )
-            {
-                sink.text( "." );
+        if (StringUtils.isNotEmpty(action.getIssue())
+                || (!action.getFixedIssues().isEmpty())) {
+            if (StringUtils.isNotBlank(actionDescription) && !actionDescription.endsWith(".")) {
+                sink.text(".");
             }
-            sink.text( " " + bundle.getString( "report.changes.text.fixes" ) + " " );
+            sink.text(" " + bundle.getString("report.changes.text.fixes") + " ");
 
             // Try to get the issue management system specified in the changes.xml file
             String system = action.getSystem();
             // Try to get the issue management system configured in the POM
-            if ( StringUtils.isEmpty( system ) )
-            {
+            if (StringUtils.isEmpty(system)) {
                 system = this.system;
             }
             // Use the default issue management system
-            if ( StringUtils.isEmpty( system ) )
-            {
+            if (StringUtils.isEmpty(system)) {
                 system = DEFAULT_ISSUE_SYSTEM_KEY;
             }
-            if ( !canGenerateIssueLinks( system ) )
-            {
-                constructIssueText( action.getIssue(), sink, action.getFixedIssues() );
+            if (!canGenerateIssueLinks(system)) {
+                constructIssueText(action.getIssue(), sink, action.getFixedIssues());
+            } else {
+                constructIssueLink(action.getIssue(), system, sink, action.getFixedIssues());
             }
-            else
-            {
-                constructIssueLink( action.getIssue(), system, sink, action.getFixedIssues() );
-            }
-            sink.text( "." );
+            sink.text(".");
         }
 
-        if ( StringUtils.isNotEmpty( action.getDueTo() ) || ( !action.getDueTos().isEmpty() ) )
-        {
-            constructDueTo( sink, action, bundle, action.getDueTos() );
+        if (StringUtils.isNotEmpty(action.getDueTo()) || (!action.getDueTos().isEmpty())) {
+            constructDueTo(sink, action, bundle, action.getDueTos());
         }
 
         sink.tableCell_();
 
-        if ( NO_TEAM.equals( team ) )
-        {
-            sinkCell( sink, action.getDev() );
-        }
-        else
-        {
-            sinkCellLink( sink, action.getDev(), team + "#" + action.getDev() );
+        if (NO_TEAM.equals(team)) {
+            sinkCell(sink, action.getDev());
+        } else {
+            sinkCellLink(sink, action.getDev(), team + "#" + action.getDev());
         }
 
-        if ( this.isAddActionDate() )
-        {
-            sinkCell( sink, action.getDate() );
+        if (this.isAddActionDate()) {
+            sinkCell(sink, action.getDate());
         }
 
         sink.tableRow_();
@@ -312,51 +270,42 @@ public class ChangesReportGenerator
      * @param bundle A resource bundle for i18n
      * @param dueTos Other people that helped with an action
      */
-    private void constructDueTo( Sink sink, Action action, ResourceBundle bundle, List<DueTo> dueTos )
-    {
+    private void constructDueTo(Sink sink, Action action, ResourceBundle bundle, List<DueTo> dueTos) {
 
         // Create a Map with key : dueTo name, value : dueTo email
         Map<String, String> namesEmailMap = new LinkedHashMap<>();
 
         // Only add the dueTo specified as attributes, if it has either a dueTo or a dueToEmail
-        if ( StringUtils.isNotEmpty( action.getDueTo() ) || StringUtils.isNotEmpty( action.getDueToEmail() ) )
-        {
-            namesEmailMap.put( action.getDueTo(), action.getDueToEmail() );
+        if (StringUtils.isNotEmpty(action.getDueTo()) || StringUtils.isNotEmpty(action.getDueToEmail())) {
+            namesEmailMap.put(action.getDueTo(), action.getDueToEmail());
         }
 
-        for ( DueTo dueTo : dueTos )
-        {
-            namesEmailMap.put( dueTo.getName(), dueTo.getEmail() );
+        for (DueTo dueTo : dueTos) {
+            namesEmailMap.put(dueTo.getName(), dueTo.getEmail());
         }
 
-        if ( namesEmailMap.isEmpty() )
-        {
+        if (namesEmailMap.isEmpty()) {
             return;
         }
 
-        sink.text( " " + bundle.getString( "report.changes.text.thanx" ) + " " );
+        sink.text(" " + bundle.getString("report.changes.text.thanx") + " ");
         int i = 0;
-        for ( String currentDueTo : namesEmailMap.keySet() )
-        {
-            String currentDueToEmail = namesEmailMap.get( currentDueTo );
+        for (String currentDueTo : namesEmailMap.keySet()) {
+            String currentDueToEmail = namesEmailMap.get(currentDueTo);
             i++;
 
-            if ( StringUtils.isNotEmpty( currentDueToEmail ) )
-            {
-                sinkLink( sink, currentDueTo, "mailto:" + currentDueToEmail );
-            }
-            else if ( StringUtils.isNotEmpty( currentDueTo ) )
-            {
-                sink.text( currentDueTo );
+            if (StringUtils.isNotEmpty(currentDueToEmail)) {
+                sinkLink(sink, currentDueTo, "mailto:" + currentDueToEmail);
+            } else if (StringUtils.isNotEmpty(currentDueTo)) {
+                sink.text(currentDueTo);
             }
 
-            if ( i < namesEmailMap.size() )
-            {
-                sink.text( ", " );
+            if (i < namesEmailMap.size()) {
+                sink.text(", ");
             }
         }
 
-        sink.text( "." );
+        sink.text(".");
     }
 
     /**
@@ -367,38 +316,32 @@ public class ChangesReportGenerator
      * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueLink( String issue, String system, Sink sink, List<FixedIssue> fixes )
-    {
-        if ( StringUtils.isNotEmpty( issue ) )
-        {
-            sink.link( parseIssueLink( issue, system ) );
+    private void constructIssueLink(String issue, String system, Sink sink, List<FixedIssue> fixes) {
+        if (StringUtils.isNotEmpty(issue)) {
+            sink.link(parseIssueLink(issue, system));
 
-            sink.text( issue );
+            sink.text(issue);
 
             sink.link_();
 
-            if ( !fixes.isEmpty() )
-            {
-                sink.text( ", " );
+            if (!fixes.isEmpty()) {
+                sink.text(", ");
             }
         }
 
-        for ( Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); )
-        {
+        for (Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); ) {
             FixedIssue fixedIssue = iterator.next();
             String currentIssueId = fixedIssue.getIssue();
-            if ( StringUtils.isNotEmpty( currentIssueId ) )
-            {
-                sink.link( parseIssueLink( currentIssueId, system ) );
+            if (StringUtils.isNotEmpty(currentIssueId)) {
+                sink.link(parseIssueLink(currentIssueId, system));
 
-                sink.text( currentIssueId );
+                sink.text(currentIssueId);
 
                 sink.link_();
             }
 
-            if ( iterator.hasNext() )
-            {
-                sink.text( ", " );
+            if (iterator.hasNext()) {
+                sink.text(", ");
             }
         }
     }
@@ -410,64 +353,56 @@ public class ChangesReportGenerator
      * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueText( String issue, Sink sink, List<FixedIssue> fixes )
-    {
-        if ( StringUtils.isNotEmpty( issue ) )
-        {
-            sink.text( issue );
+    private void constructIssueText(String issue, Sink sink, List<FixedIssue> fixes) {
+        if (StringUtils.isNotEmpty(issue)) {
+            sink.text(issue);
 
-            if ( !fixes.isEmpty() )
-            {
-                sink.text( ", " );
+            if (!fixes.isEmpty()) {
+                sink.text(", ");
             }
         }
 
-        for ( Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); )
-        {
+        for (Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); ) {
             FixedIssue fixedIssue = iterator.next();
 
             String currentIssueId = fixedIssue.getIssue();
-            if ( StringUtils.isNotEmpty( currentIssueId ) )
-            {
-                sink.text( currentIssueId );
+            if (StringUtils.isNotEmpty(currentIssueId)) {
+                sink.text(currentIssueId);
             }
 
-            if ( iterator.hasNext() )
-            {
-                sink.text( ", " );
+            if (iterator.hasNext()) {
+                sink.text(", ");
             }
         }
     }
 
-    private void constructReleaseHistory( Sink sink, ResourceBundle bundle, List<Release> releaseList )
-    {
+    private void constructReleaseHistory(Sink sink, ResourceBundle bundle, List<Release> releaseList) {
         sink.section2();
 
         sink.sectionTitle2();
-        sink.text( bundle.getString( "report.changes.label.releasehistory" ) );
+        sink.text(bundle.getString("report.changes.label.releasehistory"));
         sink.sectionTitle2_();
 
         sink.table();
 
         sink.tableRow();
 
-        sinkHeader( sink, bundle.getString( "report.issues.label.fixVersion" ) );
+        sinkHeader(sink, bundle.getString("report.issues.label.fixVersion"));
 
-        sinkHeader( sink, bundle.getString( "report.changes.label.releaseDate" ) );
+        sinkHeader(sink, bundle.getString("report.changes.label.releaseDate"));
 
-        sinkHeader( sink, bundle.getString( "report.changes.label.releaseDescription" ) );
+        sinkHeader(sink, bundle.getString("report.changes.label.releaseDescription"));
 
         sink.tableRow_();
 
-        for ( Release release : releaseList )
-        {
+        for (Release release : releaseList) {
             sink.tableRow();
 
-            sinkCellLink( sink, release.getVersion(), "#" + HtmlTools.encodeId( release.getVersion() ) );
+            sinkCellLink(sink, release.getVersion(), "#" + HtmlTools.encodeId(release.getVersion()));
 
-            sinkCell( sink, release.getDateRelease() );
+            sinkCell(sink, release.getDateRelease());
 
-            sinkCell( sink, release.getDescription() );
+            sinkCell(sink, release.getDescription());
 
             sink.tableRow_();
         }
@@ -475,13 +410,12 @@ public class ChangesReportGenerator
         sink.table_();
 
         // MCHANGES-46
-        if ( linkToFeed )
-        {
+        if (linkToFeed) {
             sink.paragraph();
-            sink.text( bundle.getString( "report.changes.text.rssfeed" ) );
+            sink.text(bundle.getString("report.changes.text.rssfeed"));
             sink.nonBreakingSpace();
-            sink.link( "changes.rss" );
-            sinkFigure( sink, "images/rss.png", "rss feed" );
+            sink.link("changes.rss");
+            sinkFigure(sink, "images/rss.png", "rss feed");
             sink.link_();
             sink.paragraph_();
         }
@@ -496,11 +430,9 @@ public class ChangesReportGenerator
      * @param bundle Resource bundle
      * @param releaseList Releases to create content for
      */
-    private void constructReleases( Sink sink, ResourceBundle bundle, List<Release> releaseList )
-    {
-        for ( Release release : releaseList )
-        {
-            constructRelease( sink, bundle, release );
+    private void constructReleases(Sink sink, ResourceBundle bundle, List<Release> releaseList) {
+        for (Release release : releaseList) {
+            constructRelease(sink, bundle, release);
         }
     }
 
@@ -511,47 +443,40 @@ public class ChangesReportGenerator
      * @param bundle Resource bundle
      * @param release Release to create document section for
      */
-    private void constructRelease( Sink sink, ResourceBundle bundle, Release release )
-    {
+    private void constructRelease(Sink sink, ResourceBundle bundle, Release release) {
         sink.section2();
 
-        final String date = ( release.getDateRelease() == null ) ? "" : " \u2013 " + release.getDateRelease();
+        final String date = (release.getDateRelease() == null) ? "" : " \u2013 " + release.getDateRelease();
 
         SinkEventAttributes attrs = new SinkEventAttributeSet();
-        attrs.addAttribute( SinkEventAttributes.ID, HtmlTools.encodeId( release.getVersion() ) );
-        sink.sectionTitle( Sink.SECTION_LEVEL_2, attrs );
-        sink.text( bundle.getString( "report.changes.label.release" ) + " " + release.getVersion() + date );
-        sink.sectionTitle_( Sink.SECTION_LEVEL_2 );
+        attrs.addAttribute(SinkEventAttributes.ID, HtmlTools.encodeId(release.getVersion()));
+        sink.sectionTitle(Sink.SECTION_LEVEL_2, attrs);
+        sink.text(bundle.getString("report.changes.label.release") + " " + release.getVersion() + date);
+        sink.sectionTitle_(Sink.SECTION_LEVEL_2);
 
-        if ( isReleaseEmpty( release ) )
-        {
+        if (isReleaseEmpty(release)) {
             sink.paragraph();
-            sink.text( bundle.getString( "report.changes.text.no.changes" ) );
+            sink.text(bundle.getString("report.changes.text.no.changes"));
             sink.paragraph_();
-        }
-        else
-        {
+        } else {
             sink.table();
 
             sink.tableRow();
-            sinkHeader( sink, bundle.getString( "report.issues.label.type" ) );
-            sinkHeader( sink, bundle.getString( "report.issues.label.summary" ) );
-            sinkHeader( sink, bundle.getString( "report.issues.label.assignee" ) );
-            if ( this.isAddActionDate() )
-            {
-                sinkHeader( sink, bundle.getString( "report.issues.label.updated" ) );
+            sinkHeader(sink, bundle.getString("report.issues.label.type"));
+            sinkHeader(sink, bundle.getString("report.issues.label.summary"));
+            sinkHeader(sink, bundle.getString("report.issues.label.assignee"));
+            if (this.isAddActionDate()) {
+                sinkHeader(sink, bundle.getString("report.issues.label.updated"));
             }
             sink.tableRow_();
 
-            for ( Action action : release.getActions() )
-            {
-                constructAction( sink, bundle, action );
+            for (Action action : release.getActions()) {
+                constructAction(sink, bundle, action);
             }
 
-            for ( Object o : release.getComponents() )
-            {
+            for (Object o : release.getComponents()) {
                 Component component = (Component) o;
-                constructComponent( sink, bundle, component );
+                constructComponent(sink, bundle, component);
             }
 
             sink.table_();
@@ -568,33 +493,29 @@ public class ChangesReportGenerator
      * @param bundle Resource bundle
      * @param component Release component to generate content for.
      */
-    private void constructComponent( Sink sink, ResourceBundle bundle, Component component )
-    {
-        if ( !component.getActions().isEmpty() )
-        {
+    private void constructComponent(Sink sink, ResourceBundle bundle, Component component) {
+        if (!component.getActions().isEmpty()) {
             sink.tableRow();
 
             sink.tableHeaderCell();
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
-            sink.text( component.getName() );
+            sink.text(component.getName());
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
             sink.tableHeaderCell_();
 
-            if ( isAddActionDate() )
-            {
+            if (isAddActionDate()) {
                 sink.tableHeaderCell();
                 sink.tableHeaderCell_();
             }
 
             sink.tableRow_();
 
-            for ( Action action : component.getActions() )
-            {
-                constructAction( sink, bundle, action );
+            for (Action action : component.getActions()) {
+                constructAction(sink, bundle, action);
             }
         }
     }
@@ -605,18 +526,14 @@ public class ChangesReportGenerator
      * @param release Release to check
      * @return <code>true</code> if release doesn't contain any issues, <code>false</code> otherwise
      */
-    private boolean isReleaseEmpty( Release release )
-    {
-        if ( !release.getActions().isEmpty() )
-        {
+    private boolean isReleaseEmpty(Release release) {
+        if (!release.getActions().isEmpty()) {
             return false;
         }
 
-        for ( Object o : release.getComponents() )
-        {
+        for (Object o : release.getComponents()) {
             Component component = (Component) o;
-            if ( !component.getActions().isEmpty() )
-            {
+            if (!component.getActions().isEmpty()) {
                 return false;
             }
         }
@@ -631,18 +548,15 @@ public class ChangesReportGenerator
      * @param system The issue management system
      * @return An interpolated issue link
      */
-    private String parseIssueLink( String issue, String system )
-    {
+    private String parseIssueLink(String issue, String system) {
         String parseLink;
-        String issueLink = this.issueLinksPerSystem.get( system );
-        parseLink = issueLink.replaceFirst( ISSUE_TOKEN, issue );
-        if ( parseLink.contains( URL_TOKEN ) )
-        {
-            String url = this.url.substring( 0, this.url.lastIndexOf( "/" ) );
-            parseLink = parseLink.replaceFirst( URL_TOKEN, url );
+        String issueLink = this.issueLinksPerSystem.get(system);
+        parseLink = issueLink.replaceFirst(ISSUE_TOKEN, issue);
+        if (parseLink.contains(URL_TOKEN)) {
+            String url = this.url.substring(0, this.url.lastIndexOf("/"));
+            parseLink = parseLink.replaceFirst(URL_TOKEN, url);
         }
 
         return parseLink;
     }
-
 }
