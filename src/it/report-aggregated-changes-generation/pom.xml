@@ -41,7 +41,7 @@
     <url>http://localhost/bla</url>
   </issueManagement>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <modules>
     <module>module1</module>
@@ -94,7 +94,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>@pom.version@</version>
+        <version>@project.version@</version>
         <configuration>
           <aggregated>true</aggregated>
           <issueLinkTemplatePerSystem>

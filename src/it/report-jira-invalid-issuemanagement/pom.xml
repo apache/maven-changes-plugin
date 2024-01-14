@@ -37,7 +37,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <issueManagement>
     <system>jira</system>
@@ -84,7 +84,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>@pom.version@</version>
+        <version>@project.version@</version>
         <reportSets>
           <reportSet>
             <reports>
