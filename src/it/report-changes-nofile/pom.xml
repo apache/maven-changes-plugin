@@ -49,15 +49,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
-          <version>${changesPluginVersion}</version>          
+          <version>${changesPluginVersion}</version>
         </plugin>
       </plugins>
-    </pluginManagement>    
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>${changesPluginVersion}</version>   
+        <version>${changesPluginVersion}</version>
         <executions>
           <execution>
             <id>validate-changes</id>
@@ -69,10 +69,15 @@
               <failOnError>true</failOnError>
             </configuration>
           </execution>
-        </executions>     
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>@sitePluginVersion@</version>
       </plugin>
     </plugins>
-  </build>  
+  </build>
   <reporting>
     <excludeDefaults>true</excludeDefaults>
     <plugins>
@@ -95,5 +100,5 @@
       </plugin>
     </plugins>
   </reporting>
-  
+
 </project>
