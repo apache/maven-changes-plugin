@@ -37,7 +37,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <build>
     <pluginManagement>
@@ -80,7 +80,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>@pom.version@</version>
+        <version>@project.version@</version>
         <configuration>
           <issueLinkTemplatePerSystem>
             <default>http://myjira/browse/%ISSUE%</default>
