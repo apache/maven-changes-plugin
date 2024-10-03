@@ -41,7 +41,7 @@
     <url>http://localhost/bla</url>
   </issueManagement>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <build>
     <pluginManagement>
@@ -49,15 +49,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
-          <version>${changesPluginVersion}</version>          
+          <version>${changesPluginVersion}</version>
         </plugin>
       </plugins>
-    </pluginManagement>    
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>${changesPluginVersion}</version>   
+        <version>${changesPluginVersion}</version>
         <executions>
           <execution>
             <id>validate-changes</id>
@@ -69,17 +69,22 @@
               <failOnError>true</failOnError>
             </configuration>
           </execution>
-        </executions>     
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>@sitePluginVersion@</version>
       </plugin>
     </plugins>
-  </build>  
+  </build>
   <reporting>
     <excludeDefaults>true</excludeDefaults>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
-        <version>@pom.version@</version>
+        <version>@project.version@</version>
         <configuration>
           <issueLinkTemplatePerSystem>
             <jira>http://myjira/browse/%ISSUE%</jira>
@@ -95,5 +100,5 @@
       </plugin>
     </plugins>
   </reporting>
-  
+
 </project>
