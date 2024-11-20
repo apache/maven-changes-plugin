@@ -27,7 +27,7 @@ boolean result = true;
 
 try
 {
-    File report = new File( basedir, "target/site/changes-report.html" );
+    File report = new File( basedir, "target/site/en/changes-report.html" );
     if ( !report.exists() || report.isDirectory() )
     {
         System.err.println( "report file is missing or a directory." );

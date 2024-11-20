@@ -35,7 +35,6 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.io.input.XmlStreamReader;
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -54,7 +53,7 @@ import org.codehaus.plexus.util.FileUtils;
  * @version $Id$
  */
 @Mojo(name = "changes-report", threadSafe = true)
-public class ChangesMojo extends AbstractChangesReport {
+public class ChangesReport extends AbstractChangesReport {
     /**
      * A flag whether the report should also include changes from child modules. If set to <code>false</code>, only the
      * changes from current project will be written to the report.
@@ -169,12 +168,6 @@ public class ChangesMojo extends AbstractChangesReport {
     private String publishDateLocale;
 
     /**
-     * @since 2.2
-     */
-    @Parameter(defaultValue = "${session}", readonly = true, required = true)
-    protected MavenSession session;
-
-    /**
      * @since 2.4
      */
     @Parameter(defaultValue = "${project.issueManagement.system}", readonly = true)
@@ -223,6 +216,7 @@ public class ChangesMojo extends AbstractChangesReport {
     /* Public methods */
     /* --------------------------------------------------------------------- */
 
+    @Override
     public boolean canGenerateReport() {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
@@ -232,6 +226,7 @@ public class ChangesMojo extends AbstractChangesReport {
         return xmlPath.isFile();
     }
 
+    @Override
     public void executeReport(Locale locale) throws MavenReportException {
         failIfUsingDeprecatedParameter(
                 escapeHTML, "escapeHTML", "Using markup inside CDATA sections does not work for all output formats!");
@@ -344,14 +339,17 @@ public class ChangesMojo extends AbstractChangesReport {
         }
     }
 
+    @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");
     }
 
+    @Override
     public String getName(Locale locale) {
         return getBundle(locale).getString("report.issues.name");
     }
 
+    @Override
     public String getOutputName() {
         return "changes-report";
     }
@@ -397,7 +395,7 @@ public class ChangesMojo extends AbstractChangesReport {
                             Collections.<String>emptyList(),
                             false,
                             encoding,
-                            session,
+                            mavenSession,
                             additionalProperties);
                     mavenFileFilter.copyFile(mavenFileFilterRequest);
                     changesXml = resultFile;

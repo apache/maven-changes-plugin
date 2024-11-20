@@ -19,8 +19,6 @@
 package org.apache.maven.plugins.jira;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -30,8 +28,6 @@ import org.apache.maven.plugins.issues.IssueUtils;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.wagon.proxy.ProxyInfo;
-import org.apache.maven.wagon.proxy.ProxyUtils;
 
 /**
  * Abstract API, more or less, to retrieving issue information from JIRA. Intended to have subclasses for the old (RSS)
@@ -153,26 +149,7 @@ public abstract class AbstractJiraDownloader {
         }
 
         if (proxy != null) {
-
-            ProxyInfo proxyInfo = new ProxyInfo();
-            proxyInfo.setNonProxyHosts(proxy.getNonProxyHosts());
-
-            // Get the host out of the JIRA URL
-            URL url = null;
-            try {
-                url = new URL(jiraUrl);
-            } catch (MalformedURLException e) {
-                getLog().error("Invalid JIRA URL: " + jiraUrl + ". " + e.getMessage());
-            }
-            String jiraHost = null;
-            if (url != null) {
-                jiraHost = url.getHost();
-            }
-
-            if (ProxyUtils.validateNonProxyHosts(proxyInfo, jiraHost)) {
-                return;
-            }
-
+            /// TODO check proxy.getNonProxyHosts()
             proxyHost = settings.getActiveProxy().getHost();
             proxyPort = settings.getActiveProxy().getPort();
             proxyUser = settings.getActiveProxy().getUsername();

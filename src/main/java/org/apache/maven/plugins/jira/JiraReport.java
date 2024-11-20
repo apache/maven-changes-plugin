@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.AbstractChangesReport;
@@ -45,7 +45,7 @@ import org.apache.maven.settings.Settings;
  * @version $Id$
  */
 @Mojo(name = "jira-report", threadSafe = true)
-public class JiraMojo extends AbstractChangesReport {
+public class JiraReport extends AbstractChangesReport {
     /**
      * Valid JIRA columns.
      */
@@ -297,6 +297,7 @@ public class JiraMojo extends AbstractChangesReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
+    @Override
     public boolean canGenerateReport() {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
@@ -316,6 +317,7 @@ public class JiraMojo extends AbstractChangesReport {
         return message == null;
     }
 
+    @Override
     public void executeReport(Locale locale) throws MavenReportException {
         // Validate parameters
         List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, JIRA_COLUMNS);
@@ -366,14 +368,17 @@ public class JiraMojo extends AbstractChangesReport {
         }
     }
 
+    @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");
     }
 
+    @Override
     public String getName(Locale locale) {
         return getBundle(locale).getString("report.issues.name");
     }
 
+    @Override
     public String getOutputName() {
         return "jira-report";
     }

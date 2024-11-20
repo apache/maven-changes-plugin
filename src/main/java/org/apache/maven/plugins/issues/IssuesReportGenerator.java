@@ -82,6 +82,7 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
         }
 
         sink.table();
+        sink.tableRows();
 
         sink.tableRow();
 
@@ -245,7 +246,7 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
 
             sink.tableRow_();
         }
-
+        sink.tableRows_();
         sink.table_();
     }
 }

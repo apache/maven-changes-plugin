@@ -42,7 +42,7 @@
     <url>http://localhost</url>
   </issueManagement>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <build>
     <pluginManagement>

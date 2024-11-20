@@ -73,11 +73,14 @@ under the License.
 
   <properties>
     <javaVersion>8</javaVersion>
-    <doxiaVersion>1.9.1</doxiaVersion>
-    <doxiaSitetoolsVersion>1.9.2</doxiaSitetoolsVersion>
-    <mavenVersion>3.0.5</mavenVersion>
-    <sitePluginVersion>3.3</sitePluginVersion>
-    <wagonVersion>2.4</wagonVersion>
+    <doxiaVersion>2.0.0</doxiaVersion>
+    <mavenVersion>3.6.3</mavenVersion>
+    <mavenResolverVersion>1.4.1</mavenResolverVersion>
+    <!-- TODO check with next parent -->
+    <version.maven-site-plugin>3.21.0</version.maven-site-plugin>
+    <version.maven-fluido-skin>2.0.0</version.maven-fluido-skin>
+
+    <sitePluginVersion>${version.maven-site-plugin}</sitePluginVersion>
     <project.build.outputTimestamp>2020-04-07T21:04:00Z</project.build.outputTimestamp>
   </properties>
 
@@ -123,40 +126,17 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-api</artifactId>
-      <version>3.0</version>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.reporting</groupId>
       <artifactId>maven-reporting-impl</artifactId>
-      <version>2.3</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.maven</groupId>
-          <artifactId>maven-project</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>4.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-filtering</artifactId>
       <version>3.2.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.shared</groupId>
-      <artifactId>maven-artifact-transfer</artifactId>
-      <version>0.13.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-interpolation</artifactId>
-      <version>1.26</version>
-    </dependency>
-
-    <!-- wagon -->
-    <dependency>
-      <groupId>org.apache.maven.wagon</groupId>
-      <artifactId>wagon-provider-api</artifactId>
-      <version>${wagonVersion}</version>
     </dependency>
 
     <!-- plexus -->
@@ -210,21 +190,6 @@ under the License.
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
-      <artifactId>plexus-i18n</artifactId>
-      <version>1.0-beta-7</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-container-default</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-component-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
@@ -234,21 +199,7 @@ under the License.
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-velocity</artifactId>
-      <version>1.2</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-container-default</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-component-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>velocity</groupId>
-          <artifactId>velocity</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>2.2.0</version>
     </dependency>
 
     <!-- commons -->
@@ -281,38 +232,13 @@ under the License.
     <!-- doxia -->
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-core</artifactId>
-      <version>${doxiaVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-module-xhtml</artifactId>
-      <version>${doxiaVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
       <artifactId>doxia-sink-api</artifactId>
       <version>${doxiaVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-decoration-model</artifactId>
-      <version>${doxiaSitetoolsVersion}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.doxia</groupId>
-      <artifactId>doxia-site-renderer</artifactId>
-      <version>${doxiaSitetoolsVersion}</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-component-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.codehaus.plexus</groupId>
-          <artifactId>plexus-container-default</artifactId>
-        </exclusion>
-      </exclusions>
+      <artifactId>doxia-core</artifactId>
+      <version>${doxiaVersion}</version>
     </dependency>
 
     <!-- rest client for jira -->
@@ -324,23 +250,12 @@ under the License.
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.1.0</version>
+      <version>2.18.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.12.7.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity</artifactId>
-      <version>1.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.velocity</groupId>
-      <artifactId>velocity-tools</artifactId>
-      <version>2.0</version>
+      <version>2.18.1</version>
     </dependency>
 
     <!-- trac dependencies -->
@@ -354,22 +269,12 @@ under the License.
     <dependency>
       <groupId>org.eclipse.mylyn.github</groupId>
       <artifactId>org.eclipse.egit.github.core</artifactId>
-      <version>5.3.0.201903130848-r</version>
+      <version>2.1.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.2.3</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.2.3</version>
     </dependency>
 
     <!-- for rss feed generation -->
@@ -389,13 +294,13 @@ under the License.
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>2.28.2</version>
+      <version>4.11.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
-      <version>2.1</version>
+      <version>3.3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -405,31 +310,38 @@ under the License.
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonatype.aether</groupId>
-      <artifactId>aether-connector-wagon</artifactId>
-      <version>1.13.1</version>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-connector-basic</artifactId>
+      <version>${mavenResolverVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.maven.wagon</groupId>
-      <artifactId>wagon-http</artifactId>
-      <version>${wagonVersion}</version>
+      <groupId>org.apache.maven.resolver</groupId>
+      <artifactId>maven-resolver-transport-http</artifactId>
+      <version>${mavenResolverVersion}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <id>eclipse-egit</id>
-      <url>https://repo.eclipse.org/content/repositories/egit-releases/</url>
-    </repository>
-  </repositories>
-
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <systemPropertyVariables>
+              <localRepository>${settings.localRepository}</localRepository>
+            </systemPropertyVariables>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.eclipse.sisu</groupId>
+        <artifactId>sisu-maven-plugin</artifactId>
+      </plugin>
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
@@ -575,7 +487,7 @@ under the License.
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>l10n-maven-plugin</artifactId>
-            <version>1.0-alpha-2</version>
+            <version>1.1.0</version>
             <configuration>
               <excludes>
                 <exclude>**/log4j.properties</exclude>

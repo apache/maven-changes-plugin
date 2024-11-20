@@ -43,7 +43,7 @@ import org.apache.xmlrpc.XmlRpcException;
  * @since 2.1
  */
 @Mojo(name = "trac-report", threadSafe = true)
-public class TracMojo extends AbstractChangesReport {
+public class TracReport extends AbstractChangesReport {
     /**
      * Deprecated Trac columns.
      */
@@ -121,6 +121,7 @@ public class TracMojo extends AbstractChangesReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
+    @Override
     public boolean canGenerateReport() {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
@@ -134,6 +135,7 @@ public class TracMojo extends AbstractChangesReport {
         return message == null;
     }
 
+    @Override
     public void executeReport(Locale locale) throws MavenReportException {
         // Validate parameters
         List<Integer> columnIds =
@@ -171,14 +173,17 @@ public class TracMojo extends AbstractChangesReport {
         }
     }
 
+    @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");
     }
 
+    @Override
     public String getName(Locale locale) {
         return getBundle(locale).getString("report.issues.name");
     }
 
+    @Override
     public String getOutputName() {
         return "trac-report";
     }

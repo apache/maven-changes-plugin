@@ -48,7 +48,7 @@ public class AnnouncementMojoTest extends AbstractMojoTestCase {
         setVariableValueToObject(mojo, "version", "1.1");
         setVariableValueToObject(mojo, "template", "announcement.vm");
         setVariableValueToObject(
-                mojo, "templateDirectory", "/src/main/resources/org/apache/maven/plugins/announcement/");
+                mojo, "templateDirectory", "src/main/resources/org/apache/maven/plugins/announcement/");
         setVariableValueToObject(mojo, "basedir", getBasedir());
         setVariableValueToObject(mojo, "introduction", "Nice library");
         mojo.execute();
