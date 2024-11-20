@@ -45,7 +45,7 @@ import org.apache.maven.settings.crypto.SettingsDecrypter;
  * @since 2.8
  */
 @Mojo(name = "github-report", threadSafe = true)
-public class GitHubMojo extends AbstractChangesReport {
+public class GitHubReport extends AbstractChangesReport {
 
     /**
      * Valid Github columns.
@@ -125,14 +125,17 @@ public class GitHubMojo extends AbstractChangesReport {
     @Parameter(defaultValue = "false")
     private boolean onlyCurrentVersion;
 
+    @Override
     public String getOutputName() {
         return "github-report";
     }
 
+    @Override
     public String getName(Locale locale) {
         return getBundle(locale).getString("report.issues.name");
     }
 
+    @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");
     }
@@ -144,6 +147,7 @@ public class GitHubMojo extends AbstractChangesReport {
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()
      */
+    @Override
     public boolean canGenerateReport() {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {

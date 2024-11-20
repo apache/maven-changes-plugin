@@ -43,7 +43,7 @@
     <!-- no URL -->
   </issueManagement>
   <properties>
-    <changesPluginVersion>@pom.version@</changesPluginVersion>
+    <changesPluginVersion>@project.version@</changesPluginVersion>
   </properties>
   <build>
     <pluginManagement>

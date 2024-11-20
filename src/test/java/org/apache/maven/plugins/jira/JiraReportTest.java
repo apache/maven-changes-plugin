@@ -21,13 +21,13 @@ package org.apache.maven.plugins.jira;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
 /**
- * Unit tests for {@link JiraMojo}.
+ * Unit tests for {@link JiraReport}.
  *
  * @author jrh3k5
  * @since 2.8
  */
-public class JiraMojoTest extends AbstractMojoTestCase {
-    private final JiraMojo mojo = new JiraMojo();
+public class JiraReportTest extends AbstractMojoTestCase {
+    private final JiraReport mojo = new JiraReport();
 
     /**
      * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.

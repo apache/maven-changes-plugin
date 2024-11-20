@@ -20,14 +20,20 @@ package org.apache.maven.plugins.jira;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.project.MavenProject;
-import org.sonatype.aether.impl.internal.SimpleLocalRepositoryManager;
-import org.sonatype.aether.util.DefaultRepositorySystemSession;
+import org.eclipse.aether.DefaultRepositorySystemSession;
+import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.RemoteRepository;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -47,13 +53,33 @@ public class JiraUnicodeTestCase extends AbstractMojoTestCase {
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        JiraMojo mojo = (JiraMojo) lookupMojo("jira-report", pom);
+        JiraReport mojo = (JiraReport) lookupMojo("jira-report", pom);
         MavenProject project = new JiraUnicodeTestProjectStub();
         MavenSession session = newMavenSession(project);
-        DefaultRepositorySystemSession repoSession = (DefaultRepositorySystemSession) session.getRepositorySession();
-        repoSession.setLocalRepositoryManager(new SimpleLocalRepositoryManager("target/local-repo"));
+
+        RepositorySystem repositorySystem = lookup(RepositorySystem.class);
+
+        DefaultRepositorySystemSession repositorySystemSession =
+                (DefaultRepositorySystemSession) session.getRepositorySession();
+        repositorySystemSession.setLocalRepositoryManager(repositorySystem.newLocalRepositoryManager(
+                repositorySystemSession, new LocalRepository(System.getProperty("localRepository"))));
+
+        // Test need to download a maven-fluido-skin if not present in local repo
+        List<RemoteRepository> remoteRepositories = repositorySystem.newResolutionRepositories(
+                repositorySystemSession,
+                Collections.singletonList(
+                        new RemoteRepository.Builder("central", "default", "https://repo.maven.apache.org/maven2")
+                                .build()));
+
         setVariableValueToObject(mojo, "project", project);
+        setVariableValueToObject(mojo, "reactorProjects", Collections.singletonList(project));
+        setVariableValueToObject(mojo, "repoSession", repositorySystemSession);
+        setVariableValueToObject(mojo, "remoteProjectRepositories", remoteRepositories);
+
+        setVariableValueToObject(mojo, "siteDirectory", new File("non-existing"));
         setVariableValueToObject(mojo, "mavenSession", session);
+        setVariableValueToObject(mojo, "mojoExecution", new MojoExecution(new Plugin(), "jira-report", "default"));
+
         String jiraXml;
         try (InputStream testJiraXmlStream =
                 JiraUnicodeTestCase.class.getResourceAsStream("unicode-jira-results.xml")) {

@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
-import org.apache.maven.doxia.util.HtmlTools;
+import org.apache.maven.doxia.util.DoxiaUtils;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Component;
 import org.apache.maven.plugins.changes.model.DueTo;
@@ -384,6 +384,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         sink.sectionTitle2_();
 
         sink.table();
+        sink.tableRows();
 
         sink.tableRow();
 
@@ -398,7 +399,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         for (Release release : releaseList) {
             sink.tableRow();
 
-            sinkCellLink(sink, release.getVersion(), "#" + HtmlTools.encodeId(release.getVersion()));
+            sinkCellLink(sink, release.getVersion(), "#" + DoxiaUtils.encodeId(release.getVersion()));
 
             sinkCell(sink, release.getDateRelease());
 
@@ -407,6 +408,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             sink.tableRow_();
         }
 
+        sink.tableRows_();
         sink.table_();
 
         // MCHANGES-46
@@ -449,7 +451,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         final String date = (release.getDateRelease() == null) ? "" : " \u2013 " + release.getDateRelease();
 
         SinkEventAttributes attrs = new SinkEventAttributeSet();
-        attrs.addAttribute(SinkEventAttributes.ID, HtmlTools.encodeId(release.getVersion()));
+        attrs.addAttribute(SinkEventAttributes.ID, DoxiaUtils.encodeId(release.getVersion()));
         sink.sectionTitle(Sink.SECTION_LEVEL_2, attrs);
         sink.text(bundle.getString("report.changes.label.release") + " " + release.getVersion() + date);
         sink.sectionTitle_(Sink.SECTION_LEVEL_2);
@@ -460,6 +462,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             sink.paragraph_();
         } else {
             sink.table();
+            sink.tableRows();
 
             sink.tableRow();
             sinkHeader(sink, bundle.getString("report.issues.label.type"));
@@ -479,6 +482,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
                 constructComponent(sink, bundle, component);
             }
 
+            sink.tableRows_();
             sink.table_();
         }
 

@@ -18,39 +18,9 @@
  */
 package org.apache.maven.plugins.changes;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.doxia.site.decoration.Body;
-import org.apache.maven.doxia.site.decoration.DecorationModel;
-import org.apache.maven.doxia.site.decoration.Skin;
-import org.apache.maven.doxia.siterenderer.Renderer;
-import org.apache.maven.doxia.siterenderer.RendererException;
-import org.apache.maven.doxia.siterenderer.RenderingContext;
-import org.apache.maven.doxia.siterenderer.SiteRenderingContext;
-import org.apache.maven.doxia.siterenderer.sink.SiteRendererSink;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.DefaultProjectBuildingRequest;
-import org.apache.maven.project.MavenProject;
-import org.apache.maven.project.ProjectBuildingRequest;
 import org.apache.maven.reporting.AbstractMavenReport;
-import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.shared.transfer.artifact.DefaultArtifactCoordinate;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolver;
-import org.apache.maven.shared.transfer.artifact.resolve.ArtifactResolverException;
-import org.codehaus.plexus.i18n.I18N;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * Base class with the things that should be in AbstractMavenReport anyway. Note: This file was copied from r415312 of
@@ -66,24 +36,6 @@ public abstract class AbstractChangesReport extends AbstractMavenReport {
      */
     @Parameter(property = "basedir", required = true)
     protected String basedir;
-
-    /**
-     * Report output directory. Note that this parameter is only relevant if the goal is run from the command line or
-     * from the default build lifecycle. If the goal is run indirectly as part of a site generation, the output
-     * directory configured in the Maven Site Plugin is used instead.
-     */
-    @Parameter(defaultValue = "${project.reporting.outputDirectory}")
-    private File outputDirectory;
-
-    /**
-     * Report output encoding. Note that this parameter is only relevant if the goal is run from the command line or
-     * from the default build lifecycle. If the goal is run indirectly as part of a site generation, the output encoding
-     * configured in the Maven Site Plugin is used instead.
-     *
-     * @since 2.4
-     */
-    @Parameter(property = "outputEncoding", defaultValue = "${project.reporting.outputEncoding}")
-    private String outputEncoding;
 
     /**
      * This will cause the execution to be run only at the top of a given module tree. That is, run in the project
@@ -103,130 +55,12 @@ public abstract class AbstractChangesReport extends AbstractMavenReport {
     protected MavenSession mavenSession;
 
     /**
-     * Doxia Site Renderer.
-     */
-    @Component
-    protected Renderer siteRenderer;
-
-    /**
-     * The Maven Project.
-     */
-    @Parameter(defaultValue = "${project}", readonly = true, required = true)
-    protected MavenProject project;
-
-    /**
-     */
-    @Component
-    protected ArtifactResolver resolver;
-
-    /**
-     * Internationalization.
-     */
-    @Component
-    protected I18N i18n;
-
-    private Artifact getSkinArtifact() throws MojoExecutionException {
-        Skin skin = Skin.getDefaultSkin();
-        DefaultArtifactCoordinate coordinate = new DefaultArtifactCoordinate();
-        coordinate.setGroupId(skin.getGroupId());
-        coordinate.setArtifactId(skin.getArtifactId());
-        coordinate.setVersion(skin.getVersion());
-        ProjectBuildingRequest pbr = new DefaultProjectBuildingRequest(mavenSession.getProjectBuildingRequest());
-        pbr.setRemoteRepositories(project.getRemoteArtifactRepositories());
-        try {
-            return resolver.resolveArtifact(pbr, coordinate).getArtifact();
-        } catch (ArtifactResolverException e) {
-            throw new MojoExecutionException("Couldn't resolve the skin.", e);
-        }
-    }
-
-    public void execute() throws MojoExecutionException {
-        if (!canGenerateReport()) {
-            return;
-        }
-
-        // TODO: push to a helper? Could still be improved by taking more of the site information from the site plugin
-        Writer writer = null;
-        try {
-            DecorationModel model = new DecorationModel();
-            model.setBody(new Body());
-            Map<String, String> attributes = new HashMap<>();
-            attributes.put("outputEncoding", getOutputEncoding());
-            Locale locale = Locale.getDefault();
-            SiteRenderingContext siteContext =
-                    siteRenderer.createContextForSkin(getSkinArtifact(), attributes, model, getName(locale), locale);
-            siteContext.setOutputEncoding(getOutputEncoding());
-
-            RenderingContext context = new RenderingContext(outputDirectory, getOutputName() + ".html");
-
-            SiteRendererSink sink = new SiteRendererSink(context);
-            generate(sink, null, locale);
-
-            outputDirectory.mkdirs();
-
-            File file = new File(outputDirectory, getOutputName() + ".html");
-            writer = new OutputStreamWriter(new FileOutputStream(file), getOutputEncoding());
-
-            siteRenderer.generateDocument(writer, sink, siteContext);
-
-            writer.close();
-            writer = null;
-
-            siteRenderer.copyResources(siteContext, outputDirectory);
-        } catch (RendererException | IOException | MavenReportException e) {
-            throw new MojoExecutionException(
-                    "An error has occurred in " + getName(Locale.ENGLISH) + " report generation.", e);
-        } finally {
-            IOUtils.closeQuietly(writer);
-        }
-    }
-
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getOutputDirectory()
-     */
-    protected String getOutputDirectory() {
-        return outputDirectory.getAbsolutePath();
-    }
-
-    /**
-     * Get the effective reporting output file encoding.
-     *
-     * @return The effective reporting output file encoding, never <code>null</code>.
-     * @since 2.4
-     */
-    protected String getOutputEncoding() {
-        return (outputEncoding != null) ? outputEncoding : ReaderFactory.UTF_8;
-    }
-
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getProject()
-     */
-    protected MavenProject getProject() {
-        return project;
-    }
-
-    /**
-     * @see org.apache.maven.reporting.AbstractMavenReport#getSiteRenderer()
-     */
-    protected Renderer getSiteRenderer() {
-        return siteRenderer;
-    }
-
-    /**
      * Returns <code>true</code> if the current project is located at the Execution Root Directory (where mvn was
      * launched).
      *
      * @return <code>true</code> if the current project is at the Execution Root
      */
     protected boolean isThisTheExecutionRoot() {
-        getLog().debug("Root Folder:" + mavenSession.getExecutionRootDirectory());
-        getLog().debug("Current Folder:" + basedir);
-        boolean result = mavenSession.getExecutionRootDirectory().equalsIgnoreCase(basedir);
-        if (result) {
-            getLog().debug("This is the execution root.");
-        } else {
-            getLog().debug("This is NOT the execution root.");
-        }
-        return result;
+        return getProject().isExecutionRoot();
     }
 }

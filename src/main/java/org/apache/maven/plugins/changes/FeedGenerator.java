@@ -36,7 +36,7 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedOutput;
-import org.apache.maven.doxia.util.HtmlTools;
+import org.apache.maven.doxia.util.DoxiaUtils;
 import org.apache.maven.plugins.changes.model.Release;
 
 /**
@@ -197,7 +197,7 @@ public class FeedGenerator {
 
             final SyndEntry entry = new SyndEntryImpl();
             entry.setTitle(release.getVersion());
-            entry.setLink(link + "#" + HtmlTools.encodeId(release.getVersion()));
+            entry.setLink(link + "#" + DoxiaUtils.encodeId(release.getVersion()));
             entry.setDescription(getSyndContent(release));
             entry.setPublishedDate(getDate(release.getDateRelease(), dateFormat));
 

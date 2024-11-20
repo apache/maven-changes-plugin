@@ -232,7 +232,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     /**
      * Velocity Component.
      */
-    @Component(role = VelocityComponent.class, hint = "maven-changes-plugin")
+    @Component
     private VelocityComponent velocity;
 
     /**
