@@ -35,7 +35,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
-import org.apache.commons.collections.map.CaseInsensitiveMap;
+import org.apache.commons.collections4.map.CaseInsensitiveMap;
 import org.apache.commons.io.input.XmlStreamReader;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
