@@ -24,6 +24,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,6 @@ import java.util.Locale;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.issues.Issue;
-import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -64,8 +64,8 @@ public class JiraXML extends DefaultHandler {
     private SimpleDateFormat sdf;
 
     /**
-     * @param log not null.
-     * @param datePattern may be null.
+     * @param log not null
+     * @param datePattern may be null
      * @since 2.4
      */
     public JiraXML(Log log, String datePattern) {
@@ -83,22 +83,20 @@ public class JiraXML extends DefaultHandler {
     }
 
     /**
-     * Parse the given xml file. The list of issues can then be retrieved with {@link #getIssueList()}.
+     * Parse the given XML file. The list of issues can then be retrieved with {@link #getIssueList()}.
      *
-     * @param xmlPath the file to pares.
-     * @throws MojoExecutionException in case of errors.
+     * @param xmlPath the file to parse
+     * @throws MojoExecutionException in case of errors
      * @since 2.4
      */
     public void parseXML(File xmlPath) throws MojoExecutionException {
-        InputStream xmlStream = null;
-        try {
-            xmlStream = new FileInputStream(xmlPath);
+        try (InputStream xmlStream = new FileInputStream(xmlPath)) {
             InputSource inputSource = new InputSource(xmlStream);
             parse(inputSource);
         } catch (FileNotFoundException e) {
             throw new MojoExecutionException("Failed to open JIRA XML file " + xmlPath, e);
-        } finally {
-            IOUtil.close(xmlStream);
+        } catch (IOException e) {
+            throw new MojoExecutionException("Failed to read JIRA XML file " + xmlPath, e);
         }
     }
 
