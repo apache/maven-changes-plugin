@@ -19,7 +19,6 @@
 package org.apache.maven.plugins.github;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +36,8 @@ import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.maven.settings.crypto.SettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecryptionResult;
-import org.eclipse.egit.github.core.User;
+import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHUser;
 import org.mockito.ArgumentCaptor;
 
 import static org.mockito.Mockito.any;
@@ -51,12 +51,11 @@ public class GitHubDownloaderTestCase extends TestCase {
         IssueManagement issueManagement = newGitHubIssueManagement();
         GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
 
-        org.eclipse.egit.github.core.Issue githubIssue = new org.eclipse.egit.github.core.Issue();
-        githubIssue.setNumber(1);
-        githubIssue.setBody("Body");
-        githubIssue.setTitle("Title");
-        User user = new User();
-        githubIssue.setUser(user);
+        GHIssue githubIssue = mock(GHIssue.class);
+        when(githubIssue.getNumber()).thenReturn(1);
+        when(githubIssue.getTitle()).thenReturn("Title");
+        when(githubIssue.getBody()).thenReturn("Body");
+        when(githubIssue.getUser()).thenReturn(new GHUser());
 
         Issue issue = gitHubDownloader.createIssue(githubIssue);
 
@@ -118,7 +117,7 @@ public class GitHubDownloaderTestCase extends TestCase {
         return server;
     }
 
-    private GitHubDownloader newGitHubDownloader(IssueManagement issueManagement) throws MalformedURLException {
+    private GitHubDownloader newGitHubDownloader(IssueManagement issueManagement) throws IOException {
         MavenProject mavenProject = new MavenProject();
         mavenProject.setIssueManagement(issueManagement);
         return new GitHubDownloader(mavenProject, "https", 80, true, false);
