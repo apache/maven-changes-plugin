@@ -18,13 +18,17 @@
  */
 package org.apache.maven.plugins.jira;
 
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.util.EntityUtils;
 import org.apache.maven.plugin.logging.Log;
 
 /**
@@ -87,21 +91,29 @@ public class JiraHelper {
     /**
      * Try to get a JIRA pid from the issue management URL.
      *
-     * @param log Used to tell the user what happened
-     * @param issueManagementUrl The URL to the issue management system
-     * @param client The client used to connect to JIRA
-     * @return The JIRA id for the project, or null if it can't be found
+     * @param log used to tell the user what happened
+     * @param issueManagementUrl the URL to the issue management system
+     * @param client the client used to connect to JIRA
+     * @return the JIRA id for the project, or null if it can't be found
      */
     public static String getPidFromJira(Log log, String issueManagementUrl, HttpClient client) {
         String jiraId = null;
-        GetMethod gm = new GetMethod(issueManagementUrl);
+        HttpGet request = new HttpGet(issueManagementUrl);
 
         String projectPage;
         try {
-            client.executeMethod(gm);
+            HttpResponse response = client.execute(request);
             log.debug("Successfully reached JIRA.");
-            projectPage = gm.getResponseBodyAsString();
-        } catch (Exception e) {
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                projectPage = EntityUtils.toString(entity);
+            } else {
+                if (log.isDebugEnabled()) {
+                    log.error("Unable to read the JIRA project page");
+                }
+                return null;
+            }
+        } catch (IOException e) {
             if (log.isDebugEnabled()) {
                 log.error("Unable to reach the JIRA project page:", e);
             } else {
@@ -131,18 +143,18 @@ public class JiraHelper {
      * Parse out the base URL for JIRA and the JIRA project name from the issue management URL. The issue management URL
      * is assumed to be of the format http(s)://host:port/browse/{projectname}
      *
-     * @param issueManagementUrl The URL to the issue management system
+     * @param issueManagementUrl the URL to the issue management system
      * @return A <code>Map</code> containing the URL and project name
      * @since 2.8
      */
     public static Map<String, String> getJiraUrlAndProjectName(String issueManagementUrl) {
         final int indexBrowse = issueManagementUrl.indexOf("/browse/");
 
-        String jiraUrl;
-        String project;
+        HashMap<String, String> urlMap = new HashMap<>(4);
 
         if (indexBrowse != -1) {
-            jiraUrl = issueManagementUrl.substring(0, indexBrowse);
+            String jiraUrl = issueManagementUrl.substring(0, indexBrowse);
+            urlMap.put("url", jiraUrl);
 
             final int indexBrowseEnd = indexBrowse + "/browse/".length();
 
@@ -150,25 +162,23 @@ public class JiraHelper {
 
             if (indexProject != -1) {
                 // Project name has trailing '/'
-                project = issueManagementUrl.substring(indexBrowseEnd, indexProject);
+                String project = issueManagementUrl.substring(indexBrowseEnd, indexProject);
+                urlMap.put("project", project);
             } else {
                 // Project name without trailing '/'
-                project = issueManagementUrl.substring(indexBrowseEnd);
+                String project = issueManagementUrl.substring(indexBrowseEnd);
+                urlMap.put("project", project);
             }
         } else {
             throw new IllegalArgumentException("Invalid browse URL");
         }
 
-        HashMap<String, String> urlMap = new HashMap<>(4);
-        urlMap.put("url", jiraUrl);
-        urlMap.put("project", project);
-
         return urlMap;
     }
 
     /**
-     * @param url URL.
-     * @return the base URL.
+     * @param url URL
+     * @return the base URL
      * @since 2.8
      */
     public static String getBaseUrl(String url) {
