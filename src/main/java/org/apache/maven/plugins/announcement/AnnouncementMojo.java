@@ -457,7 +457,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     /**
      * Velocity Component.
      */
-    private final VelocityComponent velocity;
+    private VelocityComponent velocity;
 
     /**
      * Component used to decrypt server information.
@@ -878,14 +878,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     public void setUrlDownload(String urlDownload) {
         this.urlDownload = urlDownload;
-    }
-
-    public VelocityComponent getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(VelocityComponent velocity) {
-        this.velocity = velocity;
     }
 
     public String getVersion() {
