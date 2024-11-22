@@ -18,6 +18,8 @@
  */
 package org.apache.maven.plugins.announcement;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -28,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.ChangesXML;
@@ -228,18 +229,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      */
     @Parameter
     private String urlDownload;
-
-    /**
-     * Velocity Component.
-     */
-    @Component
-    private VelocityComponent velocity;
-
-    /**
-     * Component used to decrypt server information.
-     */
-    @Component
-    private SettingsDecrypter settingsDecrypter;
 
     /**
      * Version of the artifact.
@@ -470,6 +459,22 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private ChangesXML xml;
+
+    /**
+     * Velocity Component.
+     */
+    private VelocityComponent velocity;
+
+    /**
+     * Component used to decrypt server information.
+     */
+    private SettingsDecrypter settingsDecrypter;
+
+    @Inject
+    public AnnouncementMojo(VelocityComponent velocity, SettingsDecrypter settingsDecrypter) {
+        this.velocity = velocity;
+        this.settingsDecrypter = settingsDecrypter;
+    }
 
     // =======================================//
     // announcement-generate execution //
