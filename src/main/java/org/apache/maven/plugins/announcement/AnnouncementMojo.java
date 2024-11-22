@@ -78,7 +78,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private static final String GIT_HUB = "GitHub";
 
     /**
-     * The name of the file which will contain the generated announcement. If no value is specified the plugin will use
+     * The name of the file which will contain the generated announcement. If no value is specified, the plugin will use
      * the name of the template.
      *
      * @since 2.4
@@ -309,9 +309,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     /**
      * The maximum number of issues to fetch from JIRA.
-     * <p>
-     * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "nbEntries".
-     * </p>
      */
     @Parameter(property = "changes.maxEntries", defaultValue = "25", required = true)
     private int maxEntries;
@@ -335,9 +332,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     /**
      * Include issues from JIRA with these status ids. Multiple status ids can be specified as a comma separated list of
      * ids.
-     * <p>
-     * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "statusId".
-     * </p>
      */
     @Parameter(property = "changes.statusIds", defaultValue = "Closed")
     private String statusIds;
@@ -456,19 +450,19 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     @Parameter(defaultValue = "false")
     private boolean includeOpenIssues;
 
-    private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
+    private final ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private ChangesXML xml;
 
     /**
      * Velocity Component.
      */
-    private VelocityComponent velocity;
+    private final VelocityComponent velocity;
 
     /**
      * Component used to decrypt server information.
      */
-    private SettingsDecrypter settingsDecrypter;
+    private final SettingsDecrypter settingsDecrypter;
 
     @Inject
     public AnnouncementMojo(VelocityComponent velocity, SettingsDecrypter settingsDecrypter) {
