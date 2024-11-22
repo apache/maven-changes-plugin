@@ -106,22 +106,6 @@ public class ChangesReport extends AbstractChangesReport {
     private boolean filteringChanges;
 
     /**
-     * Template string that is used to discover the URL to use to display an issue report. There are 2 template tokens
-     * you can use. <code>%URL%</code>: this is computed by getting the <code>&lt;issueManagement&gt;/&lt;url&gt;</code>
-     * value from the POM, and removing the last '/' and everything that comes after it. <code>%ISSUE%</code>: this is
-     * the issue number.
-     * <p>
-     * <strong>Note:</strong> In versions of this plugin prior to 2.0-beta-2 this parameter was called
-     * <code>link_template</code>.
-     * </p>
-     *
-     * @since 2.0-beta-2
-     * @deprecated As of 2.1 use issueLinkTemplatePerSystem: this one will be with system default
-     */
-    @Parameter(property = "changes.issueLinkTemplate")
-    private String issueLinkTemplate;
-
-    /**
      * Template strings per system that is used to discover the URL to use to display an issue report. Each key in this
      * map denotes the (case-insensitive) identifier of the issue tracking system and its value gives the URL template.
      * <p>
@@ -230,11 +214,6 @@ public class ChangesReport extends AbstractChangesReport {
     public void executeReport(Locale locale) throws MavenReportException {
         failIfUsingDeprecatedParameter(
                 escapeHTML, "escapeHTML", "Using markup inside CDATA sections does not work for all output formats!");
-        failIfUsingDeprecatedParameter(
-                issueLinkTemplate,
-                "issueLinkTemplate",
-                "You must use 'issueLinkTemplatePerSystem' for the system '"
-                        + ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY + "' instead.");
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(publishDateFormat, new Locale(publishDateLocale));
         Properties additionalProperties = new Properties();
