@@ -78,11 +78,6 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
     /**
      * @since 2.4
      */
-    private boolean escapeHTML;
-
-    /**
-     * @since 2.4
-     */
     private List<Release> releaseList;
 
     public ChangesReportGenerator() {
@@ -92,14 +87,6 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
     public ChangesReportGenerator(List<Release> releaseList) {
         this();
         this.releaseList = releaseList;
-    }
-
-    public boolean isEscapeHTML() {
-        return escapeHTML;
-    }
-
-    public void setEscapeHTML(boolean escapeHTML) {
-        this.escapeHTML = escapeHTML;
     }
 
     public String getSystem() {
@@ -211,11 +198,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
 
         String actionDescription = action.getAction();
 
-        if (escapeHTML) {
-            sink.text(actionDescription);
-        } else {
-            sink.rawText(actionDescription);
-        }
+        sink.text(actionDescription);
 
         // no null check needed classes from modello return a new ArrayList
         if (StringUtils.isNotEmpty(action.getIssue())

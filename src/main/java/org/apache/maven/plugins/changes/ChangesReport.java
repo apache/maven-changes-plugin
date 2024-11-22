@@ -234,8 +234,6 @@ public class ChangesReport extends AbstractChangesReport {
         report.setAuthor(changesXml.getAuthor());
         report.setTitle(changesXml.getTitle());
 
-        report.setEscapeHTML(true);
-
         // Create a case insensitive version of issueLinkTemplatePerSystem
         // We need something case insensitive to maintain backward compatibility
         if (issueLinkTemplatePerSystem == null) {
