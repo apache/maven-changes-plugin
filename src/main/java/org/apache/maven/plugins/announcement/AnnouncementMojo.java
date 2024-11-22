@@ -208,11 +208,10 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private String templateEncoding;
 
     /**
-     * Use the JIRA query language instead of the JIRA query based on HTTP parameters. From JIRA 5.1 and up only JQL is
-     * supported. JIRA 4.4 supports both JQL and URL parameter based queries. From 5.1.1 this is obsolete, since REST
-     * queries only use JQL.
+     * Obsolete, since REST queries always use JQL.
      *
      * @since 2.10
+     * @deprecated ignored; remove from your configs
      */
     @Parameter(property = "changes.useJql", defaultValue = "false")
     private boolean useJql;
@@ -724,8 +723,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
             jiraDownloader.setJiraUser(jiraUser);
             jiraDownloader.setJiraPassword(jiraPassword);
         }
-
-        jiraDownloader.setUseJql(useJql);
 
         jiraDownloader.setWebUser(webUser);
 

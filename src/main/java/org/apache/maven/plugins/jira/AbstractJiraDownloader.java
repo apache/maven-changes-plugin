@@ -30,8 +30,8 @@ import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Settings;
 
 /**
- * Abstract API, more or less, to retrieving issue information from JIRA. Intended to have subclasses for the old (RSS)
- * and new (REST) ways of doing things.
+ * Abstract API, more or less, to retrieve issue information from JIRA. Has a subclass for
+ * new (REST) ways of doing things.
  *
  * @author mfranken@xebia.com
  * @author jruiz@exist.com
@@ -90,12 +90,6 @@ public abstract class AbstractJiraDownloader {
 
     /** The maven settings. */
     protected Settings settings;
-
-    /**
-     * Use JQL, JIRA query language, instead of URL parameter based queries. Note that this is down here to make it
-     * easier for the mojo to deal with both new and old flavors.
-     */
-    protected boolean useJql;
 
     /** Filter the JIRA query based on the current version */
     protected boolean onlyCurrentVersion;
@@ -335,14 +329,6 @@ public abstract class AbstractJiraDownloader {
 
     public void setSettings(Settings settings) {
         this.settings = settings;
-    }
-
-    public boolean isUseJql() {
-        return useJql;
-    }
-
-    public void setUseJql(boolean useJql) {
-        this.useJql = useJql;
     }
 
     public boolean isOnlyCurrentVersion() {

@@ -83,12 +83,12 @@ public class JiraReport extends AbstractChangesReport {
     private String columnNames;
 
     /**
-     * Use the JIRA query language instead of the JIRA query based on HTTP parameters. From JIRA 5.1 and up only JQL is
-     * supported. JIRA 4.4 supports both JQL and URL parameter based queries. From 5.1.1 this is obsolete, since REST
-     * queries only use JQL.
+     * Obsolete, since REST queries only use JQL.
      *
      * @since 2.8
+     * @deprecated ignored; delete from your config
      */
+    @Deprecated
     @Parameter(property = "changes.useJql", defaultValue = "false")
     private boolean useJql;
 
