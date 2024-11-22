@@ -18,6 +18,8 @@
  */
 package org.apache.maven.plugins.changes;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,7 +37,6 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.collections.map.CaseInsensitiveMap;
 import org.apache.commons.io.input.XmlStreamReader;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.model.Release;
@@ -144,12 +145,6 @@ public class ChangesReport extends AbstractChangesReport {
     private Map<String, String> issueLinkTemplatePerSystem;
 
     /**
-     * @since 2.2
-     */
-    @Component
-    private MavenFileFilter mavenFileFilter;
-
-    /**
      * Format to use for publishDate. The value will be available with the following expression ${publishDate}
      *
      * @see java.text.SimpleDateFormat
@@ -211,6 +206,13 @@ public class ChangesReport extends AbstractChangesReport {
     private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private CaseInsensitiveMap caseInsensitiveIssueLinkTemplatePerSystem;
+
+    private MavenFileFilter mavenFileFilter;
+
+    @Inject
+    public ChangesReport(MavenFileFilter mavenFileFilter) {
+        this.mavenFileFilter = mavenFileFilter;
+    }
 
     /* --------------------------------------------------------------------- */
     /* Public methods */
