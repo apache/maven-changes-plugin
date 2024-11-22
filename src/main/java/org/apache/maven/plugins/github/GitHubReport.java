@@ -18,6 +18,8 @@
  */
 package org.apache.maven.plugins.github;
 
+import javax.inject.Inject;
+
 import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.AbstractChangesReport;
@@ -63,12 +64,6 @@ public class GitHubReport extends AbstractChangesReport {
         githubColumns.put("Type", IssuesReportHelper.COLUMN_TYPE);
         githubColumns.put("Updated", IssuesReportHelper.COLUMN_UPDATED);
     }
-
-    /**
-     * Component used to decrypt server information.
-     */
-    @Component
-    private SettingsDecrypter settingsDecrypter;
 
     /**
      * Sets the column names that you want to show in the report. The columns will appear in the report in the same
@@ -125,6 +120,20 @@ public class GitHubReport extends AbstractChangesReport {
     @Parameter(defaultValue = "false")
     private boolean onlyCurrentVersion;
 
+    /**
+     * Component used to decrypt server information.
+     */
+    private SettingsDecrypter settingsDecrypter;
+
+    @Inject
+    public GitHubReport(SettingsDecrypter settingsDecrypter) {
+        this.settingsDecrypter = settingsDecrypter;
+    }
+
+    /* --------------------------------------------------------------------- */
+    /* Public methods */
+    /* --------------------------------------------------------------------- */
+
     @Override
     public String getOutputName() {
         return "github-report";
@@ -139,10 +148,6 @@ public class GitHubReport extends AbstractChangesReport {
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");
     }
-
-    /* --------------------------------------------------------------------- */
-    /* Public methods */
-    /* --------------------------------------------------------------------- */
 
     /**
      * @see org.apache.maven.reporting.AbstractMavenReport#canGenerateReport()

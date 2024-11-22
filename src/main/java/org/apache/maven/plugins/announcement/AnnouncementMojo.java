@@ -18,6 +18,8 @@
  */
 package org.apache.maven.plugins.announcement;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -28,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.ChangesXML;
@@ -42,8 +43,8 @@ import org.apache.maven.plugins.issues.Issue;
 import org.apache.maven.plugins.issues.IssueManagementSystem;
 import org.apache.maven.plugins.issues.IssueUtils;
 import org.apache.maven.plugins.jira.AbstractJiraDownloader;
-import org.apache.maven.plugins.jira.AdaptiveJiraDownloader;
 import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
+import org.apache.maven.plugins.jira.RestJiraDownloader;
 import org.apache.maven.plugins.trac.TracDownloader;
 import org.apache.maven.plugins.trac.TracIssueManagmentSystem;
 import org.apache.maven.project.MavenProject;
@@ -60,7 +61,7 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
- * Goal which generate an announcement from the announcement template.
+ * Goal which generates an announcement from the announcement template.
  *
  * @author aramirez@exist.com
  * @version $Id$
@@ -77,7 +78,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private static final String GIT_HUB = "GitHub";
 
     /**
-     * The name of the file which will contain the generated announcement. If no value is specified the plugin will use
+     * The name of the file which will contain the generated announcement. If no value is specified, the plugin will use
      * the name of the template.
      *
      * @since 2.4
@@ -230,18 +231,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private String urlDownload;
 
     /**
-     * Velocity Component.
-     */
-    @Component
-    private VelocityComponent velocity;
-
-    /**
-     * Component used to decrypt server information.
-     */
-    @Component
-    private SettingsDecrypter settingsDecrypter;
-
-    /**
      * Version of the artifact.
      */
     @Parameter(property = "changes.version", defaultValue = "${project.version}", required = true)
@@ -320,9 +309,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     /**
      * The maximum number of issues to fetch from JIRA.
-     * <p>
-     * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "nbEntries".
-     * </p>
      */
     @Parameter(property = "changes.maxEntries", defaultValue = "25", required = true)
     private int maxEntries;
@@ -346,9 +332,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     /**
      * Include issues from JIRA with these status ids. Multiple status ids can be specified as a comma separated list of
      * ids.
-     * <p>
-     * <b>Note:</b> In versions 2.0-beta-3 and earlier this parameter was called "statusId".
-     * </p>
      */
     @Parameter(property = "changes.statusIds", defaultValue = "Closed")
     private String statusIds;
@@ -467,9 +450,25 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     @Parameter(defaultValue = "false")
     private boolean includeOpenIssues;
 
-    private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
+    private final ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
 
     private ChangesXML xml;
+
+    /**
+     * Velocity Component.
+     */
+    private VelocityComponent velocity;
+
+    /**
+     * Component used to decrypt server information.
+     */
+    private final SettingsDecrypter settingsDecrypter;
+
+    @Inject
+    public AnnouncementMojo(VelocityComponent velocity, SettingsDecrypter settingsDecrypter) {
+        this.velocity = velocity;
+        this.settingsDecrypter = settingsDecrypter;
+    }
 
     // =======================================//
     // announcement-generate execution //
@@ -697,7 +696,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     }
 
     protected List<Release> getJiraReleases() throws MojoExecutionException {
-        AbstractJiraDownloader jiraDownloader = new AdaptiveJiraDownloader();
+        AbstractJiraDownloader jiraDownloader = new RestJiraDownloader();
 
         File jiraXMLFile = jiraXML;
 
@@ -879,14 +878,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     public void setUrlDownload(String urlDownload) {
         this.urlDownload = urlDownload;
-    }
-
-    public VelocityComponent getVelocity() {
-        return velocity;
-    }
-
-    public void setVelocity(VelocityComponent velocity) {
-        this.velocity = velocity;
     }
 
     public String getVersion() {

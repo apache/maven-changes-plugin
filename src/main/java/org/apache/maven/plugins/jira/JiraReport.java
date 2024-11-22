@@ -93,16 +93,6 @@ public class JiraReport extends AbstractChangesReport {
     private boolean useJql;
 
     /**
-     * Since JIRA 5.1.1, it is no longer possible to construct a URL that downloads RSS. Meanwhile JIRA added a REST API
-     * in 4.2. By default, this plugin uses the REST API if available. Setting this parameter to true forces it to
-     * attempt to use RSS.
-     *
-     * @since 2.9
-     */
-    @Parameter(defaultValue = "false")
-    private boolean forceRss;
-
-    /**
      * Sets the component(s) that you want to limit your report to include. Multiple values can be separated by commas
      * (such as 10011,10012). If this is set to empty - that means all components will be included.
      */
@@ -333,9 +323,7 @@ public class JiraReport extends AbstractChangesReport {
             if (mockDownloader != null) {
                 issueDownloader = mockDownloader;
             } else {
-                AdaptiveJiraDownloader downloader = new AdaptiveJiraDownloader();
-                downloader.setForceClassic(forceRss);
-                issueDownloader = downloader;
+                issueDownloader = new RestJiraDownloader();
             }
             configureIssueDownloader(issueDownloader);
             issueDownloader.doExecute();
