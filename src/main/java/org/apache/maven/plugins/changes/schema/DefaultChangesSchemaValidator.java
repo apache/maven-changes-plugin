@@ -32,7 +32,6 @@ import java.util.Map;
 
 import org.apache.commons.io.input.XmlStreamReader;
 import org.codehaus.plexus.component.annotations.Component;
-import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.SAXException;
 
 /**
@@ -88,26 +87,15 @@ public class DefaultChangesSchemaValidator implements ChangesSchemaValidator {
         return schema;
     }
 
-    /**
-     * @param uriSchema
-     * @return Schema
-     * @throws Exception
-     */
     private Schema compileJAXPSchema(String uriSchema) throws IOException, SAXException, NullPointerException {
-        InputStream in = null;
-        try {
-            in = Thread.currentThread().getContextClassLoader().getResourceAsStream(uriSchema);
+        try (InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(uriSchema)) {
             if (in == null) {
                 throw new NullPointerException(" impossible to load schema with path " + uriSchema);
             }
 
             // newInstance de SchemaFactory not ThreadSafe
             final Schema schema = SchemaFactory.newInstance(W3C_XML_SCHEMA).newSchema(new StreamSource(in));
-            in.close();
-            in = null;
             return schema;
-        } finally {
-            IOUtil.close(in);
         }
     }
 

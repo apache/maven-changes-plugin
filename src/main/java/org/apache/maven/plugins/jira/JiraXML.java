@@ -95,7 +95,7 @@ public class JiraXML extends DefaultHandler {
             parse(inputSource);
         } catch (FileNotFoundException e) {
             throw new MojoExecutionException("Failed to open JIRA XML file " + xmlPath, e);
-        } catch ( IOException e) {
+        } catch (IOException e) {
             throw new MojoExecutionException("Failed to read JIRA XML file " + xmlPath, e);
         }
     }
