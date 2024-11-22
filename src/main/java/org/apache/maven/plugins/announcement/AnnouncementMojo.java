@@ -676,8 +676,9 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
             Template velocityTemplate = engine.getTemplate(templateDirectory + "/" + template, templateEncoding);
             velocityTemplate.merge(context, writer);
             getLog().info("Created template " + f);
-        } catch (ResourceNotFoundException rnfe) {
-            throw new ResourceNotFoundException("Template not found. ( " + templateDirectory + "/" + template + " )");
+        } catch (ResourceNotFoundException ex) {
+            throw new ResourceNotFoundException(
+                    "Template not found. ( " + templateDirectory + "/" + template + " )", ex);
         } catch (VelocityException ve) {
             throw ve;
         } catch (RuntimeException | IOException e) {
