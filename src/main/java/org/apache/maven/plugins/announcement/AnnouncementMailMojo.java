@@ -41,7 +41,6 @@ import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSenderException;
 import org.codehaus.plexus.util.IOUtil;
-import org.codehaus.plexus.util.ReaderFactory;
 
 /**
  * Goal which sends an announcement through email.
@@ -339,7 +338,7 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
     protected String readAnnouncement(File file) throws MojoExecutionException {
         try {
             if (templateEncoding == null || templateEncoding.isEmpty()) {
-                templateEncoding = ReaderFactory.FILE_ENCODING;
+                templateEncoding = System.getProperty("file.encoding");
                 getLog().warn("File encoding has not been set, using platform encoding '" + templateEncoding
                         + "', i.e. build is platform dependent!");
             }
