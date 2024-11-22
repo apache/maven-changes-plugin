@@ -73,23 +73,6 @@ public class ChangesReport extends AbstractChangesReport {
     private boolean addActionDate;
 
     /**
-     * Whether HTML code within an action should be escaped. By changing this to <code>false</code> you can restore the
-     * behavior that was in version 2.2 of this plugin, allowing you to use HTML code to format the content of an
-     * action.
-     * <p>
-     * <strong>Note:</strong> If you use HTML code in an action you need to place it inside a CDATA section.
-     * </p>
-     * <strong>Note:</strong> Putting any kind of markup inside a CDATA section might mess up the Changes Report or
-     * other generated documents, such as PDFs, that are based on your <code>changes.xml</code> file if you are not
-     * careful.
-     *
-     * @since 2.4
-     * @deprecated using markup inside CDATA sections does not work for all output formats!
-     */
-    @Parameter
-    private Boolean escapeHTML;
-
-    /**
      * The directory for interpolated changes.xml.
      *
      * @since 2.2
@@ -212,8 +195,6 @@ public class ChangesReport extends AbstractChangesReport {
 
     @Override
     public void executeReport(Locale locale) throws MavenReportException {
-        failIfUsingDeprecatedParameter(
-                escapeHTML, "escapeHTML", "Using markup inside CDATA sections does not work for all output formats!");
         Date now = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(publishDateFormat, new Locale(publishDateLocale));
         Properties additionalProperties = new Properties();
