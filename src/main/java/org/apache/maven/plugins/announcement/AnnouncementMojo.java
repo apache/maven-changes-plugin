@@ -43,8 +43,8 @@ import org.apache.maven.plugins.issues.Issue;
 import org.apache.maven.plugins.issues.IssueManagementSystem;
 import org.apache.maven.plugins.issues.IssueUtils;
 import org.apache.maven.plugins.jira.AbstractJiraDownloader;
-import org.apache.maven.plugins.jira.AdaptiveJiraDownloader;
 import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
+import org.apache.maven.plugins.jira.RestJiraDownloader;
 import org.apache.maven.plugins.trac.TracDownloader;
 import org.apache.maven.plugins.trac.TracIssueManagmentSystem;
 import org.apache.maven.project.MavenProject;
@@ -61,7 +61,7 @@ import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
- * Goal which generate an announcement from the announcement template.
+ * Goal which generates an announcement from the announcement template.
  *
  * @author aramirez@exist.com
  * @version $Id$
@@ -696,7 +696,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     }
 
     protected List<Release> getJiraReleases() throws MojoExecutionException {
-        AbstractJiraDownloader jiraDownloader = new AdaptiveJiraDownloader();
+        AbstractJiraDownloader jiraDownloader = new RestJiraDownloader();
 
         File jiraXMLFile = jiraXML;
 
