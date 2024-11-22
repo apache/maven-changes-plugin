@@ -69,19 +69,16 @@ public class IssueUtils {
     }
 
     /**
-     * Find the issues for only the supplied version, by matching the "Fix for" version in the supplied list of issues
+     * Find the issues for the supplied version, by matching the "Fix for" version in the supplied list of issues
      * with the supplied version. If the supplied version is a SNAPSHOT, then that part of the version will be removed
      * prior to the matching.
      *
-     * @param issues A list of issues
-     * @param version The version that issues should be returned for
-     * @return A <code>List</code> of issues for the supplied version
-     * @throws org.apache.maven.plugin.MojoExecutionException If no issues could be found for the supplied version
+     * @param issues a list of issues
+     * @param version the version that issues should be returned for
+     * @return a <code>List</code> of issues for the supplied version, possibly empty if there are no issues
      */
-    public static List<Issue> getIssuesForVersion(List<Issue> issues, String version) throws MojoExecutionException {
+    public static List<Issue> getIssuesForVersion(List<Issue> issues, String version) {
         List<Issue> issuesForVersion = new ArrayList<>();
-        boolean isFound = false;
-        Issue issue;
         String releaseVersion = version;
 
         // Remove "-SNAPSHOT" from the end of the version, if it's there
@@ -89,19 +86,12 @@ public class IssueUtils {
             releaseVersion = version.substring(0, version.length() - SNAPSHOT_SUFFIX.length());
         }
 
-        for (Issue issue1 : issues) {
-            issue = issue1;
-
+        for (Issue issue : issues) {
             if (issue.getFixVersions() != null && issue.getFixVersions().contains(releaseVersion)) {
-                isFound = true;
                 issuesForVersion.add(issue);
             }
         }
 
-        if (!isFound) {
-            throw new MojoExecutionException("Couldn't find any issues for the version '" + releaseVersion
-                    + "' among the supplied issues: " + toString(issues));
-        }
         return issuesForVersion;
     }
 
