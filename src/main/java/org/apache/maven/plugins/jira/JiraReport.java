@@ -333,9 +333,7 @@ public class JiraReport extends AbstractChangesReport {
             if (mockDownloader != null) {
                 issueDownloader = mockDownloader;
             } else {
-                AdaptiveJiraDownloader downloader = new AdaptiveJiraDownloader();
-                downloader.setForceClassic(forceRss);
-                issueDownloader = downloader;
+                issueDownloader = new RestJiraDownloader();
             }
             configureIssueDownloader(issueDownloader);
             issueDownloader.doExecute();
