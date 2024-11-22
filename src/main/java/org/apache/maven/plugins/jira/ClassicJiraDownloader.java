@@ -31,7 +31,6 @@ import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpState;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.StatusLine;
@@ -57,7 +56,6 @@ public final class ClassicJiraDownloader extends AbstractJiraDownloader {
 
     /**
      * Execute the query on the JIRA server.
-     *
      */
     public void doExecute() {
         try {
@@ -306,22 +304,17 @@ public final class ClassicJiraDownloader extends AbstractJiraDownloader {
      * @param link the URL to JIRA
      */
     private void download(final HttpClient cl, final String link) {
-        InputStream in = null;
-        OutputStream out = null;
+
+        GetMethod gm = new GetMethod(link);
+        getLog().info("Downloading from JIRA at: " + link);
+        gm.setFollowRedirects(true);
         try {
-            GetMethod gm = new GetMethod(link);
-
-            getLog().info("Downloading from JIRA at: " + link);
-
-            gm.setFollowRedirects(true);
-
             cl.executeMethod(gm);
 
             StatusLine sl = gm.getStatusLine();
 
             if (sl == null) {
                 getLog().error("Unknown error validating link: " + link);
-
                 return;
             }
 
@@ -333,37 +326,27 @@ public final class ClassicJiraDownloader extends AbstractJiraDownloader {
                     getLog().warn("Site sent redirect, but did not set Location header");
                 } else {
                     String newLink = locationHeader.getValue();
-
                     getLog().debug("Following redirect to " + newLink);
-
                     download(cl, newLink);
                 }
             }
 
             if (gm.getStatusCode() == HttpStatus.SC_OK) {
-                in = gm.getResponseBodyAsStream();
-
                 if (!output.getParentFile().exists()) {
-                    output.getParentFile().mkdirs();
+                    if (!output.getParentFile().mkdirs()) {
+                        getLog().error("Downloading issues from JIRA failed. Could not create "
+                                + output.getParentFile());
+                        return;
+                    }
                 }
 
-                // write the response to file
-                out = new FileOutputStream(output);
-                IOUtil.copy(in, out);
-                out.close();
-                out = null;
-                in.close();
-                in = null;
-
-                getLog().debug("Downloading from JIRA was successful");
+                try (InputStream in = gm.getResponseBodyAsStream();
+                        OutputStream out = new FileOutputStream(output)) {
+                    IOUtil.copy(in, out);
+                    getLog().debug("Downloading from JIRA was successful");
+                }
             } else {
                 getLog().warn("Downloading from JIRA failed. Received: [" + gm.getStatusCode() + "]");
-            }
-        } catch (HttpException e) {
-            if (getLog().isDebugEnabled()) {
-                getLog().error("Error downloading issues from JIRA:", e);
-            } else {
-                getLog().error("Error downloading issues from JIRA url: " + e.getLocalizedMessage());
             }
         } catch (IOException e) {
             if (getLog().isDebugEnabled()) {
@@ -371,9 +354,6 @@ public final class ClassicJiraDownloader extends AbstractJiraDownloader {
             } else {
                 getLog().error("Error downloading issues from JIRA. Cause is " + e.getLocalizedMessage());
             }
-        } finally {
-            IOUtil.close(out);
-            IOUtil.close(in);
         }
     }
 
