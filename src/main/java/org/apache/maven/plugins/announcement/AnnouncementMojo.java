@@ -213,6 +213,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      * @since 2.10
      * @deprecated ignored; remove from your configs
      */
+    @Deprecated
     @Parameter(property = "changes.useJql", defaultValue = "false")
     private boolean useJql;
 

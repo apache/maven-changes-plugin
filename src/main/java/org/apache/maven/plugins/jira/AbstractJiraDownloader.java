@@ -30,8 +30,8 @@ import org.apache.maven.settings.Proxy;
 import org.apache.maven.settings.Settings;
 
 /**
- * Abstract API, more or less, to retrieve issue information from JIRA. Has a subclass for
- * new (REST) ways of doing things.
+ * Abstract API, more or less, to retrieve issue information from JIRA. Has a subclass that uses
+ * the JIRA REST API.
  *
  * @author mfranken@xebia.com
  * @author jruiz@exist.com
