@@ -52,8 +52,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.issues.Issue;
 
 /**
- * Use the JIRA REST API to implement the download. This class assumes that the URL points to a copy of JIRA that
- * implements the REST API. A static function may be forthcoming in here to probe and see if a given URL supports it.
+ * Use the JIRA REST API to download issues. This class assumes that the URL points to a copy of JIRA that
+ * implements the REST API.
  */
 public class RestJiraDownloader extends AbstractJiraDownloader {
     private List<Issue> issueList;
@@ -74,9 +74,6 @@ public class RestJiraDownloader extends AbstractJiraDownloader {
 
     private List<String> resolvedPriorityIds;
 
-    /**
-     *
-     */
     public static class NoRest extends Exception {
         private static final long serialVersionUID = 6970088805270319624L;
 
