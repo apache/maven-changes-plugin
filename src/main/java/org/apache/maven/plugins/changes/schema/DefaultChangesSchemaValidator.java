@@ -88,11 +88,6 @@ public class DefaultChangesSchemaValidator implements ChangesSchemaValidator {
         return schema;
     }
 
-    /**
-     * @param uriSchema
-     * @return Schema
-     * @throws Exception
-     */
     private Schema compileJAXPSchema(String uriSchema) throws IOException, SAXException, NullPointerException {
         InputStream in = null;
         try {
