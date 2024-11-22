@@ -657,7 +657,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
         if (!outputDirectory.exists()) {
             if (!outputDirectory.mkdirs()) {
-                throw new MojoExecutionException("Faield to create directory " + outputDirectory);
+                throw new MojoExecutionException("Failed to create directory " + outputDirectory);
             }
         }
 
@@ -670,7 +670,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
         if (templateEncoding == null || templateEncoding.isEmpty()) {
             templateEncoding = Charset.defaultCharset().name();
             getLog().warn("File encoding has not been set, using platform encoding " + templateEncoding
-                    + ", i.e. build is platform dependent!");
+                    + "; build is platform dependent!");
         }
         try (Writer writer = new OutputStreamWriter(new FileOutputStream(f), templateEncoding)) {
             Template velocityTemplate = engine.getTemplate(templateDirectory + "/" + template, templateEncoding);
