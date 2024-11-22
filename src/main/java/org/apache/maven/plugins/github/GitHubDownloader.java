@@ -22,9 +22,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.issues.Issue;
@@ -35,9 +34,10 @@ import org.apache.maven.settings.building.SettingsProblem;
 import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.maven.settings.crypto.SettingsDecryptionResult;
-import org.eclipse.egit.github.core.Label;
-import org.eclipse.egit.github.core.client.GitHubClient;
-import org.eclipse.egit.github.core.service.IssueService;
+import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueState;
+import org.kohsuke.github.GHLabel;
+import org.kohsuke.github.GitHubBuilder;
 
 /**
  * @since 2.8
@@ -47,7 +47,7 @@ public class GitHubDownloader {
     /**
      * The github client.
      */
-    private GitHubClient client;
+    private GitHubBuilder client;
 
     /**
      * A boolean to indicate if we should include open issues as well
@@ -80,7 +80,7 @@ public class GitHubDownloader {
             int githubPort,
             boolean includeOpenIssues,
             boolean onlyMilestoneIssues)
-            throws MalformedURLException {
+            throws IOException {
         this.includeOpenIssues = includeOpenIssues;
         this.onlyMilestoneIssues = onlyMilestoneIssues;
 
@@ -89,9 +89,9 @@ public class GitHubDownloader {
         // The githubclient prefers to connect to 'github.com' using the api domain, unlike github enterprise
         // which can connect fine using its domain, so for github.com use empty constructor
         if (githubURL.getHost().equalsIgnoreCase("github.com")) {
-            this.client = new GitHubClient();
+            this.client = new GitHubBuilder();
         } else {
-            this.client = new GitHubClient(githubURL.getHost(), githubPort, githubScheme);
+            this.client = new GitHubBuilder().withEndpoint(githubScheme + githubURL.getHost() + githubPort);
         }
 
         this.githubIssueURL = project.getIssueManagement().getUrl();
@@ -119,7 +119,7 @@ public class GitHubDownloader {
         this.githubRepo = urlPathParts[1];
     }
 
-    protected Issue createIssue(org.eclipse.egit.github.core.Issue githubIssue) {
+    protected Issue createIssue(GHIssue githubIssue) throws IOException {
         Issue issue = new Issue();
 
         issue.setKey(String.valueOf(githubIssue.getNumber()));
@@ -155,9 +155,9 @@ public class GitHubDownloader {
             issue.setStatus("open");
         }
 
-        List<Label> labels = githubIssue.getLabels();
+        final Collection<GHLabel> labels = githubIssue.getLabels();
         if (labels != null && !labels.isEmpty()) {
-            issue.setType(labels.get(0).getName());
+            issue.setType(labels.stream().findAny().get().getName());
         }
 
         return issue;
@@ -166,24 +166,20 @@ public class GitHubDownloader {
     public List<Issue> getIssueList() throws IOException {
         List<Issue> issueList = new ArrayList<>();
 
-        IssueService service = new IssueService(client);
-        Map<String, String> issueFilter = new HashMap<>();
-
         if (includeOpenIssues) {
-            // Adding open issues
-
-            for (org.eclipse.egit.github.core.Issue issue : service.getIssues(githubOwner, githubRepo, issueFilter)) {
+            final List<GHIssue> openIssues =
+                    client.build().getRepository(githubOwner + "/" + githubRepo).getIssues(GHIssueState.OPEN);
+            for (final GHIssue issue : openIssues) {
                 if (!onlyMilestoneIssues || issue.getMilestone() != null) {
                     issueList.add(createIssue(issue));
                 }
             }
         }
 
-        // Adding closed issues
+        final List<GHIssue> closedIssues =
+                client.build().getRepository(githubOwner + "/" + githubRepo).getIssues(GHIssueState.CLOSED);
 
-        issueFilter.put("state", "closed");
-
-        for (org.eclipse.egit.github.core.Issue issue : service.getIssues(githubOwner, githubRepo, issueFilter)) {
+        for (final GHIssue issue : closedIssues) {
             if (!onlyMilestoneIssues || issue.getMilestone() != null) {
                 issueList.add(createIssue(issue));
             }
@@ -207,7 +203,7 @@ public class GitHubDownloader {
                 server = result.getServer();
                 String user = server.getUsername();
                 String password = server.getPassword();
-                this.client.setCredentials(user, password);
+                this.client.withPassword(user, password);
 
                 configured = true;
                 break;

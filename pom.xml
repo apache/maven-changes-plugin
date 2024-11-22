@@ -267,9 +267,9 @@ under the License.
 
     <!-- github dependencies -->
     <dependency>
-      <groupId>org.eclipse.mylyn.github</groupId>
-      <artifactId>org.eclipse.egit.github.core</artifactId>
-      <version>2.1.5</version>
+      <groupId>org.kohsuke</groupId>
+      <artifactId>github-api</artifactId>
+      <version>1.326</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
