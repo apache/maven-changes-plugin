@@ -21,10 +21,12 @@ package org.apache.maven.plugins.changes;
 import javax.inject.Inject;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -439,24 +441,13 @@ public class ChangesReport extends AbstractChangesReport {
         feed.setAuthor(changesXml.getAuthor());
         feed.setDateFormat(new SimpleDateFormat(publishDateFormat, new Locale(publishDateLocale)));
 
-        Writer writer = null;
-
-        try {
-            writer = new FileWriter(new File(getReportOutputDirectory(), "changes.rss"));
+        Path changes = getReportOutputDirectory().toPath().resolve("changes.rss");
+        try (Writer writer = Files.newBufferedWriter(changes, StandardCharsets.UTF_8)) {
             feed.export(changesXml.getReleaseList(), feedType, writer);
         } catch (IOException ex) {
             success = false;
-            getLog().warn("Failed to create rss feed: " + ex.getMessage());
+            getLog().warn("Failed to create RSS feed: " + ex.getMessage());
             getLog().debug(ex);
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException ex) {
-                getLog().warn("Failed to close writer: " + ex.getMessage());
-                getLog().debug(ex);
-            }
         }
 
         return success;

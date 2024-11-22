@@ -22,8 +22,10 @@ import javax.inject.Inject;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +59,6 @@ import org.apache.velocity.context.Context;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.exception.VelocityException;
 import org.apache.velocity.tools.ToolManager;
-import org.codehaus.plexus.util.ReaderFactory;
 import org.codehaus.plexus.velocity.VelocityComponent;
 
 /**
@@ -637,61 +638,50 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     }
 
     /**
-     * Create the velocity template
+     * Create the velocity template.
      *
      * @param context velocity context that has the parameter values
      * @param outputDirectory directory where the file will be generated
      * @param template velocity template which will the context be merged
-     * @param announcementFile The file name of the generated announcement
-     * @throws VelocityException in case of errors.
-     * @throws MojoExecutionException in case of errors.
+     * @param announcementFile the file name of the generated announcement
+     * @throws VelocityException in case of error processing the Velocty template
+     * @throws MojoExecutionException in case of errors
      */
     public void processTemplate(Context context, File outputDirectory, String template, String announcementFile)
             throws VelocityException, MojoExecutionException {
-        File f;
 
         // Use the name of the template as a default value
         if (announcementFile == null || announcementFile.isEmpty()) {
             announcementFile = template;
         }
 
-        try {
-            f = new File(outputDirectory, announcementFile);
-
-            if (!f.getParentFile().exists()) {
-                f.getParentFile().mkdirs();
+        if (!outputDirectory.exists()) {
+            if (!outputDirectory.mkdirs()) {
+                throw new MojoExecutionException("Faield to create directory " + outputDirectory);
             }
+        }
 
-            VelocityEngine engine = velocity.getEngine();
+        File f = new File(outputDirectory, announcementFile);
 
-            engine.setApplicationAttribute("baseDirectory", basedir);
+        VelocityEngine engine = velocity.getEngine();
 
-            if (templateEncoding == null || templateEncoding.isEmpty()) {
-                templateEncoding = ReaderFactory.FILE_ENCODING;
-                getLog().warn("File encoding has not been set, using platform encoding " + templateEncoding
-                        + ", i.e. build is platform dependent!");
-            }
+        engine.setApplicationAttribute("baseDirectory", basedir);
 
-            Writer writer = new OutputStreamWriter(new FileOutputStream(f), templateEncoding);
-
+        if (templateEncoding == null || templateEncoding.isEmpty()) {
+            templateEncoding = Charset.defaultCharset().name();
+            getLog().warn("File encoding has not been set, using platform encoding " + templateEncoding
+                    + ", i.e. build is platform dependent!");
+        }
+        try (Writer writer = new OutputStreamWriter(new FileOutputStream(f), templateEncoding)) {
             Template velocityTemplate = engine.getTemplate(templateDirectory + "/" + template, templateEncoding);
-
             velocityTemplate.merge(context, writer);
-
-            writer.flush();
-
-            writer.close();
-
             getLog().info("Created template " + f);
         } catch (ResourceNotFoundException rnfe) {
             throw new ResourceNotFoundException("Template not found. ( " + templateDirectory + "/" + template + " )");
         } catch (VelocityException ve) {
-            throw new VelocityException(ve.toString());
-        } catch (Exception e) {
-            if (e.getCause() != null) {
-                getLog().warn(e.getCause());
-            }
-            throw new MojoExecutionException(e.toString(), e.getCause());
+            throw ve;
+        } catch (RuntimeException | IOException e) {
+            throw new MojoExecutionException(e.toString(), e);
         }
     }
 
