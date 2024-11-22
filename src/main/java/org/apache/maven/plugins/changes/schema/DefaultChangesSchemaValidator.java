@@ -18,6 +18,8 @@
  */
 package org.apache.maven.plugins.changes.schema;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -31,7 +33,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.input.XmlStreamReader;
-import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.IOUtil;
 import org.xml.sax.SAXException;
 
@@ -40,7 +41,8 @@ import org.xml.sax.SAXException;
  * @since 28 juil. 2008
  * @version $Id$
  */
-@Component(role = ChangesSchemaValidator.class, hint = "default")
+@Named
+@Singleton
 public class DefaultChangesSchemaValidator implements ChangesSchemaValidator {
 
     /** property schema */
