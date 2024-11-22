@@ -18,11 +18,12 @@
  */
 package org.apache.maven.plugins.changes;
 
+import javax.inject.Inject;
+
 import java.io.File;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.schema.ChangesSchemaValidator;
@@ -41,18 +42,13 @@ import org.xml.sax.SAXParseException;
 public class ChangesValidatorMojo extends AbstractChangesMojo {
 
     /**
-     */
-    @Component(role = ChangesSchemaValidator.class, hint = "default")
-    private ChangesSchemaValidator changesSchemaValidator;
-
-    /**
      * The changes xsd version.
      */
     @Parameter(property = "changes.xsdVersion", defaultValue = "1.0.0")
     private String changesXsdVersion;
 
     /**
-     * Mojo failure if validation failed. If not and validation failed only a warning will be logged.
+     * Mojo failure if validation failed. If not and validation failed, only a warning will be logged.
      */
     @Parameter(property = "changes.validate.failed", defaultValue = "false")
     private boolean failOnError;
@@ -62,6 +58,13 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
      */
     @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
+
+    private ChangesSchemaValidator changesSchemaValidator;
+
+    @Inject
+    public ChangesValidatorMojo(ChangesSchemaValidator changesSchemaValidator) {
+        this.changesSchemaValidator = changesSchemaValidator;
+    }
 
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
