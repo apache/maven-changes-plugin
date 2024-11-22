@@ -213,8 +213,7 @@ public class JiraReport extends AbstractChangesReport {
      * <strong>Note:</strong> If you are using JIRA 4 you need to put your sort column names in the reverse order. The
      * handling of this changed between JIRA 3 and JIRA 4. The current default value is suitable for JIRA 3. This may
      * change in the future, so please configure your sort column names in an order that works for your own JIRA
-     * version. If you use JQL, by setting the <code>useJql</code> parameter to <code>true</code>, then the order of the
-     * fields are in normal order again. Starting with JIRA 5.1 you have to use JQL.
+     * version.
      * </p>
      *
      * @since 2.0
@@ -420,8 +419,6 @@ public class JiraReport extends AbstractChangesReport {
         issueDownloader.setWebPassword(webPassword);
 
         issueDownloader.setSettings(settings);
-
-        issueDownloader.setUseJql(useJql);
 
         issueDownloader.setOnlyCurrentVersion(onlyCurrentVersion);
 

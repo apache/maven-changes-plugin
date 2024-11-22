@@ -154,10 +154,10 @@ public abstract class AbstractJiraDownloader {
     /**
      * Override this method if you need to get issues for a specific Fix For.
      *
-     * @return A Fix For id or <code>null</code> if you don't have that need
+     * @return a Fix For id or <code>null</code> if you don't have that need
      */
     protected String getFixFor() {
-        if (onlyCurrentVersion && useJql) {
+        if (onlyCurrentVersion) {
             // Let JIRA do the filtering of the current version instead of the JIRA mojo.
             // This way JIRA returns less issues and we do not run into the "nbEntriesMax" limit that easily.
 
