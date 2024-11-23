@@ -29,7 +29,7 @@ public enum IssueType {
     UPDATE("update"),
     REMOVE("remove");
 
-    private String configurationKey;
+    private final String configurationKey;
 
     IssueType(String configurationKey) {
         this.configurationKey = configurationKey;
