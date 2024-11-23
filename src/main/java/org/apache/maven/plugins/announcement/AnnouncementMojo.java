@@ -44,13 +44,11 @@ import org.apache.maven.plugins.github.GitHubIssueManagementSystem;
 import org.apache.maven.plugins.issues.Issue;
 import org.apache.maven.plugins.issues.IssueManagementSystem;
 import org.apache.maven.plugins.issues.IssueUtils;
-import org.apache.maven.plugins.jira.AbstractJiraDownloader;
 import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
 import org.apache.maven.plugins.jira.RestJiraDownloader;
 import org.apache.maven.plugins.trac.TracDownloader;
 import org.apache.maven.plugins.trac.TracIssueManagmentSystem;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.velocity.Template;
@@ -300,12 +298,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private String jiraServerId;
 
     /**
-     * Path to the JIRA XML file, which will be parsed.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/jira-announcement.xml", required = true, readonly = true)
-    private File jiraXML;
-
-    /**
      * The maximum number of issues to fetch from JIRA.
      */
     @Parameter(property = "changes.maxEntries", defaultValue = "25", required = true)
@@ -338,7 +330,9 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      * Defines the http user for basic authentication into the JIRA webserver.
      *
      * @since 2.4
+     * @deprecated use {@link #jiraUser} or {@link #jiraServerId}
      */
+    @Deprecated
     @Parameter(property = "changes.webUser")
     private String webUser;
 
@@ -346,7 +340,9 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      * Defines the http password for basic authentication into the JIRA webserver.
      *
      * @since 2.4
+     * @deprecated use {@link #jiraPassword} or {@link #jiraServerId}
      */
+    @Deprecated
     @Parameter(property = "changes.webPassword")
     private String webPassword;
 
@@ -684,13 +680,9 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     }
 
     protected List<Release> getJiraReleases() throws MojoExecutionException {
-        AbstractJiraDownloader jiraDownloader = new RestJiraDownloader();
-
-        File jiraXMLFile = jiraXML;
+        RestJiraDownloader jiraDownloader = new RestJiraDownloader();
 
         jiraDownloader.setLog(getLog());
-
-        jiraDownloader.setOutput(jiraXMLFile);
 
         jiraDownloader.setStatusIds(statusIds);
 
@@ -699,23 +691,20 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
         jiraDownloader.setMavenProject(project);
 
         jiraDownloader.setSettings(settings);
+        jiraDownloader.setSettingsDecrypter(settingsDecrypter);
 
         jiraDownloader.setNbEntries(maxEntries);
 
         jiraDownloader.setFilter(filter);
 
-        if (jiraServerId != null) {
-            final Server server = mavenSession.getSettings().getServer(jiraServerId);
-            jiraDownloader.setJiraUser(server.getUsername());
-            jiraDownloader.setJiraPassword(server.getPassword());
-        } else {
+        jiraDownloader.setJiraServerId(jiraServerId);
+        if (jiraUser != null) {
             jiraDownloader.setJiraUser(jiraUser);
             jiraDownloader.setJiraPassword(jiraPassword);
+        } else if (webUser != null) {
+            jiraDownloader.setJiraUser(webUser);
+            jiraDownloader.setJiraPassword(webPassword);
         }
-
-        jiraDownloader.setWebUser(webUser);
-
-        jiraDownloader.setWebPassword(webPassword);
 
         jiraDownloader.setConnectionTimeout(jiraConnectionTimeout);
 

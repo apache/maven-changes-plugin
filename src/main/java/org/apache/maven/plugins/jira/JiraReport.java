@@ -18,7 +18,8 @@
  */
 package org.apache.maven.plugins.jira;
 
-import java.io.File;
+import javax.inject.Inject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -35,8 +36,8 @@ import org.apache.maven.plugins.issues.IssueUtils;
 import org.apache.maven.plugins.issues.IssuesReportGenerator;
 import org.apache.maven.plugins.issues.IssuesReportHelper;
 import org.apache.maven.reporting.MavenReportException;
-import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.crypto.SettingsDecrypter;
 
 /**
  * Goal which downloads issues from the Issue Tracking System and generates a report.
@@ -143,12 +144,6 @@ public class JiraReport extends AbstractChangesReport {
      */
     @Parameter(property = "changes.jiraServerId")
     private String jiraServerId;
-
-    /**
-     * Path to the JIRA XML file, which will be parsed.
-     */
-    @Parameter(defaultValue = "${project.build.directory}/jira-results.xml", required = true, readonly = true)
-    private File jiraXmlPath;
 
     /**
      * Maximum number of entries to be fetched from JIRA.
@@ -264,20 +259,36 @@ public class JiraReport extends AbstractChangesReport {
 
     /**
      * Defines the http password for basic authentication into the JIRA webserver.
+     *
+     * @deprecated use {@link #jiraPassword} or {@link #jiraServerId}
      */
+    @Deprecated
     @Parameter
     private String webPassword;
 
     /**
      * Defines the http user for basic authentication into the JIRA webserver.
+     *
+     * @deprecated use {@link #jiraUser} or {@link #jiraServerId}
      */
+    @Deprecated
     @Parameter
     private String webUser;
 
     /*
      * Used for tests.
      */
-    private AbstractJiraDownloader mockDownloader;
+    private RestJiraDownloader mockDownloader;
+
+    /**
+     * Component used to decrypt server information.
+     */
+    private final SettingsDecrypter settingsDecrypter;
+
+    @Inject
+    public JiraReport(SettingsDecrypter settingsDecrypter) {
+        this.settingsDecrypter = settingsDecrypter;
+    }
 
     /* --------------------------------------------------------------------- */
     /* Public methods */
@@ -318,7 +329,7 @@ public class JiraReport extends AbstractChangesReport {
 
         try {
             // Download issues
-            AbstractJiraDownloader issueDownloader;
+            RestJiraDownloader issueDownloader;
             if (mockDownloader != null) {
                 issueDownloader = mockDownloader;
             } else {
@@ -379,12 +390,10 @@ public class JiraReport extends AbstractChangesReport {
         return ResourceBundle.getBundle("jira-report", locale, this.getClass().getClassLoader());
     }
 
-    private void configureIssueDownloader(AbstractJiraDownloader issueDownloader) {
+    private void configureIssueDownloader(RestJiraDownloader issueDownloader) {
         issueDownloader.setLog(getLog());
 
         issueDownloader.setMavenProject(project);
-
-        issueDownloader.setOutput(jiraXmlPath);
 
         issueDownloader.setNbEntries(maxEntries);
 
@@ -404,33 +413,27 @@ public class JiraReport extends AbstractChangesReport {
 
         issueDownloader.setJiraDatePattern(jiraDatePattern);
 
-        if (jiraServerId != null) {
-            final Server server = mavenSession.getSettings().getServer(jiraServerId);
-            issueDownloader.setJiraUser(server.getUsername());
-            issueDownloader.setJiraPassword(server.getPassword());
-        } else {
+        issueDownloader.setJiraServerId(jiraServerId);
+
+        if (jiraUser != null) {
             issueDownloader.setJiraUser(jiraUser);
             issueDownloader.setJiraPassword(jiraPassword);
+        } else if (webUser != null) {
+            issueDownloader.setJiraUser(webUser);
+            issueDownloader.setJiraPassword(webPassword);
         }
 
         issueDownloader.setTypeIds(typeIds);
 
-        issueDownloader.setWebUser(webUser);
-
-        issueDownloader.setWebPassword(webPassword);
-
         issueDownloader.setSettings(settings);
+        issueDownloader.setSettingsDecrypter(settingsDecrypter);
 
         issueDownloader.setOnlyCurrentVersion(onlyCurrentVersion);
 
         issueDownloader.setVersionPrefix(versionPrefix);
     }
 
-    public void setMockDownloader(AbstractJiraDownloader mockDownloader) {
+    public void setMockDownloader(RestJiraDownloader mockDownloader) {
         this.mockDownloader = mockDownloader;
-    }
-
-    public AbstractJiraDownloader getMockDownloader() {
-        return mockDownloader;
     }
 }

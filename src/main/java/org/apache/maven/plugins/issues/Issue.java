@@ -32,8 +32,6 @@ import java.util.List;
 public class Issue {
     private String assignee;
 
-    private List<String> comments;
-
     private List<String> components;
 
     private Date created;
@@ -72,17 +70,6 @@ public class Issue {
 
     public void setAssignee(String assignee) {
         this.assignee = assignee;
-    }
-
-    public List<String> getComments() {
-        return comments;
-    }
-
-    public void addComment(String comment) {
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        comments.add(comment);
     }
 
     public List<String> getComponents() {
