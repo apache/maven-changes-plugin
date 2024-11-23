@@ -28,14 +28,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndEntryImpl;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedOutput;
+import com.rometools.rome.feed.synd.SyndContent;
+import com.rometools.rome.feed.synd.SyndContentImpl;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndEntryImpl;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.feed.synd.SyndFeedImpl;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedOutput;
 import org.apache.maven.doxia.util.DoxiaUtils;
 import org.apache.maven.plugins.changes.model.Release;
 
@@ -58,7 +58,7 @@ public class FeedGenerator {
     /**
      * Initialize feedGenerator for a given locale.
      *
-     * @param locale a locale for i18n.
+     * @param locale a locale for i18n
      */
     public FeedGenerator(final Locale locale) {
         this.feed = new SyndFeedImpl();
@@ -69,7 +69,7 @@ public class FeedGenerator {
     /**
      * The author of the feed.
      *
-     * @return the author.
+     * @return the author
      */
     public String getAuthor() {
         return author;
@@ -78,7 +78,7 @@ public class FeedGenerator {
     /**
      * Set the author of the feed.
      *
-     * @param author not null.
+     * @param author not null
      */
     public void setAuthor(final String author) {
         this.author = author.trim(); // this also assures that author is not null.
@@ -87,7 +87,7 @@ public class FeedGenerator {
     /**
      * The title of the feed.
      *
-     * @return the title.
+     * @return the title
      */
     public String getTitle() {
         return title;
@@ -96,7 +96,7 @@ public class FeedGenerator {
     /**
      * Set the title of the feed.
      *
-     * @param title not null.
+     * @param title not null
      */
     public void setTitle(final String title) {
         this.title = title.trim(); // this also assures that title is not null.
@@ -105,7 +105,7 @@ public class FeedGenerator {
     /**
      * The DateFormat.
      *
-     * @return may be null.
+     * @return may be null
      */
     public DateFormat getDateFormat() {
         return dateFormat;
@@ -114,7 +114,7 @@ public class FeedGenerator {
     /**
      * Set the date format. This should match the date format used for the release dates in changes.xml.
      *
-     * @param dateFormat may be null.
+     * @param dateFormat may be null
      */
     public void setDateFormat(final DateFormat dateFormat) {
         this.dateFormat = dateFormat;
@@ -123,7 +123,7 @@ public class FeedGenerator {
     /**
      * The main link of the feed.
      *
-     * @return the link.
+     * @return the link
      */
     public String getLink() {
         return link;
@@ -132,7 +132,7 @@ public class FeedGenerator {
     /**
      * Set the main link of the feed.
      *
-     * @param link not null.
+     * @param link not null
      */
     public void setLink(final String link) {
         this.link = link.trim(); // this also assures that link is not null.
@@ -168,7 +168,7 @@ public class FeedGenerator {
      * @param feedType The type of the feed to generate. See {@link #isSupportedFeedType(java.lang.String)} for
      *            supported values.
      * @param writer a Writer. Note that this is not flushed nor closed upon exit.
-     * @throws IOException if an error occurs during export.
+     * @throws IOException if an error occurs during export
      */
     public void export(final List<Release> releases, final String feedType, final Writer writer) throws IOException {
         feed.setFeedType(feedType);
@@ -219,7 +219,6 @@ public class FeedGenerator {
             sb.append("<p>").append(description).append("</p>");
         }
 
-        // TODO: localize?
         sb.append("<p>Version ").append(release.getVersion()).append(" is available with ");
         sb.append(release.getActions().size()).append(" fixed issues.</p>");
 

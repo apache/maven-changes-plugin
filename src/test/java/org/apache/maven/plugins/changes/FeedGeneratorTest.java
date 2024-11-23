@@ -75,7 +75,7 @@ public class FeedGeneratorTest extends TestCase {
             generator.export(releases, "rss_0.9", new StringWriter(512));
             fail("0 releases not allowed!");
         } catch (IOException ex) {
-            assertNotNull(ex);
+            assertNotNull(ex.getMessage());
         }
 
         releases.add(release);
