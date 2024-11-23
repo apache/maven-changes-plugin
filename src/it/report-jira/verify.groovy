@@ -16,26 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.maven.plugins.jira;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import com.github.tomakehurst.wiremock.WireMockServer
 
-/**
- * Unit tests for {@link JiraReport}.
- *
- * @author jrh3k5
- * @since 2.8
- */
-public class JiraReportTest extends AbstractMojoTestCase {
-    private final JiraReport mojo = new JiraReport(null);
+WireMockServer wireMockServer = context.get("wireMockServer")
+wireMockServer.stop()
 
-    /**
-     * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.
-     *
-     * @throws Exception If any errors occur during the test run.
-     */
-    public void testCanGenerateReportSkipped() throws Exception {
-        setVariableValueToObject(mojo, "skip", Boolean.TRUE);
-        assertFalse(mojo.canGenerateReport());
-    }
-}
+content = new File( basedir, 'target/site/jira-report.html' ).text;
+
+assert content.contains('/browse/TEST_PROJECT-1">TEST_PROJECT-1</a>');
+assert content.contains('<td>Authentication does not work after Upgrade</td>');
+assert content.contains('<td>Closed</td>');
+assert content.contains('<td>Fixed</td>');
+assert content.contains('<td>Assigned User</td>');
