@@ -153,10 +153,9 @@ public class FeedGenerator {
     /**
      * A List of supported feed types.
      *
-     * @return a List of supported feed types.
+     * @return a List of supported feed types
      * @see #isSupportedFeedType(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
     public List<String> getSupportedFeedTypes() {
         return feed.getSupportedFeedTypes();
     }
