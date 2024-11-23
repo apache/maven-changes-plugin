@@ -27,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.apache.maven.model.Developer;
@@ -338,7 +339,7 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
     protected String readAnnouncement(File file) throws MojoExecutionException {
         try {
             if (templateEncoding == null || templateEncoding.isEmpty()) {
-                templateEncoding = System.getProperty("file.encoding");
+                templateEncoding = Charset.defaultCharset().displayName();
                 getLog().warn("File encoding has not been set, using platform encoding '" + templateEncoding
                         + "', i.e. build is platform dependent!");
             }
