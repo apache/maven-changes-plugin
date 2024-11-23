@@ -29,7 +29,7 @@
 
 Using a Custom Announcement Template
 
- The <<<announcement-generate>>> goal uses a {{{http://velocity.apache.org/}Velocity}}
+ The <<<announcement-generate>>> goal uses a {{{https://velocity.apache.org/}Velocity}}
  template to create an announcement. If you want to, you can create your own
  custom template.
 
@@ -67,8 +67,7 @@ Using a Custom Announcement Template
 
  Next you want to create your own template. A wise thing is to start with the
  default one that is included in the plugin. You can download it from
- Subversion
- {{{http://svn.apache.org/repos/asf/maven/plugins/trunk/maven-changes-plugin/src/main/resources/org/apache/maven/plugins/announcement/announcement.vm}here}}.
+ {{{https://github.com/apache/maven-changes-plugin/blob/master/src/main/resources/org/apache/maven/plugins/announcement/announcement.vm}here}}.
  It will provide you with examples on how to iterate over the actions of a
  release among other things.
 
@@ -131,21 +130,26 @@ Using a Custom Announcement Template
 *-----------------+----------+-----------+-----------------+
 | action*         | String   |    2.0    | What was done.
 *-----------------+----------+-----------+-----------------+
+| date            | String   |    2.0    | Fix date.
+*-----------------+----------+-----------+-----------------+
 | dev*            | String   |    2.0    | The developer who made the change.
 *-----------------+----------+-----------+-----------------+
-| dueTo*          | String   |    2.0    | If this was a contribution from a non-developer, the name of that person.
+| dueTo*          | String   |    2.0    | If this was a contribution from a non-committer, the name of that person.
 *-----------------+----------+-----------+-----------------+
-| dueToEmail*     | String   |    2.0    | If this was a contribution from a non-developer, the e-mail address of that person.
+| dueToEmail*     | String   |    2.0    | If this was a contribution from a non-committer, the e-mail address of that person.
 *-----------------+----------+-----------+-----------------+
 | issue*          | String   |    2.0    | The key of the issue in your issue tracking system.
 *-----------------+----------+-----------+-----------------+
 | type*           | String   |    2.0    | What kind of change was this.
 *-----------------+----------+-----------+-----------------+
+| dueTos*         | List     |    3.0    | Collection of parsed dueTo and dueToEmail. Each item has variable name and email.
+*-----------------+----------+-----------+-----------------+
+| fixedIssues*    | List     |    3.0    | Collection of fixed issues.
+*-----------------+----------+-----------+-----------------+
 <Variables marked with * are read-only.>
 
- Since 2.8 the Velocity Context contains all default tools as provided by the {{{http://velocity.apache.org/tools/devel/standalone.html}ToolManager}}.
- See the {{{http://velocity.apache.org/tools/devel/summary.html}Tools Usage Summary}} for further details. 
+ Velocity Context contains all default tools provided by the {{{https://velocity.apache.org/tools/devel/standalone.html}ToolManager}}.
+ See the {{{https://velocity.apache.org/tools/devel/tools-summary.html}Tools Usage Summary}} for further details.
 
  For information on how to access variables in your template and more,
- please see the
- {{{http://velocity.apache.org/engine/releases/velocity-1.4/user-guide.html}Velocity user guide}}.
+ see the {{{https://velocity.apache.org/engine/devel/developer-guide.html}Velocity user guide}}.
