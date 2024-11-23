@@ -90,7 +90,7 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
     }
 
     /**
-     * When both {@link #fixVersion(String)} and {@link #fixVersionIds(String)} are used then you will probably end up
+     * When both {@code #fixVersion(String)} and {@link #fixVersionIds(String)} are used, then you will probably end up
      * with a JQL query that is valid, but returns nothing. Unless they both only reference the same fixVersion
      *
      * @param fixVersion a single fix version

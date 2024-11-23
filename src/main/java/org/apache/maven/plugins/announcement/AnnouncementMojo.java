@@ -239,9 +239,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     /**
      * The path of the changes.xml file.
-     *
-     * @parameter expression="${basedir}/src/changes/changes.xml"
-     * @required
      */
     @Parameter(defaultValue = "${basedir}/src/changes/changes.xml")
     private File xmlPath;
