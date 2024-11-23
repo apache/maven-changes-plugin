@@ -20,7 +20,6 @@ package org.apache.maven.plugins.changes;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -33,7 +32,6 @@ import org.apache.maven.doxia.util.DoxiaUtils;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Component;
 import org.apache.maven.plugins.changes.model.DueTo;
-import org.apache.maven.plugins.changes.model.FixedIssue;
 import org.apache.maven.plugins.changes.model.Release;
 import org.apache.maven.plugins.issues.AbstractIssuesReportGenerator;
 
@@ -226,8 +224,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             sink.text(".");
         }
 
-        if (StringUtils.isNotEmpty(action.getDueTo()) || (!action.getDueTos().isEmpty())) {
-            constructDueTo(sink, action, bundle, action.getDueTos());
+        if (!action.getDueTos().isEmpty()) {
+            constructDueTo(sink, action, bundle);
         }
 
         sink.tableCell_();
@@ -251,39 +249,21 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      * @param sink The sink
      * @param action The action that was done
      * @param bundle A resource bundle for i18n
-     * @param dueTos Other people that helped with an action
      */
-    private void constructDueTo(Sink sink, Action action, ResourceBundle bundle, List<DueTo> dueTos) {
-
-        // Create a Map with key : dueTo name, value : dueTo email
-        Map<String, String> namesEmailMap = new LinkedHashMap<>();
-
-        // Only add the dueTo specified as attributes, if it has either a dueTo or a dueToEmail
-        if (StringUtils.isNotEmpty(action.getDueTo()) || StringUtils.isNotEmpty(action.getDueToEmail())) {
-            namesEmailMap.put(action.getDueTo(), action.getDueToEmail());
-        }
-
-        for (DueTo dueTo : dueTos) {
-            namesEmailMap.put(dueTo.getName(), dueTo.getEmail());
-        }
-
-        if (namesEmailMap.isEmpty()) {
-            return;
-        }
+    private void constructDueTo(Sink sink, Action action, ResourceBundle bundle) {
 
         sink.text(" " + bundle.getString("report.changes.text.thanx") + " ");
         int i = 0;
-        for (String currentDueTo : namesEmailMap.keySet()) {
-            String currentDueToEmail = namesEmailMap.get(currentDueTo);
+        for (DueTo dueTo : action.getDueTos()) {
             i++;
 
-            if (StringUtils.isNotEmpty(currentDueToEmail)) {
-                sinkLink(sink, currentDueTo, "mailto:" + currentDueToEmail);
-            } else if (StringUtils.isNotEmpty(currentDueTo)) {
-                sink.text(currentDueTo);
+            if (StringUtils.isNotEmpty(dueTo.getEmail())) {
+                sinkLink(sink, dueTo.getName(), "mailto:" + dueTo.getEmail());
+            } else {
+                sink.text(dueTo.getName());
             }
 
-            if (i < namesEmailMap.size()) {
+            if (i < action.getDueTos().size()) {
                 sink.text(", ");
             }
         }
@@ -299,7 +279,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueLink(String issue, String system, Sink sink, List<FixedIssue> fixes) {
+    private void constructIssueLink(String issue, String system, Sink sink, List<String> fixes) {
         if (StringUtils.isNotEmpty(issue)) {
             sink.link(parseIssueLink(issue, system));
 
@@ -312,9 +292,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             }
         }
 
-        for (Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); ) {
-            FixedIssue fixedIssue = iterator.next();
-            String currentIssueId = fixedIssue.getIssue();
+        for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
+            String currentIssueId = iterator.next();
             if (StringUtils.isNotEmpty(currentIssueId)) {
                 sink.link(parseIssueLink(currentIssueId, system));
 
@@ -336,7 +315,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueText(String issue, Sink sink, List<FixedIssue> fixes) {
+    private void constructIssueText(String issue, Sink sink, List<String> fixes) {
         if (StringUtils.isNotEmpty(issue)) {
             sink.text(issue);
 
@@ -345,10 +324,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             }
         }
 
-        for (Iterator<FixedIssue> iterator = fixes.iterator(); iterator.hasNext(); ) {
-            FixedIssue fixedIssue = iterator.next();
-
-            String currentIssueId = fixedIssue.getIssue();
+        for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
+            String currentIssueId = iterator.next();
             if (StringUtils.isNotEmpty(currentIssueId)) {
                 sink.text(currentIssueId);
             }

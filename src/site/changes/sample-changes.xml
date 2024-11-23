@@ -16,9 +16,9 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<document xmlns="http://maven.apache.org/changes/1.0.0"
+<document xmlns="http://maven.apache.org/changes/2.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
+          xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 http://maven.apache.org/xsd/changes-2.0.0.xsd">
   <properties>
     <title>Sample Changes Report: Title</title>
     <author email="jruiz@exist.com">Johnny R. Ruiz III</author>
@@ -38,7 +38,7 @@ under the License.
     </release>
 
     <release version="1.0" date="2005-01-01" description="First release">
-      <action dev="jruiz" type="update">
+      <action dev="jruiz" type="update" fixedIssues="MABC-123,MABC-124">
         Uploaded documentation.
       </action>
     </release>

@@ -77,6 +77,18 @@ ${project.name}
   {{{./scm.html}source repository}} and will find supplementary information in the
   {{{http://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
 
+* Migration to 3.x
+
+** changes.xml - schema changes
+
+  * you should update schema in your changes.xml to <<<2.0.0>>> - {{{./using-changes-xsd.html}Using the XML Schema}}.
+
+  * tag <<<action/dueto>>> - was removed, you can put your data into existing
+    <<<due-to>>> and <<<dueToEmail>>> attributes of <<<action>>> tag,
+    which can be comma separated.
+
+  * tag <<<action/fixedIssues>>> - was changed to an attribute of <<action>> tag, it also can be comma separated.
+
 * Examples
 
   To provide you with better understanding of some usages of the Changes Plugin,

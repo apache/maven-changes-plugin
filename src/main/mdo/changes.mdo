@@ -17,11 +17,10 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
-<model xmlns="https://codehaus-plexus.github.io/MODELLO/1.0.0"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://codehaus-plexus.github.io/MODELLO/1.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-1.0.0.xsd"
-       xsd.namespace="http://maven.apache.org/changes/1.0.0"
-       xsd.targetNamespace="http://maven.apache.org/changes/1.0.0">
+<model xmlns="http://codehaus-plexus.github.io/MODELLO/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://codehaus-plexus.github.io/MODELLO/2.0.0 https://codehaus-plexus.github.io/modello/xsd/modello-2.0.0.xsd"
+       xml.namespace="http://maven.apache.org/changes/${version}"
+       xml.schemaLocation="https://maven.apache.org/xsd/changes-${version}.xsd">
   <id>changes</id>
   <name>Changes</name>
   <description>
@@ -40,11 +39,11 @@ under the License.
       <description>
         Record every release with their subsequent changes.
       </description>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <fields>
         <field>
           <name>properties</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>Properties</type>
             <multiplicity>1</multiplicity>
@@ -55,7 +54,7 @@ under the License.
         </field>
         <field>
           <name>body</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <association>
             <type>Body</type>
@@ -69,18 +68,18 @@ under the License.
     </class>
     <class>
       <name>Properties</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <fields>
         <field>
           <name>title</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>The page title.</description>
         </field>
         <field>
           <name>author</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <description>The page author.</description>
           <association>
             <type>Author</type>
@@ -91,11 +90,11 @@ under the License.
     </class>
     <class xsd.compositor="sequence">
       <name>Body</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <fields>
         <field>
           <name>releases</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association xml.itemsStyle="flat">
             <type>Release</type>
             <multiplicity>*</multiplicity>
@@ -106,12 +105,13 @@ under the License.
     </class>
     <class xsd.compositor="sequence">
       <name>Release</name>
-      <version>1.0.0</version>
+      <superClass>AbstractRelease</superClass>
+      <version>1.0.0+</version>
       <description>A single release of this project.</description>
       <fields>
         <field xml.attribute="true">
           <name>version</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>
@@ -120,7 +120,7 @@ under the License.
         </field>
         <field xml.attribute="true" xml.tagName="date">
           <name>dateRelease</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>
@@ -132,7 +132,7 @@ under the License.
         </field>
         <field xml.attribute="true">
           <name>description</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             A short description of this release.
@@ -140,7 +140,7 @@ under the License.
         </field>
         <field>
           <name>actions</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association xml.itemsStyle="flat">
             <type>Action</type>
             <multiplicity>*</multiplicity>
@@ -148,65 +148,25 @@ under the License.
           <description>The list of actions taken for this release.</description>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-            public java.util.List<Action> getActions(String type)
-            {
-                java.util.List<Action> actions = new java.util.ArrayList<Action>();
-                for (Action action : getActions())
-                {
-                  if ( action.getType() != null && action.getType().equalsIgnoreCase( type ) )
-                  {
-                      actions.add( action );
-                  }
-                }
-                return actions;
-            }
-          ]]></code>
-        </codeSegment>
-        <codeSegment>
-          <version>1.0.0</version>
-          <code><![CDATA[
-              private final java.util.List<Component> components = new java.util.ArrayList<Component>();
-
-              public void addComponent(String name, Release release)
-              {
-                  final Component component = new Component();
-                  component.setName(name);
-                  component.setDescription(release.getDescription());
-                  component.setActions(release.getActions());
-                  components.add(component);
-              }
-
-              public java.util.List<Component> getComponents()
-              {
-                  return components;
-              }
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
-
     </class>
     <class>
       <name>Author</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A description of the author page.
       </description>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>name</name>
-          <version>1.0.0</version>
-          <type>Content</type>
+          <version>1.0.0+</version>
+          <type>String</type>
           <description>
             The page author name.
           </description>
         </field>
         <field xml.attribute="true" xml.tagName="email">
           <name>authorEmail</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The page author email.
@@ -216,14 +176,14 @@ under the License.
     </class>
     <class>
       <name>Component</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A component as a part of current release.
       </description>
       <fields>
         <field>
           <name>name</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The component name.
@@ -231,7 +191,7 @@ under the License.
         </field>
         <field>
           <name>description</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             The component description.
@@ -239,7 +199,7 @@ under the License.
         </field>
         <field>
           <name>actions</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <association>
             <type>Action</type>
             <multiplicity>*</multiplicity>
@@ -249,23 +209,24 @@ under the License.
       </fields>
     </class>
     <class xsd.compositor="sequence">
+      <superClass>AbstractAction</superClass>
       <name>Action</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         A single action done on the project, during this release.
       </description>
       <fields>
-        <field>
+        <field xml.content="true">
           <name>action</name>
-          <version>1.0.0</version>
-          <type>Content</type>
+          <version>1.0.0+</version>
+          <type>String</type>
           <description>
             A short description of the action taken.
           </description>
         </field>
         <field xml.attribute="true">
           <name>dev</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>
@@ -277,24 +238,24 @@ under the License.
         </field>
         <field xml.attribute="true" xml.tagName="due-to">
           <name>dueTo</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             Name of the person to be credited for this change. This can be used when a patch is submitted by a non-committer.
+            Can be a comma separated list.
           </description>
         </field>
         <field xml.attribute="true" xml.tagName="due-to-email">
           <name>dueToEmail</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
-            Email of the person to be credited for this change.
+            Email of the person to be credited for this change. Can be a comma separated list.
           </description>
         </field>
         <field xml.attribute="true">
           <name>issue</name>
-          <version>1.0.0</version>
-          <required>true</required>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             <![CDATA[
@@ -306,7 +267,7 @@ under the License.
         </field>
         <field xml.attribute="true">
           <name>type</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <required>true</required>
           <type>String</type>
           <description>
@@ -323,7 +284,7 @@ under the License.
         </field>
         <field xml.attribute="true">
           <name>system</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>
             <![CDATA[
@@ -335,83 +296,36 @@ under the License.
         </field>
         <field xml.attribute="true">
           <name>date</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>fix date</description>
         </field>
-        <field>
-          <name>fixedIssues</name>
-          <version>1.0.0</version>
-          <association xml.itemsStyle="flat" xml.tagName="fixes">
-            <type>FixedIssue</type>
-            <multiplicity>*</multiplicity>
-          </association>
-          <description>A list of fixed issues.</description>
-        </field>
-        <field>
-          <name>dueTos</name>
-          <version>1.0.0</version>
-          <association xml.itemsStyle="flat" xml.tagName="dueto">
-            <type>DueTo</type>
-            <multiplicity>*</multiplicity>
-          </association>
-          <description>A list of contributors for this issue.</description>
+        <field xml.attribute="true" xml.tagName="fixedIssues">
+          <name>fixedIssuesString</name>
+          <version>2.0.0+</version>
+          <type>String</type>
+          <description>A comma separated list of fixed issues.</description>
         </field>
       </fields>
-      <codeSegments>
-        <codeSegment>
-          <version>1.0.9+</version>
-          <code><![CDATA[
-            public static final String ADD_ACTION = "add";
-
-            public static final String FIX_ACTION = "fix";
-
-            public static final String UPDATE_ACTION = "update";
-
-            public static final String REMOVE_ACTION = "remove";
-          ]]></code>
-        </codeSegment>
-      </codeSegments>
     </class>
     <class xsd.compositor="sequence">
       <name>DueTo</name>
-      <version>1.0.0</version>
+      <version>1.0.0+</version>
       <description>
         Name and email of the person to be credited for this change. This can be used when a patch is submitted by a non-committer.
       </description>
       <fields>
         <field xml.attribute="true">
           <name>name</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>Name of the person to be credited for this change.</description>
         </field>
         <field xml.attribute="true">
           <name>email</name>
-          <version>1.0.0</version>
+          <version>1.0.0+</version>
           <type>String</type>
           <description>Email of the person to be credited for this change.</description>
-        </field>
-      </fields>
-    </class>
-    <class xsd.compositor="sequence">
-      <name>FixedIssue</name>
-      <version>1.0.0</version>
-      <description>
-        A fixed issue.
-      </description>
-      <fields>
-        <field xml.attribute="true">
-          <name>issue</name>
-          <version>1.0.0</version>
-          <type>String</type>
-          <description>
-            <![CDATA[
-              Id of the issue related to this change. This is the id in your issue tracking system.
-              <p>The Changes plugin will generate a URL out of this id. The URL is constructed using the value of the issueLinkTemplate parameter.</p>
-              <p>See the <a href="changes-report.html">changes-report mojo</a> for more details.</p>
-            ]]>
-          </description>
         </field>
       </fields>
     </class>

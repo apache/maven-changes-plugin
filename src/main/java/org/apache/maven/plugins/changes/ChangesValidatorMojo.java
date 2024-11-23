@@ -44,7 +44,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
     /**
      * The changes xsd version.
      */
-    @Parameter(property = "changes.xsdVersion", defaultValue = "1.0.0")
+    @Parameter(property = "changes.xsdVersion", defaultValue = "2.0.0")
     private String changesXsdVersion;
 
     /**

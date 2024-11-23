@@ -41,7 +41,7 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
     public void testValidationSuccess() throws Exception {
         File changesXml = new File(getBasedir(), "/src/test/unit/changes.xml");
         setVariableValueToObject(mojo, "xmlPath", changesXml);
-        setVariableValueToObject(mojo, "changesXsdVersion", "1.0.0");
+        setVariableValueToObject(mojo, "changesXsdVersion", "2.0.0");
         setVariableValueToObject(mojo, "failOnError", Boolean.TRUE);
         mojo.execute();
     }
@@ -49,7 +49,7 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
     public void testValidationFailedWithMojoFailure() throws Exception {
         File changesXml = new File(getBasedir(), "/src/test/unit/non-valid-changes.xml");
         setVariableValueToObject(mojo, "xmlPath", changesXml);
-        setVariableValueToObject(mojo, "changesXsdVersion", "1.0.0");
+        setVariableValueToObject(mojo, "changesXsdVersion", "2.0.0");
         setVariableValueToObject(mojo, "failOnError", Boolean.TRUE);
         try {
             mojo.execute();

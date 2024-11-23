@@ -399,15 +399,12 @@ under the License.
       <plugin>
         <groupId>org.codehaus.modello</groupId>
         <artifactId>modello-maven-plugin</artifactId>
-        <version>1.0.1</version>
         <configuration>
-          <useJava5>true</useJava5>
-          <version>1.0.0</version>
+          <version>2.0.0</version>
           <models>
             <model>src/main/mdo/changes.mdo</model>
           </models>
         </configuration>
-        <!-- cannot upgrade because of MODELLO-254 -->
         <executions>
           <execution>
             <id>site-docs</id>
@@ -421,7 +418,6 @@ under the License.
             <goals>
               <goal>java</goal>
               <goal>xpp3-reader</goal>
-              <goal>xpp3-writer</goal>
             </goals>
           </execution>
           <execution>
@@ -442,24 +438,6 @@ under the License.
             <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/xsd</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- workaround to remove timestamp inserted by Modello 1.0.1 into generated .java and .xsd -->
-      <plugin>
-        <groupId>org.codehaus.gmaven</groupId>
-        <artifactId>groovy-maven-plugin</artifactId>
-        <version>2.1.1</version>
-        <executions>
-          <execution>
-            <id>patch-changes-xsd</id>
-            <goals>
-              <goal>execute</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <source>${project.basedir}/src/main/script/patch-modello.groovy</source>
             </configuration>
           </execution>
         </executions>
