@@ -19,21 +19,26 @@
  */
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.jar.*;
-import org.codehaus.plexus.util.*;
 
 boolean result = true;
 
 try
 {
     File report = new File( basedir, "target/announcement/test-announce.vm" );
-    if ( !report.exists() || report.isDirectory() )
+    if ( !report.exists() )
     {
-        System.err.println( "report file is missing or a directory." );
+        System.err.println( "report file is missing." );
         return false;
     }
-    String reportContent = FileUtils.fileRead( report );
+    if ( report.isDirectory() )
+    {
+        System.err.println( "report file is a directory." );
+        return false;
+    }
+    String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8");
 
     int indexOf = reportContent.indexOf( "maven-changes-plugin-test-1.1 release" );
     if ( indexOf < 0 )

@@ -19,33 +19,38 @@
  */
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.jar.*;
-import org.codehaus.plexus.util.*;
 
 boolean result = true;
 
 try
 {
     File report = new File( basedir, "target/site/changes-report.html" );
-    if ( !report.exists() || report.isDirectory() )
+    if ( !report.exists() )
     {
-        System.err.println( "report file is missing or a directory." );
+        System.err.println( "report file is missing." );
         return false;
     }
-    String reportContent = FileUtils.fileRead( report );
+    if ( report.isDirectory() )
+    {
+        System.err.println( "report is directory." );
+        return false;
+    }
+    String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8");
 
     int indexOf = reportContent.indexOf( "Changes" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contains Changes title" );
+      System.err.println( "changes-report.html doesn't contain Changes title" );
       return false;
     }
 
     indexOf = reportContent.indexOf( "href=\"http://myjira/browse/MCHANGES-88\"" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contains jira issue link" );
+      System.err.println( "changes-report.html doesn't contain jira issue link" );
       return false;
     }
 
@@ -61,7 +66,7 @@ try
     indexOf = reportContent.indexOf( "bug-12345" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contains issue text for issue specified with <fixes> element" );
+      System.err.println( "changes-report.html doesn't contain issue text for issue specified with <fixes> element" );
       return false;
     }
     indexOf = reportContent.indexOf( "Fixes ." );
