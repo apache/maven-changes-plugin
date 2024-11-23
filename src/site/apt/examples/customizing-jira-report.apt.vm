@@ -29,40 +29,10 @@
 
 Customizing the JIRA Report
 
- <<Note:>> Most of the features used in this document was introduced in version
+ <<Note:>> Most of the features used in this document were introduced in version
  <<2.0>> of the Changes Plugin. See the
  {{{../jira-report-mojo.html}goal documentation}} for detailed info on which
  feature was added in which version.
-
-
-* What version of JIRA are you using?
-
- Depending on which version of JIRA you use, you might need to add bits of
- configuration to make the JIRA Report work properly. Starting with JIRA 5.1 it
- is no longer possible to ask JIRA questions using query parameters. If you use
- JIRA 5.1 or newer you must add this configuration, or else you will see a
- stack trace saying something like "Caused by: org.xml.sax.SAXParseException".
-
-+-----------------+
-<project>
-  ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${project.version}</version>
-        <configuration>
-          <useJql>true</useJql>
-        </configuration>
-        ...
-      </plugin>
-    </plugins>
-  </reporting>
-  ...
-</project>
-+-----------------+
-
 
 * Selecting version(s)
 
@@ -211,7 +181,7 @@ Customizing the JIRA Report
   Another way to filter and sort issues is to configure the plugin using a JIRA
   syntaxed filter. You can grab this from the URL if you filter and sort issues
   in the Issue Navigator in JIRA. Just remember that you have to escape the
-  ampersand (&) characters, when you put them into the xml based POM.
+  ampersand (&) characters, when you put them into the XML based POM.
 
   In this example we are filtering out issues with <Fixed> as resolution and
   sorting them by <type>, in ascending order.
