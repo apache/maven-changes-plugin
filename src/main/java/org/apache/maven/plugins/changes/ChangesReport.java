@@ -295,12 +295,6 @@ public class ChangesReport extends AbstractChangesReport {
         copyStaticResources();
     }
 
-    private void failIfUsingDeprecatedParameter(Object value, String name, String message) throws MavenReportException {
-        if (value != null) {
-            throw new MavenReportException("You are using the old parameter '" + name + "'. " + message);
-        }
-    }
-
     @Override
     public String getDescription(Locale locale) {
         return getBundle(locale).getString("report.issues.description");

@@ -42,12 +42,6 @@ import org.codehaus.plexus.util.StringUtils;
 public class ProjectJavamailMailSender extends AbstractMailSender {
     private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
-    // ----------------------------------------------------------------------
-    //
-    // ----------------------------------------------------------------------
-
-    private Properties userProperties;
-
     private Properties props;
 
     // ----------------------------------------------------------------------
@@ -85,16 +79,6 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
 
         if (isTlsEnabled()) {
             props.put("mail.smtp.starttls.enable", "true");
-        }
-
-        if (userProperties != null) {
-            for (Object o : userProperties.keySet()) {
-                String key = (String) o;
-
-                String value = userProperties.getProperty(key);
-
-                props.put(key, value);
-            }
         }
     }
 
