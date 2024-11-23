@@ -52,4 +52,13 @@ under the License.
       </pluginRepositories>
     </profile>
   </profiles>
+
+  <servers>
+    <server>
+      <id>jira</id>
+      <username>jira-test</username>
+      <!-- <password>jira-password</password> -->
+      <password>{xZLx2669VMsHnW8pO9Ehd1FLMrPsCOQ3g2MiRNNA5vI=}</password>
+    </server>
+  </servers>
 </settings>

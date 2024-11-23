@@ -300,12 +300,6 @@ under the License.
       <version>${doxiaVersion}</version>
     </dependency>
 
-    <!-- rest client for jira -->
-    <dependency>
-      <groupId>org.apache.cxf</groupId>
-      <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-      <version>2.6.11</version>
-    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -459,7 +453,17 @@ under the License.
                   <goal>clean</goal>
                   <goal>site</goal>
                 </goals>
+                <properties>
+                  <settings.security>${project.basedir}/src/it/settings-security.xml</settings.security>
+                </properties>
               </configuration>
+              <dependencies>
+                <dependency>
+                  <groupId>com.github.tomakehurst</groupId>
+                  <artifactId>wiremock-standalone</artifactId>
+                  <version>2.27.2</version>
+                </dependency>
+              </dependencies>
             </plugin>
           </plugins>
         </pluginManagement>
