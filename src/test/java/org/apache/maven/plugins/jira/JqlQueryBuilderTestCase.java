@@ -146,7 +146,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
-    private JiraQueryBuilder createBuilder() {
+    private JqlQueryBuilder createBuilder() {
         return new JqlQueryBuilder(new SystemStreamLog());
     }
 }

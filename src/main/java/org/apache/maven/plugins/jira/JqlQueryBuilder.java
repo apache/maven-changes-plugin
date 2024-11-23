@@ -32,7 +32,7 @@ import org.apache.maven.plugin.logging.Log;
  * @version $Id$
  * @since 2.8
  */
-public class JqlQueryBuilder implements JiraQueryBuilder {
+public class JqlQueryBuilder {
     private String filter = "";
 
     private boolean urlEncode = true;
@@ -74,17 +74,17 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
         }
     }
 
-    public JiraQueryBuilder components(String components) {
+    public JqlQueryBuilder components(String components) {
         addCommaSeparatedValues("component", components);
         return this;
     }
 
-    public JiraQueryBuilder components(List<String> components) {
+    public JqlQueryBuilder components(List<String> components) {
         addValues("component", components);
         return this;
     }
 
-    public JiraQueryBuilder filter(String filter) {
+    public JqlQueryBuilder filter(String filter) {
         this.filter = filter;
         return this;
     }
@@ -96,7 +96,7 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
      * @param fixVersion a single fix version
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersion(String fixVersion) {
+    public JqlQueryBuilder fixVersion(String fixVersion) {
         addSingleValue("fixVersion", fixVersion);
         return this;
     }
@@ -108,7 +108,7 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
      * @param fixVersionIds a comma-separated list of version ids.
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersionIds(String fixVersionIds) {
+    public JqlQueryBuilder fixVersionIds(String fixVersionIds) {
         addCommaSeparatedValues("fixVersion", fixVersionIds);
         return this;
     }
@@ -119,7 +119,7 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
      * @param fixVersionIds the version ids.
      * @return the builder.
      */
-    public JiraQueryBuilder fixVersionIds(List<String> fixVersionIds) {
+    public JqlQueryBuilder fixVersionIds(List<String> fixVersionIds) {
         addValues("fixVersion", fixVersionIds);
         return this;
     }
@@ -128,32 +128,32 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
         return log;
     }
 
-    public JiraQueryBuilder priorityIds(String priorityIds) {
+    public JqlQueryBuilder priorityIds(String priorityIds) {
         addCommaSeparatedValues("priority", priorityIds);
         return this;
     }
 
-    public JiraQueryBuilder priorityIds(List<String> priorityIds) {
+    public JqlQueryBuilder priorityIds(List<String> priorityIds) {
         addValues("priority", priorityIds);
         return this;
     }
 
-    public JiraQueryBuilder project(String project) {
+    public JqlQueryBuilder project(String project) {
         addSingleValue("project", project);
         return this;
     }
 
-    public JiraQueryBuilder resolutionIds(String resolutionIds) {
+    public JqlQueryBuilder resolutionIds(String resolutionIds) {
         addCommaSeparatedValues("resolution", resolutionIds);
         return this;
     }
 
-    public JiraQueryBuilder resolutionIds(List<String> resolutionIds) {
+    public JqlQueryBuilder resolutionIds(List<String> resolutionIds) {
         addValues("resolution", resolutionIds);
         return this;
     }
 
-    public JiraQueryBuilder sortColumnNames(String sortColumnNames) {
+    public JqlQueryBuilder sortColumnNames(String sortColumnNames) {
         if (sortColumnNames != null) {
             orderBy.append(" ORDER BY ");
 
@@ -168,27 +168,27 @@ public class JqlQueryBuilder implements JiraQueryBuilder {
         return this;
     }
 
-    public JiraQueryBuilder statusIds(String statusIds) {
+    public JqlQueryBuilder statusIds(String statusIds) {
         addCommaSeparatedValues("status", statusIds);
         return this;
     }
 
-    public JiraQueryBuilder statusIds(List<String> statusIds) {
+    public JqlQueryBuilder statusIds(List<String> statusIds) {
         addValues("status", statusIds);
         return this;
     }
 
-    public JiraQueryBuilder typeIds(String typeIds) {
+    public JqlQueryBuilder typeIds(String typeIds) {
         addCommaSeparatedValues("type", typeIds);
         return this;
     }
 
-    public JiraQueryBuilder typeIds(List<String> typeIds) {
+    public JqlQueryBuilder typeIds(List<String> typeIds) {
         addValues("type", typeIds);
         return this;
     }
 
-    public JiraQueryBuilder urlEncode(boolean doEncoding) {
+    public JqlQueryBuilder urlEncode(boolean doEncoding) {
         urlEncode = doEncoding;
         return this;
     }
