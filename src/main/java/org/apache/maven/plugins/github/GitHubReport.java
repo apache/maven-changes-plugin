@@ -135,6 +135,7 @@ public class GitHubReport extends AbstractChangesReport {
     /* --------------------------------------------------------------------- */
 
     @Override
+    @Deprecated
     public String getOutputName() {
         return "github-report";
     }

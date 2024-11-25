@@ -366,6 +366,7 @@ public class JiraReport extends AbstractChangesReport {
     }
 
     @Override
+    @Deprecated
     public String getOutputName() {
         return "jira-report";
     }

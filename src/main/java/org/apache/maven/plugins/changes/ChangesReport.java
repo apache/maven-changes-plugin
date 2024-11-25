@@ -306,6 +306,7 @@ public class ChangesReport extends AbstractChangesReport {
     }
 
     @Override
+    @Deprecated
     public String getOutputName() {
         return "changes-report";
     }
@@ -337,7 +338,8 @@ public class ChangesReport extends AbstractChangesReport {
             }
             try {
                 // so we get encoding from the file itself
-                try (XmlStreamReader xmlStreamReader = new XmlStreamReader(changesXml)) {
+                try (XmlStreamReader xmlStreamReader =
+                        XmlStreamReader.builder().setFile(changesXml).get()) {
                     String encoding = xmlStreamReader.getEncoding();
                     File resultFile = new File(
                             filteredOutputDirectory,
