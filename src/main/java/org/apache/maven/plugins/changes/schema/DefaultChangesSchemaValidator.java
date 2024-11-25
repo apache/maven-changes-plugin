@@ -64,7 +64,7 @@ public class DefaultChangesSchemaValidator implements ChangesSchemaValidator {
 
             validator.setErrorHandler(baseHandler);
 
-            try (Reader reader = new XmlStreamReader(file)) {
+            try (Reader reader = XmlStreamReader.builder().setFile(file).get()) {
                 validator.validate(new StreamSource(reader));
             }
 

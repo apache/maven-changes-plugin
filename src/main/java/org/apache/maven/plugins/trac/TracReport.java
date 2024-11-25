@@ -184,6 +184,7 @@ public class TracReport extends AbstractChangesReport {
     }
 
     @Override
+    @Deprecated
     public String getOutputName() {
         return "trac-report";
     }
