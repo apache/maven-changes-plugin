@@ -22,11 +22,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
+import org.apache.maven.plugins.changes.issues.Issue;
+import org.apache.maven.plugins.changes.issues.IssueManagementSystem;
+import org.apache.maven.plugins.changes.jira.JIRAIssueManagmentSystem;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
-import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.plugins.issues.IssueManagementSystem;
-import org.apache.maven.plugins.jira.JIRAIssueManagmentSystem;
 
 /**
  * @author Alan Parkinson

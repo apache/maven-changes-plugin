@@ -29,11 +29,11 @@ import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.doxia.util.DoxiaUtils;
+import org.apache.maven.plugins.changes.issues.AbstractIssuesReportGenerator;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Component;
 import org.apache.maven.plugins.changes.model.DueTo;
 import org.apache.maven.plugins.changes.model.Release;
-import org.apache.maven.plugins.issues.AbstractIssuesReportGenerator;
 
 /**
  * Generates a changes report.

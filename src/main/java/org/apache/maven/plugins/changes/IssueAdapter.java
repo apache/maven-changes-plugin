@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.maven.artifact.versioning.ComparableVersion;
+import org.apache.maven.plugins.changes.issues.Issue;
+import org.apache.maven.plugins.changes.issues.IssueManagementSystem;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
-import org.apache.maven.plugins.issues.Issue;
-import org.apache.maven.plugins.issues.IssueManagementSystem;
 
 /**
  * An adapter that can adapt data models from other issue management system to the data models used in the changes.xml
