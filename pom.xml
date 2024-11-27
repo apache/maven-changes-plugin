@@ -74,7 +74,7 @@ under the License.
   <properties>
     <javaVersion>8</javaVersion>
     <doxiaVersion>2.0.0</doxiaVersion>
-    <mavenVersion>3.6.3</mavenVersion>
+    <mavenVersion>3.9.9</mavenVersion>
     <mavenResolverVersion>1.4.1</mavenResolverVersion>
     <!-- TODO check with next parent -->
     <version.maven-site-plugin>3.21.0</version.maven-site-plugin>
