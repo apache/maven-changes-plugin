@@ -157,15 +157,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private File announcementDirectory;
 
     /**
-     * Directory where the announcement file will be generated.
-     *
-     * @deprecated Starting with version 2.10 this parameter is no longer used. You must use
-     *             {@link #announcementDirectory} instead.
-     */
-    @Parameter
-    private File outputDirectory;
-
-    /**
      * Packaging structure for the artifact.
      */
     @Parameter(property = "project.packaging", readonly = true)
@@ -253,25 +244,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      */
     @Parameter
     private String filter;
-
-    /**
-     * Flag to determine if the plugin will generate a JIRA announcement.
-     *
-     * @deprecated Since version 2.4 this parameter has been deprecated. Please use the issueManagementSystems parameter
-     *             instead.
-     */
-    @Parameter(property = "generateJiraAnnouncement")
-    private Boolean generateJiraAnnouncement;
-
-    /**
-     * If releases from JIRA should be merged with the releases from a changes.xml file.
-     *
-     * @since 2.1
-     * @deprecated Since version 2.4 this parameter has been deprecated. Please use the issueManagementSystems parameter
-     *             instead.
-     */
-    @Parameter(property = "changes.jiraMerge")
-    private Boolean jiraMerge;
 
     /**
      * Defines the JIRA password for authentication into a private JIRA installation.
@@ -458,11 +430,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
      * @throws MojoExecutionException in case of errors
      */
     public void execute() throws MojoExecutionException {
-        // Fail build fast if it is using deprecated parameters
-        failIfUsingDeprecatedParameter(outputDirectory, "outputDirectory", "announcementDirectory");
-        failIfUsingDeprecatedParameter(generateJiraAnnouncement, "generateJiraAnnouncement", "issueManagementSystems ");
-        failIfUsingDeprecatedParameter(jiraMerge, "jiraMerge", "issueManagementSystems ");
-
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
             getLog().info("Skipping the announcement generation in this project because it's not the Execution Root");
@@ -540,14 +507,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
             } else {
                 doGenerate(releases);
             }
-        }
-    }
-
-    private void failIfUsingDeprecatedParameter(Object value, String name, String replacement)
-            throws MojoExecutionException {
-        if (value != null) {
-            throw new MojoExecutionException(
-                    "You are using the old parameter '" + name + "'. " + "You must use '" + replacement + "' instead.");
         }
     }
 

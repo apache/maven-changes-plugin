@@ -189,15 +189,6 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
     private String templateEncoding;
 
     /**
-     * Directory which contains the template for announcement email.
-     *
-     * @deprecated Starting with version 2.10 this parameter is no longer used. You must use
-     *             {@link #announcementDirectory} instead.
-     */
-    @Parameter
-    private File templateOutputDirectory;
-
-    /**
      * Recipient email address.
      */
     @Parameter(required = true)
@@ -228,11 +219,6 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
     private ProjectJavamailMailSender mailer = new ProjectJavamailMailSender();
 
     public void execute() throws MojoExecutionException {
-        // Fail build fast if it is using deprecated parameters
-        if (templateOutputDirectory != null) {
-            throw new MojoExecutionException("You are using the old parameter 'templateOutputDirectory'. "
-                    + "You must use 'announcementDirectory' instead.");
-        }
 
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
