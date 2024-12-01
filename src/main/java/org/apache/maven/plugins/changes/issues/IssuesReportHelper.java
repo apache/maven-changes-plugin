@@ -23,9 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections4.bidimap.DualHashBidiMap;
-import org.apache.maven.plugin.logging.Log;
-
 /**
  * A helper class for generation of reports based on issues.
  *
@@ -70,42 +67,14 @@ public class IssuesReportHelper {
      * @return A List of column id:s
      */
     public static List<Integer> getColumnIds(String columnNames, Map<String, Integer> allColumns) {
-        return getColumnIds(columnNames, allColumns, null, null);
-    }
-
-    /**
-     * Get a list of id:s for the columns that are to be included in the report. This method also handles deprecated
-     * column names, which will still work. If deprecated column names are used they generate a warning, indicating the
-     * replacement column name.
-     *
-     * @param columnNames The names of the columns
-     * @param allColumns A mapping from column name to column id
-     * @param deprecatedColumns A mapping from deprecated column name to column id
-     * @param log A log
-     * @return A List of column id:s
-     */
-    public static List<Integer> getColumnIds(
-            String columnNames, Map<String, Integer> allColumns, Map<String, Integer> deprecatedColumns, Log log) {
-        DualHashBidiMap bidiColumns = null;
         List<Integer> columnIds = new ArrayList<>();
         String[] columnNamesArray = columnNames.split(",");
-
-        if (deprecatedColumns != null) {
-            bidiColumns = new DualHashBidiMap(allColumns);
-        }
 
         // Loop through the names of the columns, to validate each of them and add their id to the list
         for (String aColumnNamesArray : columnNamesArray) {
             String columnName = aColumnNamesArray.trim();
             if (allColumns.containsKey(columnName)) {
                 columnIds.add(allColumns.get(columnName));
-            } else if (deprecatedColumns != null && deprecatedColumns.containsKey(columnName)) {
-                Integer columnId = deprecatedColumns.get(columnName);
-                columnIds.add(columnId);
-                if (log != null) {
-                    log.warn("The columnName '" + columnName + "' has been deprecated." + " Please use "
-                            + "the columnName '" + bidiColumns.getKey(columnId) + "' instead.");
-                }
             }
         }
         return columnIds;

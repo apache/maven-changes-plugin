@@ -44,10 +44,6 @@ import org.apache.xmlrpc.XmlRpcException;
  */
 @Mojo(name = "trac-report", threadSafe = true)
 public class TracReport extends AbstractChangesReport {
-    /**
-     * Deprecated Trac columns.
-     */
-    private static final Map<String, Integer> DEPRECATED_TRAC_COLUMNS = new HashMap<>();
 
     /**
      * Valid Trac columns.
@@ -55,19 +51,6 @@ public class TracReport extends AbstractChangesReport {
     private static final Map<String, Integer> TRAC_COLUMNS = new HashMap<>();
 
     static {
-        DEPRECATED_TRAC_COLUMNS.put("changed", IssuesReportHelper.COLUMN_UPDATED);
-        DEPRECATED_TRAC_COLUMNS.put("component", IssuesReportHelper.COLUMN_COMPONENT);
-        DEPRECATED_TRAC_COLUMNS.put("created", IssuesReportHelper.COLUMN_CREATED);
-        DEPRECATED_TRAC_COLUMNS.put("id", IssuesReportHelper.COLUMN_ID);
-        DEPRECATED_TRAC_COLUMNS.put("milestone", IssuesReportHelper.COLUMN_FIX_VERSION);
-        DEPRECATED_TRAC_COLUMNS.put("owner", IssuesReportHelper.COLUMN_ASSIGNEE);
-        DEPRECATED_TRAC_COLUMNS.put("priority", IssuesReportHelper.COLUMN_PRIORITY);
-        DEPRECATED_TRAC_COLUMNS.put("reporter", IssuesReportHelper.COLUMN_REPORTER);
-        DEPRECATED_TRAC_COLUMNS.put("resolution", IssuesReportHelper.COLUMN_RESOLUTION);
-        DEPRECATED_TRAC_COLUMNS.put("status", IssuesReportHelper.COLUMN_STATUS);
-        DEPRECATED_TRAC_COLUMNS.put("summary", IssuesReportHelper.COLUMN_SUMMARY);
-        DEPRECATED_TRAC_COLUMNS.put("type", IssuesReportHelper.COLUMN_TYPE);
-
         TRAC_COLUMNS.put("Assignee", IssuesReportHelper.COLUMN_ASSIGNEE);
         TRAC_COLUMNS.put("Component", IssuesReportHelper.COLUMN_COMPONENT);
         TRAC_COLUMNS.put("Created", IssuesReportHelper.COLUMN_CREATED);
@@ -138,8 +121,7 @@ public class TracReport extends AbstractChangesReport {
     @Override
     public void executeReport(Locale locale) throws MavenReportException {
         // Validate parameters
-        List<Integer> columnIds =
-                IssuesReportHelper.getColumnIds(columnNames, TRAC_COLUMNS, DEPRECATED_TRAC_COLUMNS, getLog());
+        List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, TRAC_COLUMNS);
         if (columnIds.isEmpty()) {
             // This can happen if the user has configured column names and they are all invalid
             throw new MavenReportException(

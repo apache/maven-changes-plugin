@@ -51,18 +51,18 @@ public class GitHubReport extends AbstractChangesReport {
     /**
      * Valid Github columns.
      */
-    private static Map<String, Integer> githubColumns = new HashMap<>();
+    private static final Map<String, Integer> GITHUB_COLUMNS = new HashMap<>();
 
     static {
-        githubColumns.put("Assignee", IssuesReportHelper.COLUMN_ASSIGNEE);
-        githubColumns.put("Created", IssuesReportHelper.COLUMN_CREATED);
-        githubColumns.put("Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION);
-        githubColumns.put("Id", IssuesReportHelper.COLUMN_ID);
-        githubColumns.put("Reporter", IssuesReportHelper.COLUMN_REPORTER);
-        githubColumns.put("Status", IssuesReportHelper.COLUMN_STATUS);
-        githubColumns.put("Summary", IssuesReportHelper.COLUMN_SUMMARY);
-        githubColumns.put("Type", IssuesReportHelper.COLUMN_TYPE);
-        githubColumns.put("Updated", IssuesReportHelper.COLUMN_UPDATED);
+        GITHUB_COLUMNS.put("Assignee", IssuesReportHelper.COLUMN_ASSIGNEE);
+        GITHUB_COLUMNS.put("Created", IssuesReportHelper.COLUMN_CREATED);
+        GITHUB_COLUMNS.put("Fix Version", IssuesReportHelper.COLUMN_FIX_VERSION);
+        GITHUB_COLUMNS.put("Id", IssuesReportHelper.COLUMN_ID);
+        GITHUB_COLUMNS.put("Reporter", IssuesReportHelper.COLUMN_REPORTER);
+        GITHUB_COLUMNS.put("Status", IssuesReportHelper.COLUMN_STATUS);
+        GITHUB_COLUMNS.put("Summary", IssuesReportHelper.COLUMN_SUMMARY);
+        GITHUB_COLUMNS.put("Type", IssuesReportHelper.COLUMN_TYPE);
+        GITHUB_COLUMNS.put("Updated", IssuesReportHelper.COLUMN_UPDATED);
     }
 
     /**
@@ -163,7 +163,7 @@ public class GitHubReport extends AbstractChangesReport {
     protected void executeReport(Locale locale) throws MavenReportException {
 
         // Validate parameters
-        List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, githubColumns);
+        List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, GITHUB_COLUMNS);
         if (columnIds.isEmpty()) {
             // This can happen if the user has configured column names and they are all invalid
             throw new MavenReportException(
