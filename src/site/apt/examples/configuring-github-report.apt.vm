@@ -34,31 +34,30 @@ Configuring the GitHub Report
 
 * Using GitHub Enterprise
 
-  If you are using GitHub Enterprise you will want to make sure that the
-  githubAPIScheme and githubAPIPort are correct (they default to "http" and 80
-  by default). If either of these are incorrect make sure to include them in
-  your configuration.
+  Additional configurations are not needed. Address of your <<GitHub>> instance will be taken from <<<project -> issueManagement -> url>>>
+
+* Authenticating to the GitHub REST API
+
+  If you are using GitHub Enterprise or you want to authenticate to GitHub, configure the server in settings.xml like so:
 
 +-----------------+
-<project>
+<settings>
   ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${project.version}</version>
-        <configuration>
-          <githubAPIScheme>https</githubAPIScheme>
-          <githubAPIPort>443</githubAPIPort>
-        </configuration>
-        ...
-      </plugin>
-    </plugins>
-  </reporting>
+  <servers>
+    <server>
+      <id>github</id>
+      <password>YOUR-TOKEN</password>
+    </server>
+  </servers>
   ...
-</project>
+</settings>
 +-----------------+
+
+  Only the <<<password>>> item is used as your token for <<<Authorization: Bearer YOUR-TOKEN>>>
+
+  The default serverId is <<<github>>>. You can change it by setting the <<<\<githubAPIServerId\>>>> configuration parameter.
+
+  {{{https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api}Authenticating to the REST API}}
 
 * Filtering Issues
 

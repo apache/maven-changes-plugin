@@ -563,11 +563,6 @@ public class RestJiraDownloader {
                 issue.setSummary(val.asText());
             }
 
-            val = fieldsNode.get("title");
-            if (val != null) {
-                issue.setTitle(val.asText());
-            }
-
             val = fieldsNode.get("updated");
             processUpdated(issue, val);
 

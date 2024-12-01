@@ -54,8 +54,6 @@ public class Issue {
 
     private String summary;
 
-    private String title;
-
     private String type;
 
     private Date updated;
@@ -166,14 +164,6 @@ public class Issue {
         this.summary = summary;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String getType() {
         return type;
     }
@@ -199,7 +189,7 @@ public class Issue {
     }
 
     public String toString() {
-        return this.getClass().getSimpleName() + "[id='" + this.getId() + "'" + ", title='" + this.getTitle() + "'"
+        return this.getClass().getSimpleName() + "[id='" + this.getId() + "'" + ", summary='" + this.getSummary() + "'"
                 + ", fixVersions='" + this.getFixVersions() + "'" + "]";
     }
 }

@@ -19,7 +19,8 @@ specific language governing permissions and limitations
 under the License.
 -->
 
-<settings>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 https://maven.apache.org/xsd/settings-1.2.0.xsd">
   <profiles>
     <profile>
       <id>it-repo</id>
@@ -59,6 +60,11 @@ under the License.
       <username>jira-test</username>
       <!-- <password>jira-password</password> -->
       <password>{xZLx2669VMsHnW8pO9Ehd1FLMrPsCOQ3g2MiRNNA5vI=}</password>
+    </server>
+    <server>
+      <id>github</id>
+      <!-- github-token -->
+      <password>{d0C24IDj+NEH8LOV7aQGx+yYDYR7nI4T9okO70geQuc=}</password>
     </server>
   </servers>
 </settings>

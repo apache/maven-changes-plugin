@@ -77,20 +77,12 @@ public class GitHubReport extends AbstractChangesReport {
     private String columnNames;
 
     /**
-     * The scheme of your github api domain. Only use if using github enterprise.
-     */
-    @Parameter(defaultValue = "http")
-    private String githubAPIScheme;
-
-    /**
-     * The port of your github api domain. Only use if using github enterprise.
-     */
-    @Parameter(defaultValue = "80")
-    private int githubAPIPort;
-
-    /**
-     * The settings.xml server id to be used to authenticate into github api domain. Only use if using github
-     * enterprise.
+     * The settings.xml server id to be used to authenticate into GitHub Api.
+     * <br>
+     * Since 3.x - only password item is used as authentication token with {@code Authorization: Bearer YOUR-TOKEN}
+     * <a href="https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api">Authenticating to the REST API</a>
+     *
+     * @since 2.12
      */
     @Parameter(defaultValue = "github")
     private String githubAPIServerId;
@@ -180,8 +172,7 @@ public class GitHubReport extends AbstractChangesReport {
 
         try {
             // Download issues
-            GitHubDownloader issueDownloader = new GitHubDownloader(
-                    project, githubAPIScheme, githubAPIPort, includeOpenIssues, onlyMilestoneIssues);
+            GitHubDownloader issueDownloader = new GitHubDownloader(project, includeOpenIssues, onlyMilestoneIssues);
 
             issueDownloader.configureAuthentication(settingsDecrypter, githubAPIServerId, settings, getLog());
 
@@ -203,7 +194,7 @@ public class GitHubReport extends AbstractChangesReport {
             }
         } catch (MalformedURLException e) {
             // Rethrow this error so that the build fails
-            throw new MavenReportException("The Github URL is incorrect.");
+            throw new MavenReportException("The Github URL is incorrect - " + e.getMessage());
         } catch (Exception e) {
             throw new MavenReportException(e.getMessage(), e);
         }
