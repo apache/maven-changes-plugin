@@ -74,12 +74,7 @@ public class GitHubDownloader {
      */
     private String githubIssueURL;
 
-    public GitHubDownloader(
-            MavenProject project,
-            String githubScheme,
-            int githubPort,
-            boolean includeOpenIssues,
-            boolean onlyMilestoneIssues)
+    public GitHubDownloader(MavenProject project, boolean includeOpenIssues, boolean onlyMilestoneIssues)
             throws IOException {
         this.includeOpenIssues = includeOpenIssues;
         this.onlyMilestoneIssues = onlyMilestoneIssues;
@@ -91,7 +86,9 @@ public class GitHubDownloader {
         if (githubURL.getHost().equalsIgnoreCase("github.com")) {
             this.client = new GitHubBuilder();
         } else {
-            this.client = new GitHubBuilder().withEndpoint(githubScheme + githubURL.getHost() + githubPort);
+            this.client = new GitHubBuilder()
+                    .withEndpoint(githubURL.getProtocol() + "://" + githubURL.getHost()
+                            + (githubURL.getPort() == -1 ? "" : ":" + githubURL.getPort()));
         }
 
         this.githubIssueURL = project.getIssueManagement().getUrl();
@@ -139,8 +136,6 @@ public class GitHubDownloader {
             }
         }
 
-        issue.setTitle(githubIssue.getTitle());
-
         issue.setSummary(githubIssue.getTitle());
 
         if (githubIssue.getMilestone() != null) {
@@ -149,11 +144,7 @@ public class GitHubDownloader {
 
         issue.setReporter(githubIssue.getUser().getLogin());
 
-        if (githubIssue.getClosedAt() != null) {
-            issue.setStatus("closed");
-        } else {
-            issue.setStatus("open");
-        }
+        issue.setStatus(githubIssue.getState().name());
 
         final Collection<GHLabel> labels = githubIssue.getLabels();
         if (labels != null && !labels.isEmpty()) {
@@ -201,9 +192,8 @@ public class GitHubDownloader {
                     log.error(problem.getMessage(), problem.getException());
                 }
                 server = result.getServer();
-                String user = server.getUsername();
                 String password = server.getPassword();
-                this.client.withPassword(user, password);
+                client.withJwtToken(password);
 
                 configured = true;
                 break;
@@ -211,7 +201,7 @@ public class GitHubDownloader {
         }
 
         if (!configured) {
-            log.warn("Can't find server id [" + githubAPIServerId + "] configured in githubAPIServerId.");
+            log.warn("Can't find server id [" + githubAPIServerId + "] configured in settings.xml");
         }
     }
 }

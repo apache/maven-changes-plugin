@@ -414,24 +414,10 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     // =======================================//
 
     /**
-     * The scheme of your github api domain. Only use if using github enterprise.
-     *
-     * @since 2.9
-     */
-    @Parameter(defaultValue = "http", property = "changes.githubAPIScheme")
-    private String githubAPIScheme;
-
-    /**
-     * The port of your github api domain. Only use if using github enterprise.
-     *
-     * @since 2.9
-     */
-    @Parameter(defaultValue = "80", property = "changes.githubAPIPort")
-    private int githubAPIPort;
-
-    /**
-     * The settings.xml server id to be used to authenticate into github api domain. Only use if using github
-     * enterprise.
+     * The settings.xml server id to be used to authenticate into GitHub Api.
+     * <br>
+     * Since 3.x - only password item is used as authentication token with {@code Authorization: Bearer YOUR-TOKEN}
+     * <a href="https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api">Authenticating to the REST API</a>
      *
      * @since 2.12
      */
@@ -760,8 +746,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
 
     protected List<Release> getGitHubReleases() throws MojoExecutionException {
         try {
-            GitHubDownloader issueDownloader =
-                    new GitHubDownloader(project, githubAPIScheme, githubAPIPort, includeOpenIssues, true);
+            GitHubDownloader issueDownloader = new GitHubDownloader(project, includeOpenIssues, true);
 
             issueDownloader.configureAuthentication(settingsDecrypter, githubAPIServerId, settings, getLog());
 

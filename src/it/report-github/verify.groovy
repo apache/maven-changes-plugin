@@ -22,10 +22,18 @@ import com.github.tomakehurst.wiremock.WireMockServer
 WireMockServer wireMockServer = context.get("wireMockServer")
 wireMockServer.stop()
 
-content = new File(basedir, 'target/site/jira-report.html').text;
+content = new File(basedir, 'target/site/github-report.html').text;
 
-assert content.contains('/browse/TEST_PROJECT-1">TEST_PROJECT-1</a>');
+assert content.contains('/owner-name/repo-name/issues/1234">1234</a>');
 assert content.contains('<td>Authentication does not work after Upgrade</td>');
-assert content.contains('<td>Closed</td>');
-assert content.contains('<td>Fixed</td>');
-assert content.contains('<td>Assigned User</td>');
+assert content.contains('<td>OPEN</td>');
+assert content.contains('<td>assigned-user1</td>')
+assert content.contains('<td>reporter-user1</td>');
+assert content.contains('<td>2.12.1</td>');
+
+assert content.contains('/owner-name/repo-name/issues/1235">1235</a>');
+assert content.contains('<td>Next issue for testing</td>');
+assert content.contains('<td>CLOSED</td>');
+assert content.contains('<td>assigned-user2</td>')
+assert content.contains('<td>reporter-user2</td>');
+assert content.contains('<td>2.12.2</td>');

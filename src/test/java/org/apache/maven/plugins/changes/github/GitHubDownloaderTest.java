@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.model.IssueManagement;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.changes.issues.Issue;
@@ -36,17 +35,22 @@ import org.apache.maven.settings.crypto.DefaultSettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
 import org.apache.maven.settings.crypto.SettingsDecryptionRequest;
 import org.apache.maven.settings.crypto.SettingsDecryptionResult;
+import org.junit.Test;
 import org.kohsuke.github.GHIssue;
+import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHUser;
 import org.mockito.ArgumentCaptor;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class GitHubDownloaderTestCase extends TestCase {
+public class GitHubDownloaderTest {
 
+    @Test
     public void testCreateIssue() throws IOException {
         IssueManagement issueManagement = newGitHubIssueManagement();
         GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
@@ -56,16 +60,18 @@ public class GitHubDownloaderTestCase extends TestCase {
         when(githubIssue.getTitle()).thenReturn("Title");
         when(githubIssue.getBody()).thenReturn("Body");
         when(githubIssue.getUser()).thenReturn(new GHUser());
+        when(githubIssue.getState()).thenReturn(GHIssueState.OPEN);
 
         Issue issue = gitHubDownloader.createIssue(githubIssue);
 
         assertEquals(Integer.toString(githubIssue.getNumber()), issue.getId());
         assertEquals(Integer.toString(githubIssue.getNumber()), issue.getKey());
-        assertEquals(githubIssue.getTitle(), issue.getTitle());
         assertEquals(githubIssue.getTitle(), issue.getSummary());
+        assertEquals(githubIssue.getState().name(), issue.getStatus());
         assertEquals(issueManagement.getUrl() + githubIssue.getNumber(), issue.getLink());
     }
 
+    @Test
     public void testConfigureAuthenticationWithProblems() throws Exception {
         IssueManagement issueManagement = newGitHubIssueManagement();
         GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
@@ -91,6 +97,7 @@ public class GitHubDownloaderTestCase extends TestCase {
         assertSame(server, servers.get(0));
     }
 
+    @Test
     public void testConfigureAuthenticationWithNoServer() throws Exception {
         IssueManagement issueManagement = newGitHubIssueManagement();
         GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
@@ -106,7 +113,7 @@ public class GitHubDownloaderTestCase extends TestCase {
 
         gitHubDownloader.configureAuthentication(decrypter, "github-server", settings, log);
 
-        verify(log).warn("Can't find server id [github-server] configured in githubAPIServerId.");
+        verify(log).warn("Can't find server id [github-server] configured in settings.xml");
     }
 
     private Server newServer(String id) {
@@ -120,7 +127,7 @@ public class GitHubDownloaderTestCase extends TestCase {
     private GitHubDownloader newGitHubDownloader(IssueManagement issueManagement) throws IOException {
         MavenProject mavenProject = new MavenProject();
         mavenProject.setIssueManagement(issueManagement);
-        return new GitHubDownloader(mavenProject, "https", 80, true, false);
+        return new GitHubDownloader(mavenProject, true, false);
     }
 
     private IssueManagement newGitHubIssueManagement() {
