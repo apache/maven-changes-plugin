@@ -19,8 +19,8 @@
 package org.apache.maven.plugins.changes.issues;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.apache.maven.doxia.sink.Sink;
@@ -33,7 +33,7 @@ import org.apache.maven.doxia.sink.Sink;
  * @version $Id$
  * @since 2.4
  */
-public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
+public class IssuesReportRenderer extends AbstractIssuesReportRenderer {
     /**
      * Fallback value that is used if date field are not available.
      */
@@ -42,106 +42,92 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
     /**
      * Holds the id:s for the columns to include in the report, in the order that they should appear in the report.
      */
-    private int[] columns;
+    private final List<Integer> columns;
+
+    private final List<Issue> issueList;
 
     /**
      * @param includedColumns The id:s of the columns to include in the report
      */
-    public IssuesReportGenerator(int[] includedColumns) {
+    public IssuesReportRenderer(
+            Sink sink, ResourceBundle bundle, List<Integer> includedColumns, List<Issue> issueList) {
+        super(sink, bundle);
         this.columns = includedColumns;
+        this.issueList = issueList;
     }
 
-    public void doGenerateEmptyReport(ResourceBundle bundle, Sink sink) {
-        sinkBeginReport(sink, bundle);
-
-        sink.paragraph();
-
-        sink.text(bundle.getString("report.issues.error"));
-
-        sink.paragraph_();
-
-        sinkEndReport(sink);
-    }
-
-    public void doGenerateReport(ResourceBundle bundle, Sink sink, List<Issue> issueList) {
-        sinkBeginReport(sink, bundle);
-
-        constructHeaderRow(sink, issueList, bundle);
-
-        // Always use the international date format as recommended by the W3C:
-        // http://www.w3.org/QA/Tips/iso-date
-        // This date format is used in the Swedish locale.
-        constructDetailRows(sink, issueList, bundle, new Locale("sv"));
-
-        sinkEndReport(sink);
-    }
-
-    private void constructHeaderRow(Sink sink, List<Issue> issueList, ResourceBundle bundle) {
-        if (issueList == null) {
-            return;
+    @Override
+    public void renderBody() {
+        if (issueList == null || issueList.isEmpty()) {
+            paragraph(bundle.getString("report.issues.error"));
+        } else {
+            startTable();
+            constructHeaderRow();
+            constructDetailRows();
+            endTable();
         }
+    }
 
-        sink.table();
-        sink.tableRows();
+    private void constructHeaderRow() {
 
         sink.tableRow();
 
         for (int column : columns) {
             switch (column) {
                 case IssuesReportHelper.COLUMN_ASSIGNEE:
-                    sinkHeader(sink, bundle.getString("report.issues.label.assignee"));
+                    tableHeaderCell(bundle.getString("report.issues.label.assignee"));
                     break;
 
                 case IssuesReportHelper.COLUMN_COMPONENT:
-                    sinkHeader(sink, bundle.getString("report.issues.label.component"));
+                    tableHeaderCell(bundle.getString("report.issues.label.component"));
                     break;
 
                 case IssuesReportHelper.COLUMN_CREATED:
-                    sinkHeader(sink, bundle.getString("report.issues.label.created"));
+                    tableHeaderCell(bundle.getString("report.issues.label.created"));
                     break;
 
                 case IssuesReportHelper.COLUMN_FIX_VERSION:
-                    sinkHeader(sink, bundle.getString("report.issues.label.fixVersion"));
+                    tableHeaderCell(bundle.getString("report.issues.label.fixVersion"));
                     break;
 
                 case IssuesReportHelper.COLUMN_ID:
-                    sinkHeader(sink, bundle.getString("report.issues.label.id"));
+                    tableHeaderCell(bundle.getString("report.issues.label.id"));
                     break;
 
                 case IssuesReportHelper.COLUMN_KEY:
-                    sinkHeader(sink, bundle.getString("report.issues.label.key"));
+                    tableHeaderCell(bundle.getString("report.issues.label.key"));
                     break;
 
                 case IssuesReportHelper.COLUMN_PRIORITY:
-                    sinkHeader(sink, bundle.getString("report.issues.label.priority"));
+                    tableHeaderCell(bundle.getString("report.issues.label.priority"));
                     break;
 
                 case IssuesReportHelper.COLUMN_REPORTER:
-                    sinkHeader(sink, bundle.getString("report.issues.label.reporter"));
+                    tableHeaderCell(bundle.getString("report.issues.label.reporter"));
                     break;
 
                 case IssuesReportHelper.COLUMN_RESOLUTION:
-                    sinkHeader(sink, bundle.getString("report.issues.label.resolution"));
+                    tableHeaderCell(bundle.getString("report.issues.label.resolution"));
                     break;
 
                 case IssuesReportHelper.COLUMN_STATUS:
-                    sinkHeader(sink, bundle.getString("report.issues.label.status"));
+                    tableHeaderCell(bundle.getString("report.issues.label.status"));
                     break;
 
                 case IssuesReportHelper.COLUMN_SUMMARY:
-                    sinkHeader(sink, bundle.getString("report.issues.label.summary"));
+                    tableHeaderCell(bundle.getString("report.issues.label.summary"));
                     break;
 
                 case IssuesReportHelper.COLUMN_TYPE:
-                    sinkHeader(sink, bundle.getString("report.issues.label.type"));
+                    tableHeaderCell(bundle.getString("report.issues.label.type"));
                     break;
 
                 case IssuesReportHelper.COLUMN_UPDATED:
-                    sinkHeader(sink, bundle.getString("report.issues.label.updated"));
+                    tableHeaderCell(bundle.getString("report.issues.label.updated"));
                     break;
 
                 case IssuesReportHelper.COLUMN_VERSION:
-                    sinkHeader(sink, bundle.getString("report.issues.label.version"));
+                    tableHeaderCell(bundle.getString("report.issues.label.version"));
                     break;
 
                 default:
@@ -153,25 +139,24 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
         sink.tableRow_();
     }
 
-    private void constructDetailRows(Sink sink, List<Issue> issueList, ResourceBundle bundle, Locale locale) {
-        if (issueList == null) {
-            return;
-        }
+    private void constructDetailRows() {
+
+        // Always use the international date format as recommended by the W3C:
+        // http://www.w3.org/QA/Tips/iso-date
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         for (Issue issue : issueList) {
-            // Use a DateFormat based on the Locale
-            DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
 
             sink.tableRow();
 
             for (int column : columns) {
                 switch (column) {
                     case IssuesReportHelper.COLUMN_ASSIGNEE:
-                        sinkCell(sink, issue.getAssignee());
+                        sinkCell(issue.getAssignee());
                         break;
 
                     case IssuesReportHelper.COLUMN_COMPONENT:
-                        sinkCell(sink, IssuesReportHelper.printValues(issue.getComponents()));
+                        sinkCell(IssuesReportHelper.printValues(issue.getComponents()));
                         break;
 
                     case IssuesReportHelper.COLUMN_CREATED:
@@ -179,51 +164,43 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
                         if (issue.getCreated() != null) {
                             created = df.format(issue.getCreated());
                         }
-                        sinkCell(sink, created);
+                        sinkCell(created);
                         break;
 
                     case IssuesReportHelper.COLUMN_FIX_VERSION:
-                        sinkCell(sink, IssuesReportHelper.printValues(issue.getFixVersions()));
+                        sinkCell(IssuesReportHelper.printValues(issue.getFixVersions()));
                         break;
 
                     case IssuesReportHelper.COLUMN_ID:
-                        sink.tableCell();
-                        sink.link(issue.getLink());
-                        sink.text(issue.getId());
-                        sink.link_();
-                        sink.tableCell_();
+                        sinkCellLink(issue.getId(), issue.getLink());
                         break;
 
                     case IssuesReportHelper.COLUMN_KEY:
-                        sink.tableCell();
-                        sink.link(issue.getLink());
-                        sink.text(issue.getKey());
-                        sink.link_();
-                        sink.tableCell_();
+                        sinkCellLink(issue.getKey(), issue.getLink());
                         break;
 
                     case IssuesReportHelper.COLUMN_PRIORITY:
-                        sinkCell(sink, issue.getPriority());
+                        sinkCell(issue.getPriority());
                         break;
 
                     case IssuesReportHelper.COLUMN_REPORTER:
-                        sinkCell(sink, issue.getReporter());
+                        sinkCell(issue.getReporter());
                         break;
 
                     case IssuesReportHelper.COLUMN_RESOLUTION:
-                        sinkCell(sink, issue.getResolution());
+                        sinkCell(issue.getResolution());
                         break;
 
                     case IssuesReportHelper.COLUMN_STATUS:
-                        sinkCell(sink, issue.getStatus());
+                        sinkCell(issue.getStatus());
                         break;
 
                     case IssuesReportHelper.COLUMN_SUMMARY:
-                        sinkCell(sink, issue.getSummary());
+                        sinkCell(issue.getSummary());
                         break;
 
                     case IssuesReportHelper.COLUMN_TYPE:
-                        sinkCell(sink, issue.getType());
+                        sinkCell(issue.getType());
                         break;
 
                     case IssuesReportHelper.COLUMN_UPDATED:
@@ -231,11 +208,11 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
                         if (issue.getUpdated() != null) {
                             updated = df.format(issue.getUpdated());
                         }
-                        sinkCell(sink, updated);
+                        sinkCell(updated);
                         break;
 
                     case IssuesReportHelper.COLUMN_VERSION:
-                        sinkCell(sink, issue.getVersion());
+                        sinkCell(issue.getVersion());
                         break;
 
                     default:
@@ -246,7 +223,5 @@ public class IssuesReportGenerator extends AbstractIssuesReportGenerator {
 
             sink.tableRow_();
         }
-        sink.tableRows_();
-        sink.table_();
     }
 }

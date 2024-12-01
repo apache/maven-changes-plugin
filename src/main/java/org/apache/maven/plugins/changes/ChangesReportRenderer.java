@@ -26,10 +26,8 @@ import java.util.ResourceBundle;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.doxia.util.DoxiaUtils;
-import org.apache.maven.plugins.changes.issues.AbstractIssuesReportGenerator;
+import org.apache.maven.plugins.changes.issues.AbstractIssuesReportRenderer;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Component;
 import org.apache.maven.plugins.changes.model.DueTo;
@@ -40,7 +38,7 @@ import org.apache.maven.plugins.changes.model.Release;
  *
  * @version $Id$
  */
-public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
+public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
     /**
      * The token in {@link #issueLinksPerSystem} denoting the base URL for the issue management.
@@ -55,6 +53,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
     static final String DEFAULT_ISSUE_SYSTEM_KEY = "default";
 
     private static final String NO_TEAM = "none";
+
+    private final ChangesXML changesXML;
 
     /**
      * The issue management system to use, for actions that do not specify a system.
@@ -73,22 +73,10 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
 
     private boolean linkToFeed;
 
-    /**
-     * @since 2.4
-     */
-    private List<Release> releaseList;
-
-    public ChangesReportGenerator() {
-        issueLinksPerSystem = new HashMap<>();
-    }
-
-    public ChangesReportGenerator(List<Release> releaseList) {
-        this();
-        this.releaseList = releaseList;
-    }
-
-    public String getSystem() {
-        return system;
+    public ChangesReportRenderer(Sink sink, ResourceBundle bundleName, ChangesXML changesXML) {
+        super(sink, bundleName);
+        this.issueLinksPerSystem = new HashMap<>();
+        this.changesXML = changesXML;
     }
 
     public void setSystem(String system) {
@@ -99,20 +87,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         this.team = team;
     }
 
-    public String getTeam() {
-        return team;
-    }
-
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public Map<String, String> getIssueLinksPerSystem() {
-        return issueLinksPerSystem;
     }
 
     public void setIssueLinksPerSystem(Map<String, String> issueLinksPerSystem) {
@@ -122,16 +98,8 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         this.issueLinksPerSystem = issueLinksPerSystem;
     }
 
-    public boolean isAddActionDate() {
-        return addActionDate;
-    }
-
     public void setAddActionDate(boolean addActionDate) {
         this.addActionDate = addActionDate;
-    }
-
-    public boolean isLinkToFeed() {
-        return linkToFeed;
     }
 
     public void setLinkToFeed(boolean generateLinkTofeed) {
@@ -144,7 +112,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      * @param system The issue management system
      * @return <code>true</code> if issue links can be generated, <code>false</code> otherwise.
      */
-    public boolean canGenerateIssueLinks(String system) {
+    private boolean canGenerateIssueLinks(String system) {
         if (!this.issueLinksPerSystem.containsKey(system)) {
             return false;
         }
@@ -156,55 +124,50 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
         }
 
         // If the %URL% token is used then the issue management system URL must be set.
-        if (issueLink.contains(URL_TOKEN) && StringUtils.isBlank(getUrl())) {
+        if (issueLink.contains(URL_TOKEN) && StringUtils.isBlank(url)) {
             return false;
         }
         return true;
     }
 
-    public void doGenerateEmptyReport(ResourceBundle bundle, Sink sink, String message) {
-        sinkBeginReport(sink, bundle);
-
-        sink.text(message);
-
-        sinkEndReport(sink);
+    @Override
+    protected void renderBody() {
+        constructReleaseHistory();
+        constructReleases();
     }
 
-    public void doGenerateReport(ResourceBundle bundle, Sink sink) {
-        sinkBeginReport(sink, bundle);
-
-        constructReleaseHistory(sink, bundle, releaseList);
-
-        constructReleases(sink, bundle, releaseList);
-
-        sinkEndReport(sink);
+    @Override
+    public String getTitle() {
+        String title = changesXML.getTitle();
+        if (title == null) {
+            title = bundle.getString("report.issues.header");
+        }
+        return title;
     }
 
     /**
      * Constructs table row for specified action with all calculated content (e.g. issue link).
      *
-     * @param sink Sink
-     * @param bundle Resource bundle
      * @param action Action to generate content for
      */
-    private void constructAction(Sink sink, ResourceBundle bundle, Action action) {
+    private void constructAction(Action action) {
         sink.tableRow();
 
-        sinkShowTypeIcon(sink, action.getType());
+        sinkShowTypeIcon(action.getType());
 
         sink.tableCell();
 
         String actionDescription = action.getAction();
 
-        sink.text(actionDescription);
+        text(actionDescription);
 
         // no null check needed classes from modello return a new ArrayList
         if (StringUtils.isNotEmpty(action.getIssue())
                 || (!action.getFixedIssues().isEmpty())) {
             if (StringUtils.isNotBlank(actionDescription) && !actionDescription.endsWith(".")) {
-                sink.text(".");
+                text(".");
             }
-            sink.text(" " + bundle.getString("report.changes.text.fixes") + " ");
+            text(" " + bundle.getString("report.changes.text.fixes") + " ");
 
             // Try to get the issue management system specified in the changes.xml file
             String system = action.getSystem();
@@ -217,27 +180,27 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
                 system = DEFAULT_ISSUE_SYSTEM_KEY;
             }
             if (!canGenerateIssueLinks(system)) {
-                constructIssueText(action.getIssue(), sink, action.getFixedIssues());
+                constructIssueText(action.getIssue(), action.getFixedIssues());
             } else {
-                constructIssueLink(action.getIssue(), system, sink, action.getFixedIssues());
+                constructIssueLink(action.getIssue(), system, action.getFixedIssues());
             }
-            sink.text(".");
+            text(".");
         }
 
         if (!action.getDueTos().isEmpty()) {
-            constructDueTo(sink, action, bundle);
+            constructDueTo(action);
         }
 
         sink.tableCell_();
 
         if (NO_TEAM.equals(team)) {
-            sinkCell(sink, action.getDev());
+            sinkCell(action.getDev());
         } else {
-            sinkCellLink(sink, action.getDev(), team + "#" + action.getDev());
+            sinkCellLink(action.getDev(), team + "#" + action.getDev());
         }
 
-        if (this.isAddActionDate()) {
-            sinkCell(sink, action.getDate());
+        if (addActionDate) {
+            sinkCell(action.getDate());
         }
 
         sink.tableRow_();
@@ -246,29 +209,28 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
     /**
      * Construct a text or link that mention the people that helped with an action.
      *
-     * @param sink The sink
      * @param action The action that was done
-     * @param bundle A resource bundle for i18n
      */
-    private void constructDueTo(Sink sink, Action action, ResourceBundle bundle) {
+    private void constructDueTo(Action action) {
 
-        sink.text(" " + bundle.getString("report.changes.text.thanx") + " ");
+        text(" " + bundle.getString("report.changes.text.thanx") + " ");
         int i = 0;
         for (DueTo dueTo : action.getDueTos()) {
             i++;
 
             if (StringUtils.isNotEmpty(dueTo.getEmail())) {
-                sinkLink(sink, dueTo.getName(), "mailto:" + dueTo.getEmail());
+                String text = dueTo.getName();
+                link("mailto:" + dueTo.getEmail(), text);
             } else {
-                sink.text(dueTo.getName());
+                text(dueTo.getName());
             }
 
             if (i < action.getDueTos().size()) {
-                sink.text(", ");
+                text(", ");
             }
         }
 
-        sink.text(".");
+        text(".");
     }
 
     /**
@@ -276,34 +238,24 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      *
      * @param issue The issue specified by attributes
      * @param system The issue management system
-     * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueLink(String issue, String system, Sink sink, List<String> fixes) {
+    private void constructIssueLink(String issue, String system, List<String> fixes) {
         if (StringUtils.isNotEmpty(issue)) {
-            sink.link(parseIssueLink(issue, system));
-
-            sink.text(issue);
-
-            sink.link_();
-
+            link(parseIssueLink(issue, system), issue);
             if (!fixes.isEmpty()) {
-                sink.text(", ");
+                text(", ");
             }
         }
 
         for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
             String currentIssueId = iterator.next();
             if (StringUtils.isNotEmpty(currentIssueId)) {
-                sink.link(parseIssueLink(currentIssueId, system));
-
-                sink.text(currentIssueId);
-
-                sink.link_();
+                link(parseIssueLink(currentIssueId, system), currentIssueId);
             }
 
             if (iterator.hasNext()) {
-                sink.text(", ");
+                text(", ");
             }
         }
     }
@@ -312,152 +264,123 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
      * Construct a text that references (but does not link to) the issues that were solved by an action.
      *
      * @param issue The issue specified by attributes
-     * @param sink The sink
      * @param fixes The List of issues specified as fixes elements
      */
-    private void constructIssueText(String issue, Sink sink, List<String> fixes) {
+    private void constructIssueText(String issue, List<String> fixes) {
         if (StringUtils.isNotEmpty(issue)) {
-            sink.text(issue);
+            text(issue);
 
             if (!fixes.isEmpty()) {
-                sink.text(", ");
+                text(", ");
             }
         }
 
         for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
             String currentIssueId = iterator.next();
             if (StringUtils.isNotEmpty(currentIssueId)) {
-                sink.text(currentIssueId);
+                text(currentIssueId);
             }
 
             if (iterator.hasNext()) {
-                sink.text(", ");
+                text(", ");
             }
         }
     }
 
-    private void constructReleaseHistory(Sink sink, ResourceBundle bundle, List<Release> releaseList) {
-        sink.section2();
+    private void constructReleaseHistory() {
+        startSection(bundle.getString("report.changes.label.releasehistory"));
 
-        sink.sectionTitle2();
-        sink.text(bundle.getString("report.changes.label.releasehistory"));
-        sink.sectionTitle2_();
+        startTable();
 
-        sink.table();
-        sink.tableRows();
+        tableHeader(new String[] {
+            bundle.getString("report.issues.label.fixVersion"),
+            bundle.getString("report.changes.label.releaseDate"),
+            bundle.getString("report.changes.label.releaseDescription")
+        });
 
-        sink.tableRow();
-
-        sinkHeader(sink, bundle.getString("report.issues.label.fixVersion"));
-
-        sinkHeader(sink, bundle.getString("report.changes.label.releaseDate"));
-
-        sinkHeader(sink, bundle.getString("report.changes.label.releaseDescription"));
-
-        sink.tableRow_();
-
-        for (Release release : releaseList) {
+        for (Release release : changesXML.getReleaseList()) {
             sink.tableRow();
-
-            sinkCellLink(sink, release.getVersion(), "#" + DoxiaUtils.encodeId(release.getVersion()));
-
-            sinkCell(sink, release.getDateRelease());
-
-            sinkCell(sink, release.getDescription());
-
+            sinkCellLink(release.getVersion(), "#" + DoxiaUtils.encodeId(release.getVersion()));
+            sinkCell(release.getDateRelease());
+            sinkCell(release.getDescription());
             sink.tableRow_();
         }
 
-        sink.tableRows_();
-        sink.table_();
+        endTable();
 
         // MCHANGES-46
         if (linkToFeed) {
             sink.paragraph();
-            sink.text(bundle.getString("report.changes.text.rssfeed"));
+            text(bundle.getString("report.changes.text.rssfeed"));
             sink.nonBreakingSpace();
             sink.link("changes.rss");
-            sinkFigure(sink, "images/rss.png", "rss feed");
+            sinkFigure("images/rss.png", "rss feed");
             sink.link_();
             sink.paragraph_();
         }
 
-        sink.section2_();
+        endSection();
     }
 
     /**
      * Constructs document sections for each of specified releases.
-     *
-     * @param sink Sink
-     * @param bundle Resource bundle
-     * @param releaseList Releases to create content for
      */
-    private void constructReleases(Sink sink, ResourceBundle bundle, List<Release> releaseList) {
-        for (Release release : releaseList) {
-            constructRelease(sink, bundle, release);
+    private void constructReleases() {
+        for (Release release : changesXML.getReleaseList()) {
+            constructRelease(release);
         }
     }
 
     /**
      * Constructs document section for specified release.
      *
-     * @param sink Sink
-     * @param bundle Resource bundle
      * @param release Release to create document section for
      */
-    private void constructRelease(Sink sink, ResourceBundle bundle, Release release) {
-        sink.section2();
+    private void constructRelease(Release release) {
 
         final String date = (release.getDateRelease() == null) ? "" : " \u2013 " + release.getDateRelease();
 
-        SinkEventAttributes attrs = new SinkEventAttributeSet();
-        attrs.addAttribute(SinkEventAttributes.ID, DoxiaUtils.encodeId(release.getVersion()));
-        sink.sectionTitle(Sink.SECTION_LEVEL_2, attrs);
-        sink.text(bundle.getString("report.changes.label.release") + " " + release.getVersion() + date);
-        sink.sectionTitle_(Sink.SECTION_LEVEL_2);
+        startSection(
+                bundle.getString("report.changes.label.release") + " " + release.getVersion() + date,
+                DoxiaUtils.encodeId(release.getVersion()));
 
         if (isReleaseEmpty(release)) {
             sink.paragraph();
-            sink.text(bundle.getString("report.changes.text.no.changes"));
+            text(bundle.getString("report.changes.text.no.changes"));
             sink.paragraph_();
         } else {
-            sink.table();
-            sink.tableRows();
+            startTable();
 
             sink.tableRow();
-            sinkHeader(sink, bundle.getString("report.issues.label.type"));
-            sinkHeader(sink, bundle.getString("report.issues.label.summary"));
-            sinkHeader(sink, bundle.getString("report.issues.label.assignee"));
-            if (this.isAddActionDate()) {
-                sinkHeader(sink, bundle.getString("report.issues.label.updated"));
+            tableHeaderCell(bundle.getString("report.issues.label.type"));
+            tableHeaderCell(bundle.getString("report.issues.label.summary"));
+            tableHeaderCell(bundle.getString("report.issues.label.assignee"));
+            if (addActionDate) {
+                tableHeaderCell(bundle.getString("report.issues.label.updated"));
             }
             sink.tableRow_();
 
             for (Action action : release.getActions()) {
-                constructAction(sink, bundle, action);
+                constructAction(action);
             }
 
-            for (Object o : release.getComponents()) {
-                Component component = (Component) o;
-                constructComponent(sink, bundle, component);
+            for (Component component : release.getComponents()) {
+                constructComponent(component);
             }
 
-            sink.tableRows_();
-            sink.table_();
+            endTable();
         }
 
-        sink.section2_();
+        endSection();
     }
 
     /**
      * Constructs table rows for specified release component. It will create header row for component name and action
      * rows for all component issues.
      *
-     * @param sink Sink
-     * @param bundle Resource bundle
      * @param component Release component to generate content for.
      */
-    private void constructComponent(Sink sink, ResourceBundle bundle, Component component) {
+    private void constructComponent(Component component) {
         if (!component.getActions().isEmpty()) {
             sink.tableRow();
 
@@ -465,13 +388,13 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
-            sink.text(component.getName());
+            text(component.getName());
             sink.tableHeaderCell_();
 
             sink.tableHeaderCell();
             sink.tableHeaderCell_();
 
-            if (isAddActionDate()) {
+            if (addActionDate) {
                 sink.tableHeaderCell();
                 sink.tableHeaderCell_();
             }
@@ -479,7 +402,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             sink.tableRow_();
 
             for (Action action : component.getActions()) {
-                constructAction(sink, bundle, action);
+                constructAction(action);
             }
         }
     }
@@ -495,8 +418,7 @@ public class ChangesReportGenerator extends AbstractIssuesReportGenerator {
             return false;
         }
 
-        for (Object o : release.getComponents()) {
-            Component component = (Component) o;
+        for (Component component : release.getComponents()) {
             if (!component.getActions().isEmpty()) {
                 return false;
             }

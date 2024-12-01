@@ -430,8 +430,6 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     @Parameter(defaultValue = "false")
     private boolean includeOpenIssues;
 
-    private final ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
-
     private ChangesXML xml;
 
     /**
@@ -483,7 +481,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 if (getXmlPath().exists()) {
                     ChangesXML changesXML = new ChangesXML(getXmlPath(), getLog());
                     List<Release> changesReleases = changesXML.getReleaseList();
-                    releases = releaseUtils.mergeReleases(null, changesReleases);
+                    releases = ReleaseUtils.mergeReleases(null, changesReleases);
                     getLog().info("Including issues from file " + getXmlPath() + " in announcement...");
                 } else {
                     getLog().warn("changes.xml file " + getXmlPath().getAbsolutePath() + " does not exist.");
@@ -494,7 +492,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 String message = ProjectUtils.validateIssueManagement(project, JIRA, "JIRA announcement");
                 if (message == null) {
                     List<Release> jiraReleases = getJiraReleases();
-                    releases = releaseUtils.mergeReleases(releases, jiraReleases);
+                    releases = ReleaseUtils.mergeReleases(releases, jiraReleases);
                     getLog().info("Including issues from JIRA in announcement...");
                 } else {
                     throw new MojoExecutionException(
@@ -506,7 +504,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 String message = ProjectUtils.validateIssueManagement(project, TRAC, "Trac announcement");
                 if (message == null) {
                     List<Release> tracReleases = getTracReleases();
-                    releases = releaseUtils.mergeReleases(releases, tracReleases);
+                    releases = ReleaseUtils.mergeReleases(releases, tracReleases);
                     getLog().info("Including issues from Trac in announcement...");
                 } else {
                     throw new MojoExecutionException(
@@ -518,7 +516,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 String message = ProjectUtils.validateIssueManagement(project, GIT_HUB, "GitHub announcement");
                 if (message == null) {
                     List<Release> gitHubReleases = getGitHubReleases();
-                    releases = releaseUtils.mergeReleases(releases, gitHubReleases);
+                    releases = ReleaseUtils.mergeReleases(releases, gitHubReleases);
                     getLog().info("Including issues from GitHub in announcement...");
                 } else {
                     throw new MojoExecutionException(
@@ -565,7 +563,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
         getLog().debug("Generating announcement for version [" + version + "]. Found these releases: "
                 + ReleaseUtils.toString(releases));
 
-        doGenerate(releases, releaseUtils.getLatestRelease(releases, version));
+        doGenerate(releases, ReleaseUtils.getLatestRelease(releases, version));
     }
 
     protected void doGenerate(List<Release> releases, Release release) throws MojoExecutionException {

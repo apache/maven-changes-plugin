@@ -87,8 +87,7 @@ public class ChangesCheckMojo extends AbstractChangesMojo {
                 getLog().info("Skipping snapshot version '" + this.version + "'.");
             } else if (xmlPath.exists()) {
                 ChangesXML xml = new ChangesXML(xmlPath, getLog());
-                ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
-                Release release = releaseUtils.getLatestRelease(xml.getReleaseList(), version);
+                Release release = ReleaseUtils.getLatestRelease(xml.getReleaseList(), version);
 
                 if (!isValidDate(release.getDateRelease(), releaseDateFormat, releaseDateLocale)) {
                     throw new MojoExecutionException(
