@@ -33,8 +33,8 @@ import org.apache.maven.plugins.changes.AbstractChangesReport;
 import org.apache.maven.plugins.changes.ProjectUtils;
 import org.apache.maven.plugins.changes.issues.Issue;
 import org.apache.maven.plugins.changes.issues.IssueUtils;
-import org.apache.maven.plugins.changes.issues.IssuesReportGenerator;
 import org.apache.maven.plugins.changes.issues.IssuesReportHelper;
+import org.apache.maven.plugins.changes.issues.IssuesReportRenderer;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
@@ -164,7 +164,7 @@ public class GitHubReport extends AbstractChangesReport {
 
         // Validate parameters
         List<Integer> columnIds = IssuesReportHelper.getColumnIds(columnNames, githubColumns);
-        if (columnIds.size() == 0) {
+        if (columnIds.isEmpty()) {
             // This can happen if the user has configured column names and they are all invalid
             throw new MavenReportException(
                     "maven-changes-plugin: None of the configured columnNames '" + columnNames + "' are valid.");
@@ -184,14 +184,9 @@ public class GitHubReport extends AbstractChangesReport {
             }
 
             // Generate the report
-            IssuesReportGenerator report = new IssuesReportGenerator(IssuesReportHelper.toIntArray(columnIds));
+            IssuesReportRenderer report = new IssuesReportRenderer(getSink(), getBundle(locale), columnIds, issueList);
+            report.render();
 
-            if (issueList.isEmpty()) {
-                report.doGenerateEmptyReport(getBundle(locale), getSink());
-                getLog().warn("No issue was matched.");
-            } else {
-                report.doGenerateReport(getBundle(locale), getSink(), issueList);
-            }
         } catch (MalformedURLException e) {
             // Rethrow this error so that the build fails
             throw new MavenReportException("The Github URL is incorrect - " + e.getMessage());

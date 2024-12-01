@@ -33,8 +33,8 @@ import org.apache.maven.plugins.changes.AbstractChangesReport;
 import org.apache.maven.plugins.changes.ProjectUtils;
 import org.apache.maven.plugins.changes.issues.Issue;
 import org.apache.maven.plugins.changes.issues.IssueUtils;
-import org.apache.maven.plugins.changes.issues.IssuesReportGenerator;
 import org.apache.maven.plugins.changes.issues.IssuesReportHelper;
+import org.apache.maven.plugins.changes.issues.IssuesReportRenderer;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
@@ -354,13 +354,9 @@ public class JiraReport extends AbstractChangesReport {
             }
 
             // Generate the report
-            IssuesReportGenerator report = new IssuesReportGenerator(IssuesReportHelper.toIntArray(columnIds));
+            IssuesReportRenderer report = new IssuesReportRenderer(getSink(), getBundle(locale), columnIds, issueList);
+            report.render();
 
-            if (issueList.isEmpty()) {
-                report.doGenerateEmptyReport(getBundle(locale), getSink());
-            } else {
-                report.doGenerateReport(getBundle(locale), getSink(), issueList);
-            }
         } catch (Exception e) {
             getLog().warn(e);
         }

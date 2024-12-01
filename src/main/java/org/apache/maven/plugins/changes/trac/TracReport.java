@@ -30,8 +30,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.AbstractChangesReport;
 import org.apache.maven.plugins.changes.ProjectUtils;
 import org.apache.maven.plugins.changes.issues.Issue;
-import org.apache.maven.plugins.changes.issues.IssuesReportGenerator;
 import org.apache.maven.plugins.changes.issues.IssuesReportHelper;
+import org.apache.maven.plugins.changes.issues.IssuesReportRenderer;
 import org.apache.maven.reporting.MavenReportException;
 import org.apache.xmlrpc.XmlRpcException;
 
@@ -140,7 +140,7 @@ public class TracReport extends AbstractChangesReport {
         // Validate parameters
         List<Integer> columnIds =
                 IssuesReportHelper.getColumnIds(columnNames, TRAC_COLUMNS, DEPRECATED_TRAC_COLUMNS, getLog());
-        if (columnIds.size() == 0) {
+        if (columnIds.isEmpty()) {
             // This can happen if the user has configured column names and they are all invalid
             throw new MavenReportException(
                     "maven-changes-plugin: None of the configured columnNames '" + columnNames + "' are valid.");
@@ -154,14 +154,9 @@ public class TracReport extends AbstractChangesReport {
             List<Issue> issueList = issueDownloader.getIssueList();
 
             // Generate the report
-            IssuesReportGenerator report = new IssuesReportGenerator(IssuesReportHelper.toIntArray(columnIds));
+            IssuesReportRenderer report = new IssuesReportRenderer(getSink(), getBundle(locale), columnIds, issueList);
+            report.render();
 
-            if (issueList.isEmpty()) {
-                report.doGenerateEmptyReport(getBundle(locale), getSink());
-                getLog().warn("No ticket has matched.");
-            } else {
-                report.doGenerateReport(getBundle(locale), getSink(), issueList);
-            }
         } catch (MalformedURLException e) {
             // Rethrow this error so that the build fails
             throw new MavenReportException("The Trac URL is incorrect.");
@@ -169,7 +164,7 @@ public class TracReport extends AbstractChangesReport {
             // Rethrow this error so that the build fails
             throw new MavenReportException("XmlRpc Error.", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new MavenReportException(e.getMessage(), e);
         }
     }
 
@@ -199,11 +194,8 @@ public class TracReport extends AbstractChangesReport {
 
     private void configureIssueDownloader(TracDownloader issueDownloader) {
         issueDownloader.setProject(project);
-
         issueDownloader.setQuery(query);
-
         issueDownloader.setTracPassword(tracPassword);
-
         issueDownloader.setTracUser(tracUser);
     }
 }

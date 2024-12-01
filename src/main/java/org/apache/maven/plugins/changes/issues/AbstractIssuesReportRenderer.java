@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import org.apache.maven.doxia.sink.Sink;
 import org.apache.maven.doxia.sink.SinkEventAttributes;
 import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
+import org.apache.maven.reporting.AbstractMavenReportRenderer;
 
 /**
  * An abstract super class that helps when generating a report on issues.
@@ -31,66 +32,58 @@ import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
  * @version $Id$
  * @since 2.4
  */
-public abstract class AbstractIssuesReportGenerator {
-    protected String author;
+public abstract class AbstractIssuesReportRenderer extends AbstractMavenReportRenderer {
 
-    protected String title;
+    protected final ResourceBundle bundle;
 
-    public AbstractIssuesReportGenerator() {}
+    protected AbstractIssuesReportRenderer(Sink sink, ResourceBundle bundle) {
+        super(sink);
+        this.bundle = bundle;
+    }
 
     public String getAuthor() {
-        return author;
+        return null;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
+    @Override
     public String getTitle() {
-        return title;
+        return bundle.getString("report.issues.header");
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    @Override
+    public void render() {
 
-    protected void sinkBeginReport(Sink sink, ResourceBundle bundle) {
+        String title = getTitle();
         sink.head();
-
-        String title;
-        if (this.title != null) {
-            title = this.title;
-        } else {
-            title = bundle.getString("report.issues.header");
-        }
         sink.title();
-        sink.text(title);
+        text(title);
         sink.title_();
 
-        if (author != null && !author.isEmpty()) {
+        String author = getAuthor();
+        if (author != null) {
             sink.author();
-            sink.text(author);
+            text(author);
             sink.author_();
         }
 
         sink.head_();
 
         sink.body();
+        startSection(title);
 
-        sink.section1();
+        renderBody();
 
-        sink.sectionTitle1();
-
-        sink.text(title);
-
-        sink.sectionTitle1_();
+        endSection();
+        sink.body_();
+        sink.flush();
+        sink.close();
     }
 
-    protected void sinkCell(Sink sink, String text) {
+    protected void sinkCell(String text) {
         sink.tableCell();
 
         if (text != null) {
-            sink.text(text);
+            text(text);
         } else {
             sink.nonBreakingSpace();
         }
@@ -98,25 +91,13 @@ public abstract class AbstractIssuesReportGenerator {
         sink.tableCell_();
     }
 
-    protected void sinkCellLink(Sink sink, String text, String link) {
+    protected void sinkCellLink(String text, String link) {
         sink.tableCell();
-
-        sinkLink(sink, text, link);
-
+        link(link, text);
         sink.tableCell_();
     }
 
-    protected void sinkEndReport(Sink sink) {
-        sink.section1_();
-
-        sink.body_();
-
-        sink.flush();
-
-        sink.close();
-    }
-
-    protected void sinkFigure(Sink sink, String image, String altText) {
+    protected void sinkFigure(String image, String altText) {
         SinkEventAttributes attributes = new SinkEventAttributeSet();
         attributes.addAttribute("alt", altText);
         attributes.addAttribute("title", altText);
@@ -124,23 +105,7 @@ public abstract class AbstractIssuesReportGenerator {
         sink.figureGraphics(image, attributes);
     }
 
-    protected void sinkHeader(Sink sink, String header) {
-        sink.tableHeaderCell();
-
-        sink.text(header);
-
-        sink.tableHeaderCell_();
-    }
-
-    protected void sinkLink(Sink sink, String text, String link) {
-        sink.link(link);
-
-        sink.text(text);
-
-        sink.link_();
-    }
-
-    protected void sinkShowTypeIcon(Sink sink, String type) {
+    protected void sinkShowTypeIcon(String type) {
         String image = "";
         String altText = "";
 
@@ -162,9 +127,7 @@ public abstract class AbstractIssuesReportGenerator {
         }
 
         sink.tableCell();
-
-        sinkFigure(sink, image, altText);
-
+        sinkFigure(image, altText);
         sink.tableCell_();
     }
 }

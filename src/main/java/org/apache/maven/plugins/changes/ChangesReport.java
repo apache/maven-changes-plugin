@@ -146,8 +146,6 @@ public class ChangesReport extends AbstractChangesReport {
     @Parameter(defaultValue = "team.html")
     private String team;
 
-    /**
-     */
     @Parameter(defaultValue = "${project.issueManagement.url}", readonly = true)
     private String url;
 
@@ -172,11 +170,7 @@ public class ChangesReport extends AbstractChangesReport {
     @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
 
-    private ReleaseUtils releaseUtils = new ReleaseUtils(getLog());
-
-    private CaseInsensitiveMap caseInsensitiveIssueLinkTemplatePerSystem;
-
-    private MavenFileFilter mavenFileFilter;
+    private final MavenFileFilter mavenFileFilter;
 
     @Inject
     public ChangesReport(MavenFileFilter mavenFileFilter) {
@@ -219,62 +213,23 @@ public class ChangesReport extends AbstractChangesReport {
             final String relativePath = absolutePath.substring(basePath.length());
 
             List<Release> releaseList = changesXml.getReleaseList();
-            for (Object o : project.getCollectedProjects()) {
-                final MavenProject childProject = (MavenProject) o;
+            for (MavenProject childProject : project.getCollectedProjects()) {
                 final File changesFile = new File(childProject.getBasedir(), relativePath);
                 final ChangesXML childXml = getChangesFromFile(changesFile, childProject, additionalProperties);
                 if (childXml != null) {
                     releaseList =
-                            releaseUtils.mergeReleases(releaseList, childProject.getName(), childXml.getReleaseList());
+                            ReleaseUtils.mergeReleases(releaseList, childProject.getName(), childXml.getReleaseList());
                 }
             }
             changesXml.setReleaseList(releaseList);
         }
 
-        ChangesReportGenerator report = new ChangesReportGenerator(changesXml.getReleaseList());
+        ChangesReportRenderer report = new ChangesReportRenderer(getSink(), getBundle(locale), changesXml);
 
-        report.setAuthor(changesXml.getAuthor());
-        report.setTitle(changesXml.getTitle());
-
-        // Create a case insensitive version of issueLinkTemplatePerSystem
-        // We need something case insensitive to maintain backward compatibility
-        if (issueLinkTemplatePerSystem == null) {
-            caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap();
-        } else {
-            caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap(issueLinkTemplatePerSystem);
-        }
-
-        // Set good default values for issue management systems here
-        addIssueLinkTemplate(ChangesReportGenerator.DEFAULT_ISSUE_SYSTEM_KEY, "%URL%/ViewIssue.jspa?key=%ISSUE%");
-        addIssueLinkTemplate("Bitbucket", "%URL%/issue/%ISSUE%");
-        addIssueLinkTemplate("Bugzilla", "%URL%/show_bug.cgi?id=%ISSUE%");
-        addIssueLinkTemplate("GitHub", "%URL%/%ISSUE%");
-        addIssueLinkTemplate("GoogleCode", "%URL%/detail?id=%ISSUE%");
-        addIssueLinkTemplate("JIRA", "%URL%/%ISSUE%");
-        addIssueLinkTemplate("Mantis", "%URL%/view.php?id=%ISSUE%");
-        addIssueLinkTemplate("MKS", "%URL%/viewissue?selection=%ISSUE%");
-        addIssueLinkTemplate("Redmine", "%URL%/issues/show/%ISSUE%");
-        addIssueLinkTemplate("Scarab", "%URL%/issues/id/%ISSUE%");
-        addIssueLinkTemplate("SourceForge", "http://sourceforge.net/support/tracker.php?aid=%ISSUE%");
-        addIssueLinkTemplate("SourceForge2", "%URL%/%ISSUE%");
-        addIssueLinkTemplate("Trac", "%URL%/ticket/%ISSUE%");
-        addIssueLinkTemplate("Trackplus", "%URL%/printItem.action?key=%ISSUE%");
-        addIssueLinkTemplate("Tuleap", "%URL%/?aid=%ISSUE%");
-        addIssueLinkTemplate("YouTrack", "%URL%/issue/%ISSUE%");
-        // @todo Add more issue management systems here
-        // Remember to also add documentation in usage.apt.vm
-
-        // Show the current issueLinkTemplatePerSystem configuration
-        logIssueLinkTemplatePerSystem(caseInsensitiveIssueLinkTemplatePerSystem);
-
-        report.setIssueLinksPerSystem(caseInsensitiveIssueLinkTemplatePerSystem);
-
+        report.setIssueLinksPerSystem(prepareIssueLinksPerSystem());
         report.setSystem(system);
-
         report.setTeam(team);
-
         report.setUrl(url);
-
         report.setAddActionDate(addActionDate);
 
         if (url == null || url.isEmpty()) {
@@ -289,10 +244,46 @@ public class ChangesReport extends AbstractChangesReport {
 
         report.setLinkToFeed(feedGenerated);
 
-        report.doGenerateReport(getBundle(locale), getSink());
+        report.render();
 
         // Copy the images
         copyStaticResources();
+    }
+
+    private Map<String, String> prepareIssueLinksPerSystem() {
+        Map<String, String> issueLinkTemplate;
+        // Create a case insensitive version of issueLinkTemplatePerSystem
+        // We need something case insensitive to maintain backward compatibility
+        if (this.issueLinkTemplatePerSystem == null) {
+            issueLinkTemplate = new CaseInsensitiveMap<>();
+        } else {
+            issueLinkTemplate = new CaseInsensitiveMap<>(this.issueLinkTemplatePerSystem);
+        }
+
+        // Set good default values for issue management systems here
+        issueLinkTemplate.computeIfAbsent(
+                ChangesReportRenderer.DEFAULT_ISSUE_SYSTEM_KEY, k -> "%URL%/ViewIssue.jspa?key=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Bitbucket", k -> "%URL%/issue/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Bugzilla", k -> "%URL%/show_bug.cgi?id=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("GitHub", k -> "%URL%/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("GoogleCode", k -> "%URL%/detail?id=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("JIRA", k -> "%URL%/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Mantis", k -> "%URL%/view.php?id=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("MKS", k -> "%URL%/viewissue?selection=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Redmine", k -> "%URL%/issues/show/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Scarab", k -> "%URL%/issues/id/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("SourceForge", k -> "http://sourceforge.net/support/tracker.php?aid=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("SourceForge2", k -> "%URL%/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Trac", k -> "%URL%/ticket/%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Trackplus", k -> "%URL%/printItem.action?key=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("Tuleap", k -> "%URL%/?aid=%ISSUE%");
+        issueLinkTemplate.computeIfAbsent("YouTrack", k -> "%URL%/issue/%ISSUE%");
+        // @todo Add more issue management systems here
+        // Remember to also add documentation in usage.apt.vm
+
+        // Show the current issueLinkTemplatePerSystem configuration
+        logIssueLinkTemplatePerSystem(issueLinkTemplate);
+        return issueLinkTemplate;
     }
 
     @Override
@@ -350,7 +341,7 @@ public class ChangesReport extends AbstractChangesReport {
                             resultFile,
                             true,
                             project,
-                            Collections.<String>emptyList(),
+                            Collections.emptyList(),
                             false,
                             encoding,
                             mavenSession,
@@ -363,23 +354,6 @@ public class ChangesReport extends AbstractChangesReport {
             }
         }
         return new ChangesXML(changesXml, getLog());
-    }
-
-    /**
-     * Add the issue link template for the given issue management system, but only if it has not already been
-     * configured.
-     *
-     * @param system The issue management system
-     * @param issueLinkTemplate The issue link template to use
-     * @since 2.4
-     */
-    private void addIssueLinkTemplate(String system, String issueLinkTemplate) {
-        if (caseInsensitiveIssueLinkTemplatePerSystem == null) {
-            caseInsensitiveIssueLinkTemplatePerSystem = new CaseInsensitiveMap();
-        }
-        if (!caseInsensitiveIssueLinkTemplatePerSystem.containsKey(system)) {
-            caseInsensitiveIssueLinkTemplatePerSystem.put(system, issueLinkTemplate);
-        }
     }
 
     private void copyStaticResources() throws MavenReportException {
@@ -408,18 +382,10 @@ public class ChangesReport extends AbstractChangesReport {
                 "changes-report", locale, this.getClass().getClassLoader());
     }
 
-    protected String getTeam() {
-        return team;
-    }
-
     private void logIssueLinkTemplatePerSystem(Map<String, String> issueLinkTemplatePerSystem) {
         if (getLog().isDebugEnabled()) {
-            if (issueLinkTemplatePerSystem == null) {
-                getLog().debug("No issueLinkTemplatePerSystem configuration was found");
-            } else {
-                for (Entry<String, String> entry : issueLinkTemplatePerSystem.entrySet()) {
-                    getLog().debug("issueLinkTemplatePerSystem[" + entry.getKey() + "] = " + entry.getValue());
-                }
+            for (Entry<String, String> entry : issueLinkTemplatePerSystem.entrySet()) {
+                getLog().debug("issueLinkTemplatePerSystem[" + entry.getKey() + "] = " + entry.getValue());
             }
         }
     }

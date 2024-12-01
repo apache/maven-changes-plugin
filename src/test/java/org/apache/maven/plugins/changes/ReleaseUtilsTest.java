@@ -21,47 +21,47 @@ package org.apache.maven.plugins.changes;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugin.testing.SilentLog;
 import org.apache.maven.plugins.changes.model.Release;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Dennis Lundberg
  * @version $Id$
  * @since 2.4
  */
-public class ReleaseUtilsTestCase extends TestCase {
+public class ReleaseUtilsTest {
+
+    @Test
     public void testMergeReleases() {
-        Log log = new SilentLog();
-        ReleaseUtils releaseUtils = new ReleaseUtils(log);
 
         List<Release> firstReleases = new ArrayList<>();
         List<Release> secondReleases = new ArrayList<>();
         List<Release> mergedReleases;
 
-        mergedReleases = releaseUtils.mergeReleases(firstReleases, secondReleases);
+        mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals("Both empty", 0, mergedReleases.size());
 
         Release release = new Release();
         release.setVersion("1.0");
         firstReleases.add(release);
 
-        mergedReleases = releaseUtils.mergeReleases(firstReleases, secondReleases);
+        mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals("One release in first", 1, mergedReleases.size());
 
         release = new Release();
         release.setVersion("1.1");
         secondReleases.add(release);
 
-        mergedReleases = releaseUtils.mergeReleases(firstReleases, secondReleases);
+        mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals("One release each", 2, mergedReleases.size());
 
         release = new Release();
         release.setVersion("1.1");
         firstReleases.add(release);
 
-        mergedReleases = releaseUtils.mergeReleases(firstReleases, secondReleases);
+        mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals(
                 "Two releases in first, one release in second with one version being the same",
                 2,
@@ -71,7 +71,7 @@ public class ReleaseUtilsTestCase extends TestCase {
         release.setVersion("1.2");
         secondReleases.add(release);
 
-        mergedReleases = releaseUtils.mergeReleases(firstReleases, secondReleases);
+        mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals("Two releases each with one version being the same", 3, mergedReleases.size());
     }
 }

@@ -131,18 +131,4 @@ public class IssuesReportHelper {
         }
         return sb.toString();
     }
-
-    /**
-     * Convert a List of Integers to an int array.
-     *
-     * @param list The List to convert
-     * @return An in array
-     */
-    public static int[] toIntArray(List<Integer> list) {
-        int[] intArray = new int[list.size()];
-        for (int j = 0; j < intArray.length; j++) {
-            intArray[j] = list.get(j);
-        }
-        return intArray;
-    }
 }

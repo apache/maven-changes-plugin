@@ -23,9 +23,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A utility class for working with Release objects.
@@ -37,10 +38,10 @@ import org.apache.maven.plugins.changes.model.Release;
 public class ReleaseUtils {
     private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
-    private Log log;
+    private static final Logger LOG = LoggerFactory.getLogger(ReleaseUtils.class);
 
-    public ReleaseUtils(Log log) {
-        this.log = log;
+    private ReleaseUtils() {
+        // utility class
     }
 
     /**
@@ -51,12 +52,12 @@ public class ReleaseUtils {
      * @return A <code>Release</code> that matches the next release of the current project
      * @throws org.apache.maven.plugin.MojoExecutionException If a release can't be found
      */
-    public Release getLatestRelease(List<Release> releases, String pomVersion) throws MojoExecutionException {
+    public static Release getLatestRelease(List<Release> releases, String pomVersion) throws MojoExecutionException {
         // Remove "-SNAPSHOT" from the end, if it's there
         if (pomVersion != null && pomVersion.endsWith(SNAPSHOT_SUFFIX)) {
             pomVersion = pomVersion.substring(0, pomVersion.length() - SNAPSHOT_SUFFIX.length());
         }
-        getLog().debug("Found " + releases.size() + " releases.");
+        LOG.debug("Found {} releases.", releases.size());
 
         Release release = getRelease(releases, pomVersion);
 
@@ -68,10 +69,6 @@ public class ReleaseUtils {
         return release;
     }
 
-    private Log getLog() {
-        return log;
-    }
-
     /**
      * Get a release with the specified version from the list of releases.
      *
@@ -79,16 +76,18 @@ public class ReleaseUtils {
      * @param version The version we want
      * @return A Release, or null if no release with the specified version can be found
      */
-    protected Release getRelease(List<Release> releases, String version) {
+    protected static Release getRelease(List<Release> releases, String version) {
         for (Release release : releases) {
-            if (getLog().isDebugEnabled()) {
-                getLog().debug("The release: " + release.getVersion() + " has "
-                        + release.getActions().size() + " actions.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(
+                        "The release: {} has {} actions.",
+                        release.getVersion(),
+                        release.getActions().size());
             }
 
             if (release.getVersion() != null && release.getVersion().equals(version)) {
-                if (getLog().isDebugEnabled()) {
-                    getLog().debug("Found the correct release: " + release.getVersion());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Found the correct release: {}", release.getVersion());
                     logRelease(release);
                 }
                 return release;
@@ -97,14 +96,14 @@ public class ReleaseUtils {
         return null;
     }
 
-    protected void logRelease(Release release) {
+    protected static void logRelease(Release release) {
         Action action;
         for (Action action1 : release.getActions()) {
             action = action1;
-            getLog().debug("o " + action.getType());
-            getLog().debug("issue : " + action.getIssue());
-            getLog().debug("action : " + action.getAction());
-            getLog().debug("dueTo : " + action.getDueTo());
+            LOG.debug("o {}", action.getType());
+            LOG.debug("issue: {}", action.getIssue());
+            LOG.debug("action: {}", action.getAction());
+            LOG.debug("dueTo: {}", action.getDueTo());
         }
     }
 
@@ -116,7 +115,7 @@ public class ReleaseUtils {
      * @param secondReleases Releases from the second issue tracker
      * @return A list containing the merged releases
      */
-    public List<Release> mergeReleases(final List<Release> firstReleases, final List<Release> secondReleases) {
+    public static List<Release> mergeReleases(final List<Release> firstReleases, final List<Release> secondReleases) {
         if (firstReleases == null && secondReleases == null) {
             return Collections.emptyList();
         }
@@ -162,7 +161,7 @@ public class ReleaseUtils {
      * @param componentReleases Releases from the child component
      * @return A list containing the merged releases
      */
-    public List<Release> mergeReleases(
+    public static List<Release> mergeReleases(
             final List<Release> releases, final String componentName, final List<Release> componentReleases) {
         if (releases == null && componentReleases == null) {
             return Collections.emptyList();
@@ -174,8 +173,7 @@ public class ReleaseUtils {
         final List<Release> mergedReleases = new ArrayList<>();
 
         if (releases != null) {
-            for (Object release1 : releases) {
-                final Release release = (Release) release1;
+            for (Release release : releases) {
                 final Release componentRelease = getRelease(componentReleases, release.getVersion());
                 if (componentRelease != null) {
                     release.addComponent(componentName, componentRelease);
@@ -184,8 +182,7 @@ public class ReleaseUtils {
             }
         }
 
-        for (Object componentRelease1 : componentReleases) {
-            final Release release = (Release) componentRelease1;
+        for (Release release : componentReleases) {
             final Release mergedRelease = getRelease(mergedReleases, release.getVersion());
             if (mergedRelease == null) {
                 final Release componentRelease = new Release();
