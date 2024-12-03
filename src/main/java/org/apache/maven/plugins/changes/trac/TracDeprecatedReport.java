@@ -16,20 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/site/changes.html').exists();
-content = new File(basedir, 'target/site/changes.html').text;
+package org.apache.maven.plugins.changes.trac;
 
-assert content.contains( 'Changes' );
+import org.apache.maven.plugins.annotations.Mojo;
 
-assert content.contains( '<th>Module1</th>' );
-assert !content.contains( '<th>Module2</th>' );
-assert content.contains( '<th>Module3</th>' );
-assert !content.contains( '<th>Module4</th>' );
-
-assert content.contains( 'MCHANGES-88' );
-assert content.contains( 'MCHANGES-1' );
-assert content.contains( 'bug-12345' );
-
-assert content.contains( 'No changes in this release.' );
-
-return true;
+/**
+ * Goal which downloads issues from the Issue Tracking System and generates a report.
+ *
+ * @author Noriko Kinugasa
+ * @version $Id$
+ * @since 2.1
+ * @deprecated use {@code track-changes} goal
+ */
+@Deprecated
+@Mojo(name = "trac-report", threadSafe = true)
+public class TracDeprecatedReport extends TracChangesReport {}

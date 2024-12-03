@@ -89,8 +89,8 @@
           <reportSet>
             <reports>
               <!-- Issue Management in the POM is JIRA, but we're trying to generate GitHub and Trac report -->
-              <report>github-report</report>
-              <report>trac-report</report>
+              <report>github-changes</report>
+              <report>trac-changes</report>
             </reports>
           </reportSet>
         </reportSets>

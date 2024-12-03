@@ -42,8 +42,8 @@ import org.apache.xmlrpc.XmlRpcException;
  * @version $Id$
  * @since 2.1
  */
-@Mojo(name = "trac-report", threadSafe = true)
-public class TracReport extends AbstractChangesReport {
+@Mojo(name = "trac-changes", threadSafe = true)
+public class TracChangesReport extends AbstractChangesReport {
 
     /**
      * Valid Trac columns.
@@ -163,7 +163,7 @@ public class TracReport extends AbstractChangesReport {
     @Override
     @Deprecated
     public String getOutputName() {
-        return "trac-report";
+        return "trac-changes";
     }
 
     /* --------------------------------------------------------------------- */

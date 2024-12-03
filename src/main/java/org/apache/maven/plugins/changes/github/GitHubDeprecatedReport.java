@@ -16,20 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/site/changes.html').exists();
-content = new File(basedir, 'target/site/changes.html').text;
+package org.apache.maven.plugins.changes.github;
 
-assert content.contains( 'Changes' );
+import javax.inject.Inject;
 
-assert content.contains( '<th>Module1</th>' );
-assert !content.contains( '<th>Module2</th>' );
-assert content.contains( '<th>Module3</th>' );
-assert !content.contains( '<th>Module4</th>' );
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.settings.crypto.SettingsDecrypter;
 
-assert content.contains( 'MCHANGES-88' );
-assert content.contains( 'MCHANGES-1' );
-assert content.contains( 'bug-12345' );
+/**
+ * Goal which downloads issues from GitHub and generates a report.
+ *
+ * @author Bryan Baugher
+ * @since 2.8
+ * @deprecated use {@code github-changes} goal
+ */
+@Deprecated
+@Mojo(name = "github-report", threadSafe = true)
+public class GitHubDeprecatedReport extends GitHubChangesReport {
 
-assert content.contains( 'No changes in this release.' );
-
-return true;
+    @Inject
+    public GitHubDeprecatedReport(SettingsDecrypter settingsDecrypter) {
+        super(settingsDecrypter);
+    }
+}

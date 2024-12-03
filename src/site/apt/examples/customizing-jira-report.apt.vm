@@ -31,7 +31,7 @@ Customizing the JIRA Report
 
  <<Note:>> Most of the features used in this document were introduced in version
  <<2.0>> of the Changes Plugin. See the
- {{{../jira-report-mojo.html}goal documentation}} for detailed info on which
+ {{{../jira-changes-mojo.html}goal documentation}} for detailed info on which
  feature was added in which version.
 
 * Selecting version(s)
@@ -174,7 +174,7 @@ Customizing the JIRA Report
 +-----------------+
 
  You can also filter by <<<\<component\>>>> and <<<\<priorityIds\>>>>. See the
- {{{../jira-report-mojo.html}goal documentation}} for info on how to use them.
+ {{{../jira-changes-mojo.html}goal documentation}} for info on how to use them.
 
 ** Using JIRA syntax
 

@@ -64,7 +64,7 @@
         <reportSets>
           <reportSet>
             <reports>
-              <report>github-report</report>
+              <report>github-changes</report>
             </reports>
           </reportSet>
         </reportSets>

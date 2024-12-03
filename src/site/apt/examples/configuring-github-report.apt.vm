@@ -29,7 +29,7 @@
 
 Configuring the GitHub Report
 
- <<Note:>> See the {{{../github-report-mojo.html}goal documentation}} for 
+ <<Note:>> See the {{{../github-changes-mojo.html}goal documentation}} for
  detailed info on which feature was added in which version.
 
 * Using GitHub Enterprise

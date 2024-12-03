@@ -56,7 +56,7 @@ Alternate Location for the <<<changes.xml>>> File
         <reportSets>
           <reportSet>
             <reports>
-              <report>changes-report</report>
+              <report>changes</report>
             </reports>
           </reportSet>
         </reportSets>

@@ -43,10 +43,10 @@ import org.apache.maven.settings.crypto.SettingsDecrypter;
  * Goal which downloads issues from the Issue Tracking System and generates a report.
  *
  * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
- * @version $Id$
+ * @since 2.0
  */
-@Mojo(name = "jira-report", threadSafe = true)
-public class JiraReport extends AbstractChangesReport {
+@Mojo(name = "jira-changes", threadSafe = true)
+public class JiraChangesReport extends AbstractChangesReport {
     /**
      * Valid JIRA columns.
      */
@@ -286,7 +286,7 @@ public class JiraReport extends AbstractChangesReport {
     private final SettingsDecrypter settingsDecrypter;
 
     @Inject
-    public JiraReport(SettingsDecrypter settingsDecrypter) {
+    public JiraChangesReport(SettingsDecrypter settingsDecrypter) {
         this.settingsDecrypter = settingsDecrypter;
     }
 
@@ -375,7 +375,7 @@ public class JiraReport extends AbstractChangesReport {
     @Override
     @Deprecated
     public String getOutputName() {
-        return "jira-report";
+        return "jira-changes";
     }
 
     /* --------------------------------------------------------------------- */

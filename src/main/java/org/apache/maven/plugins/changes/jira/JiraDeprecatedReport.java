@@ -18,24 +18,24 @@
  */
 package org.apache.maven.plugins.changes.jira;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import javax.inject.Inject;
+
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.settings.crypto.SettingsDecrypter;
 
 /**
- * Unit tests for {@link JiraReport}.
+ * Goal which downloads issues from the Issue Tracking System and generates a report.
  *
- * @author jrh3k5
- * @since 2.8
+ * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
+ * @since 2.0
+ * @deprecated use {@code jira-changes} goal
  */
-public class JiraReportTest extends AbstractMojoTestCase {
-    private final JiraReport mojo = new JiraReport(null);
+@Deprecated
+@Mojo(name = "jira-report", threadSafe = true)
+public class JiraDeprecatedReport extends JiraChangesReport {
 
-    /**
-     * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.
-     *
-     * @throws Exception If any errors occur during the test run.
-     */
-    public void testCanGenerateReportSkipped() throws Exception {
-        setVariableValueToObject(mojo, "skip", Boolean.TRUE);
-        assertFalse(mojo.canGenerateReport());
+    @Inject
+    public JiraDeprecatedReport(SettingsDecrypter settingsDecrypter) {
+        super(settingsDecrypter);
     }
 }

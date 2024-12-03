@@ -45,7 +45,7 @@ under the License.
       <item name="changes.xsd" href="xsd/changes-2.0.0.xsd"/>
     </menu>
     <menu name="Samples">
-      <item name="Sample Changes Report" href="changes-report.html"/>
+      <item name="Sample Changes Report" href="changes.html"/>
     </menu>
     <menu name="Examples">
       <item name="Alternate Location for the changes.xml File" href="examples/alternate-changes-xml-location.html"/>

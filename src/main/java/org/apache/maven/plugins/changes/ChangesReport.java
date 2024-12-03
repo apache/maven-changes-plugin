@@ -53,9 +53,9 @@ import org.codehaus.plexus.util.FileUtils;
  * Goal which creates a nicely formatted Changes Report in html format from a changes.xml file.
  *
  * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
- * @version $Id$
+ * @since 2.0
  */
-@Mojo(name = "changes-report", threadSafe = true)
+@Mojo(name = "changes", threadSafe = true)
 public class ChangesReport extends AbstractChangesReport {
     /**
      * A flag whether the report should also include changes from child modules. If set to <code>false</code>, only the
@@ -299,7 +299,7 @@ public class ChangesReport extends AbstractChangesReport {
     @Override
     @Deprecated
     public String getOutputName() {
-        return "changes-report";
+        return "changes";
     }
 
     /* --------------------------------------------------------------------- */

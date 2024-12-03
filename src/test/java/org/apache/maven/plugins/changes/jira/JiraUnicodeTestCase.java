@@ -53,7 +53,7 @@ public class JiraUnicodeTestCase extends AbstractMojoTestCase {
         assertNotNull(pom);
         assertTrue(pom.exists());
 
-        JiraReport mojo = lookupMojo("jira-report", pom);
+        JiraChangesReport mojo = lookupMojo("jira-changes", pom);
         MavenProject project = new JiraUnicodeTestProjectStub();
         MavenSession session = newMavenSession(project);
 
@@ -78,7 +78,7 @@ public class JiraUnicodeTestCase extends AbstractMojoTestCase {
 
         setVariableValueToObject(mojo, "siteDirectory", new File("non-existing"));
         setVariableValueToObject(mojo, "mavenSession", session);
-        setVariableValueToObject(mojo, "mojoExecution", new MojoExecution(new Plugin(), "jira-report", "default"));
+        setVariableValueToObject(mojo, "mojoExecution", new MojoExecution(new Plugin(), "jira-changes", "default"));
 
         RestJiraDownloader mock = mock(RestJiraDownloader.class);
         Issue issue = new Issue();
@@ -95,7 +95,7 @@ public class JiraUnicodeTestCase extends AbstractMojoTestCase {
         outputDir.mkdirs();
         mojo.setReportOutputDirectory(outputDir);
         mojo.execute();
-        String reportHtml = FileUtils.readFileToString(new File(outputDir, "jira-report.html"), "utf-8");
+        String reportHtml = FileUtils.readFileToString(new File(outputDir, "jira-changes.html"), "utf-8");
         int turtleIndex = reportHtml.indexOf(TEST_TURTLES);
         assertTrue(turtleIndex >= 0);
     }
