@@ -22,7 +22,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 WireMockServer wireMockServer = context.get("wireMockServer")
 wireMockServer.stop()
 
-content = new File(basedir, 'target/site/github-report.html').text;
+content = new File(basedir, 'target/site/github-changes.html').text;
 
 assert content.contains('/owner-name/repo-name/issues/1234">1234</a>');
 assert content.contains('<td>Authentication does not work after Upgrade</td>');

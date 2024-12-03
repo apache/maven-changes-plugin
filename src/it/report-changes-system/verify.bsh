@@ -27,7 +27,7 @@ boolean result = true;
 
 try
 {
-    File report = new File( basedir, "target/site/en/changes-report.html" );
+    File report = new File( basedir, "target/site/en/changes.html" );
     if ( !report.exists() )
     {
         System.err.println( "report file is missing." );
@@ -43,26 +43,26 @@ try
     int indexOf = reportContent.indexOf( "Changes" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain Changes title" );
+      System.err.println( "changes.html doesn't contain Changes title" );
       return false;
     }
 
     indexOf = reportContent.indexOf( "href=\"http://myjira/browse/MCHANGES-88\"" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain jira issue link" );
+      System.err.println( "changes.html doesn't contain jira issue link" );
       return false;
     }
     indexOf = reportContent.indexOf( "href=\"http://localhost/1212\"" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain qc issue link" );
+      System.err.println( "changes.html doesn't contain qc issue link" );
       return false;
     }
     indexOf = reportContent.indexOf( "2008-01-01" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain date 2008-01-01" );
+      System.err.println( "changes.html doesn't contain date 2008-01-01" );
       return false;
     }
 }

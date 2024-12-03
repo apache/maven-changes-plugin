@@ -18,21 +18,21 @@
  */
 
 
-def report = new File(basedir, 'target/site/changes-report.html')
+def report = new File(basedir, 'target/site/changes.html')
 assert report.exists()
 
 def content = report.text
 
-assert content.contains('Changes'): 'changes-report.html doesn\'t contain Changes title'
+assert content.contains('Changes'): 'changes.html doesn\'t contain Changes title'
 
-assert content.contains('href="http://myjira/browse/MCHANGES-88"'): 'changes-report.html doesn\'t contain jira issue link'
+assert content.contains('href="http://myjira/browse/MCHANGES-88"'): 'changes.html doesn\'t contain jira issue link'
 
 // Test for output problem caused by only using <dueTo> elements
-assert !content.contains('Thanks to , '): 'changes-report.html has too many dueTos in the Map'
+assert !content.contains('Thanks to , '): 'changes.html has too many dueTos in the Map'
 
 // Tests output problems caused by only using fixedIssues attribute
-assert content.contains('bug-12345'): 'changes-report.html doesn\'t contain issue text for issue specified with <fixes> element'
-assert !content.contains('Fixes .'): 'changes-report.html doesn\'t handle empty fixes attribute properly'
+assert content.contains('bug-12345'): 'changes.html doesn\'t contain issue text for issue specified with <fixes> element'
+assert !content.contains('Fixes .'): 'changes.html doesn\'t handle empty fixes attribute properly'
 
 // due-to verification
 assert content.contains('<a class="externalLink" href="mailto:john@doe.com">John Doe</a>')

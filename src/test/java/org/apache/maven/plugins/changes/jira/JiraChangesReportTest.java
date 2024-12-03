@@ -16,20 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/site/changes.html').exists();
-content = new File(basedir, 'target/site/changes.html').text;
+package org.apache.maven.plugins.changes.jira;
 
-assert content.contains( 'Changes' );
+import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 
-assert content.contains( '<th>Module1</th>' );
-assert !content.contains( '<th>Module2</th>' );
-assert content.contains( '<th>Module3</th>' );
-assert !content.contains( '<th>Module4</th>' );
+/**
+ * Unit tests for {@link JiraChangesReport}.
+ *
+ * @author jrh3k5
+ * @since 2.8
+ */
+public class JiraChangesReportTest extends AbstractMojoTestCase {
+    private final JiraChangesReport mojo = new JiraChangesReport(null);
 
-assert content.contains( 'MCHANGES-88' );
-assert content.contains( 'MCHANGES-1' );
-assert content.contains( 'bug-12345' );
-
-assert content.contains( 'No changes in this release.' );
-
-return true;
+    /**
+     * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.
+     *
+     * @throws Exception If any errors occur during the test run.
+     */
+    public void testCanGenerateReportSkipped() throws Exception {
+        setVariableValueToObject(mojo, "skip", Boolean.TRUE);
+        assertFalse(mojo.canGenerateReport());
+    }
+}

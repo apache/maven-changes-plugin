@@ -36,7 +36,7 @@ Configuring the Trac Report
  accessible via no authentication, basic authentication or NTLM authentication.
  If you've used form authentication then you are out of luck.
 
- Your Trac installation needs to have the {{{http://trac-hacks.org/wiki/XmlRpcPlugin}XML-RPC plugin}}
+ Your Trac installation needs to have the {{{https://trac-hacks.org/wiki/XmlRpcPlugin}XML-RPC plugin}}
  installed and working for this plugin to be able to read the tickets.
 
 ** Basic Report Configuration
@@ -55,7 +55,7 @@ Configuring the Trac Report
 ** Configuring a Custom Query
 
  The exact query can configured in the <<<\<query\>>>> element.
- See {{{http://trac.edgewall.org/wiki/TracQuery}TracQuery}} for the exact syntax.
+ See {{{https://trac.edgewall.org/wiki/TracQuery}TracQuery}} for the exact syntax.
 
 +-----------------+
   ...

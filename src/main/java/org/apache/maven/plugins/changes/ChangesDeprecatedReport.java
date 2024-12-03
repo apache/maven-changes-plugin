@@ -16,20 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/site/changes.html').exists();
-content = new File(basedir, 'target/site/changes.html').text;
+package org.apache.maven.plugins.changes;
 
-assert content.contains( 'Changes' );
+import javax.inject.Inject;
 
-assert content.contains( '<th>Module1</th>' );
-assert !content.contains( '<th>Module2</th>' );
-assert content.contains( '<th>Module3</th>' );
-assert !content.contains( '<th>Module4</th>' );
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.shared.filtering.MavenFileFilter;
 
-assert content.contains( 'MCHANGES-88' );
-assert content.contains( 'MCHANGES-1' );
-assert content.contains( 'bug-12345' );
+/**
+ * Goal which creates a nicely formatted Changes Report in html format from a changes.xml file.
+ *
+ * @author <a href="mailto:jruiz@exist.com">Johnny R. Ruiz III</a>
+ * @deprecated use {@code change} goal
+ */
+@Deprecated
+@Mojo(name = "changes-report", threadSafe = true)
+public class ChangesDeprecatedReport extends ChangesReport {
 
-assert content.contains( 'No changes in this release.' );
-
-return true;
+    @Inject
+    public ChangesDeprecatedReport(MavenFileFilter mavenFileFilter) {
+        super(mavenFileFilter);
+    }
+}

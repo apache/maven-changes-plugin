@@ -40,7 +40,7 @@ Usage
  In order to use this goal, simply create a <<<changes.xml>>> file in the <<<src/changes/>>> directory.
  Here's an example of a typical <<<changes.xml>>>, showing the syntax:
 
--------------------
++-------------------+
 <document xmlns="http://maven.apache.org/changes/2.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 https://maven.apache.org/xsd/changes-2.0.0.xsd">
@@ -69,7 +69,7 @@ Usage
     </release>
   </body>
 </document>
--------------------
++-------------------+
 
  See the {{{./changes.html}Changes Reference}} for details regarding the
  <<<\<release\>>>> and <<<\<action\>>>> elements and their attributes.
@@ -77,7 +77,7 @@ Usage
  To generate the Changes Report, insert the Changes Plugin in the
  <<<\<reporting\>>>> section of your project's <<<pom.xml>>>
 
--------------------
++-------------------+
 <project>
   ...
   <reporting>
@@ -89,7 +89,7 @@ Usage
         <reportSets>
           <reportSet>
             <reports>
-              <report>changes-report</report>
+              <report>changes</report>
             </reports>
           </reportSet>
         </reportSets>
@@ -98,7 +98,7 @@ Usage
   </reporting>
   ...
 </project>
--------------------
++-------------------+
 
   and execute the <<<site>>> phase to generate the report.
 
@@ -116,7 +116,7 @@ mvn site
   different issue management systems. All you have to to is enter your issue
   management system and the URL to it in your POM. It can look like this:
 
------
++-----+
 <project>
   ...
   <issueManagement>
@@ -125,7 +125,7 @@ mvn site
   </issueManagement>
   ...
 </project>
------
++-----+
 
   If you have a previous configuration for <<<\<issueLinkTemplatePerSystem\>>>>
   in your POM, you can probably throw that away when you start using version 2.4,
@@ -170,7 +170,7 @@ mvn site
 *---------------+--------------------------------------------------------+
 
   If you use an issue management system other than the ones above, you need to
-  {{{./changes-report-mojo.html#issueLinkTemplatePerSystem}configure an issue
+  {{{./changes-mojo.html#issueLinkTemplatePerSystem}configure an issue
   link template for it}}.
   We would love to extend the table above with more issue management systems,
   so if you have a working configuration that is not listed above, please tell
@@ -191,7 +191,7 @@ mvn site
   the <<<pom.xml>>> of your project must be configured. It might look something
   like this:
 
--------------------
++-------------------+
 <project>
   ...
   <issueManagement>
@@ -200,12 +200,12 @@ mvn site
   </issueManagement>
   ...
 </project>
--------------------
++-------------------+
 
   To generate the JIRA Report, insert the Changes Plugin in the
   <<<\<reporting\>>>> section of your project's <<<pom.xml>>>
 
--------------------
++-------------------+
 <project>
   ...
   <reporting>
@@ -217,7 +217,7 @@ mvn site
         <reportSets>
           <reportSet>
             <reports>
-              <report>jira-report</report>
+              <report>jira-changes</report>
             </reports>
           </reportSet>
         </reportSets>
@@ -226,7 +226,7 @@ mvn site
   </reporting>
   ...
 </project>
--------------------
++-------------------+
 
   and execute the site goal to generate the report.
 
@@ -244,7 +244,7 @@ mvn site
   the <<<pom.xml>>> of your project must be configured. It might look something
   like this:
 
--------------------
++-------------------+
 <project>
   ...
   <issueManagement>
@@ -253,12 +253,12 @@ mvn site
   </issueManagement>
   ...
 </project>
--------------------
++-------------------+
 
   To generate the GitHub Report, insert the Changes Plugin in the
   <<<\<reporting\>>>> section of your project's <<<pom.xml>>>
 
--------------------
++-------------------+
 <project>
   ...
   <reporting>
@@ -270,7 +270,7 @@ mvn site
         <reportSets>
           <reportSet>
             <reports>
-              <report>github-report</report>
+              <report>github-changes</report>
             </reports>
           </reportSet>
         </reportSets>
@@ -279,7 +279,7 @@ mvn site
   </reporting>
   ...
 </project>
--------------------
++-------------------+
 
   and execute the site goal to generate the report.
 
@@ -309,7 +309,7 @@ mvn site
   <add> corresponds to 'New Feature', <fix> corresponds to 'Bug', and <update>
   corresponds to 'Improvement'.
 
--------------------
++-------------------+
 <project>
   ...
   <build>
@@ -338,7 +338,7 @@ mvn site
   </build>
   ...
 </project>
--------------------
++-------------------+
 
   You can now generate the announcement by executing the command below:
 
@@ -349,7 +349,7 @@ mvn changes:announcement-generate
   If you want to generate the announcement based on JIRA you need to
   configure that in your <<<pom.xml>>>, like this:
 
--------------------
++-------------------+
 <project>
   ...
   <build>
@@ -370,12 +370,12 @@ mvn changes:announcement-generate
   </build>
   ...
 </project>
--------------------
++-------------------+
 
   To generate the announcement based on <<both>> a <<<changes.xml>>> file and JIRA
   you should configure your <<<pom.xml>>> like this:
 
--------------------
++-------------------+
 <project>
   ...
   <build>
@@ -397,7 +397,7 @@ mvn changes:announcement-generate
   </build>
   ...
 </project>
--------------------
++-------------------+
 
   This is how you send an email with the generated announcement:
 

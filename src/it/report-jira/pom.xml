@@ -64,7 +64,7 @@
         <reportSets>
           <reportSet>
             <reports>
-              <report>jira-report</report>
+              <report>jira-changes</report>
             </reports>
           </reportSet>
         </reportSets>

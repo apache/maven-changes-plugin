@@ -45,8 +45,8 @@ import org.apache.maven.settings.crypto.SettingsDecrypter;
  * @author Bryan Baugher
  * @since 2.8
  */
-@Mojo(name = "github-report", threadSafe = true)
-public class GitHubReport extends AbstractChangesReport {
+@Mojo(name = "github-changes", threadSafe = true)
+public class GitHubChangesReport extends AbstractChangesReport {
 
     /**
      * Valid Github columns.
@@ -118,7 +118,7 @@ public class GitHubReport extends AbstractChangesReport {
     private SettingsDecrypter settingsDecrypter;
 
     @Inject
-    public GitHubReport(SettingsDecrypter settingsDecrypter) {
+    public GitHubChangesReport(SettingsDecrypter settingsDecrypter) {
         this.settingsDecrypter = settingsDecrypter;
     }
 
@@ -129,7 +129,7 @@ public class GitHubReport extends AbstractChangesReport {
     @Override
     @Deprecated
     public String getOutputName() {
-        return "github-report";
+        return "github-changes";
     }
 
     @Override

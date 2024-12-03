@@ -47,22 +47,20 @@ ${project.name}
 
   * {{{./changes-validate-mojo.html}changes:changes-validate}} validate the <<<changes.xml>>> file.
 
-  * {{{./changes-report-mojo.html}changes:changes-report}} create a report from <<<changes.xml>>> file.
+  * {{{./changes-mojo.html}changes:changes}} create a report from <<<changes.xml>>> file.
 
-  * {{{./jira-report-mojo.html}changes:jira-report}} create a report from issues downloaded from {{{http://www.atlassian.com/software/jira/}JIRA}}.
+  * {{{./jira-changes-mojo.html}changes:jira-changes}} create a report from issues downloaded from {{{https://www.atlassian.com/software/jira/}JIRA}}.
 
-  * {{{./trac-report-mojo.html}changes:trac-report}} create a report from issues downloaded from {{{http://trac.edgewall.org/}Trac}}.
+  * {{{./trac-changes-mojo.html}changes:trac-changes}} create a report from issues downloaded from {{{https://trac.edgewall.org/}Trac}}.
   
-  * {{{./github-report-mojo.html}changes:github-report}} create a report from issues downloaded from {{{http://github.com/}GitHub}}.
+  * {{{./github-changes-mojo.html}changes:github-changes}} create a report from issues downloaded from {{{https://github.com/}GitHub}}.
 
   []
 
 * Usage
 
   General instructions on how to use the Changes Plugin can be found on the {{{./usage.html}usage page}}. Some more
-  specific use cases are described in the examples given below. Last but not least, users occasionally contribute
-  additional examples, tips or errata to the
-  {{{http://docs.codehaus.org/display/MAVENUSER/Changes+Plugin}plugin's wiki page}}.
+  specific use cases are described in the examples given below.
 
   In case you still have questions regarding the plugin's usage, please have a look at the {{{./faq.html}FAQ}} and feel
   free to contact the {{{./mailing-lists.html}user mailing list}}. The posts to the mailing list are archived and could
@@ -75,7 +73,7 @@ ${project.name}
   entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated.
   Of course, patches are welcome, too. Contributors can check out the project from our
   {{{./scm.html}source repository}} and will find supplementary information in the
-  {{{http://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
+  {{{https://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
 
 * Migration to 3.x
 
@@ -88,6 +86,24 @@ ${project.name}
     which can be comma separated.
 
   * tag <<<action/fixedIssues>>> - was changed to an attribute of <<action>> tag, it also can be comma separated.
+
+** Report goals and output names
+
+  The reports output filename and goals name were changed for alignment with other reporting plugins from <<<org.apache.maven.plugins>>>.
+
+  See the following table for changes:
+
+*---------------------------------+-------------------------------------------+
+|       <<goal name>>             |          <<output name>>                  |
+*---------------------------------+-------------------------------------------+
+| changes-report -> changes       | changes-report.html -> changes.html       |
+*---------------------------------+-------------------------------------------+
+| github-report -> github-changes | github-report.html -> github-changes.html |
+*---------------------------------+-------------------------------------------+
+| jira-report -> jira-changes     | jira-report.html -> jira-changes.html     |
+*---------------------------------+-------------------------------------------+
+| trac-report -> trac-changes     | trac-report.html -> trac-changes.html     |
+*---------------------------------+-------------------------------------------+
 
 * Examples
 

@@ -29,7 +29,7 @@ boolean result = true;
 
 try
 {
-    File report = new File( basedir, "target/site/changes-report.html" );
+    File report = new File( basedir, "target/site/changes.html" );
     if ( !report.exists() )
     {
         System.err.println( "report file is missing." );
@@ -45,14 +45,14 @@ try
     int indexOf = reportContent.indexOf( "Changes" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain Changes title" );
+      System.err.println( "changes.html doesn't contain Changes title" );
       return false;
     }
 
     indexOf = reportContent.indexOf( "href=\"http://myjira/browse/MCHANGES-88\"" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain jira issue link" );
+      System.err.println( "changes.html doesn't contain jira issue link" );
       return false;
     }
 
@@ -60,7 +60,7 @@ try
     indexOf = reportContent.indexOf( "Thanks to , " );
     if ( indexOf != -1 )
     {
-      System.err.println( "changes-report.html has too many dueTos in the Map" );
+      System.err.println( "changes.html has too many dueTos in the Map" );
       return false;
     }
 
@@ -68,20 +68,20 @@ try
     indexOf = reportContent.indexOf( "bug-12345" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain issue text for issue specified with <fixes> element" );
+      System.err.println( "changes.html doesn't contain issue text for issue specified with <fixes> element" );
       return false;
     }
     indexOf = reportContent.indexOf( "Fixes ." );
     if ( indexOf != -1 )
     {
-      System.err.println( "changes-report.html doesn't handle empty fixes attribute properly" );
+      System.err.println( "changes.html doesn't handle empty fixes attribute properly" );
       return false;
     }
 
     indexOf = reportContent.indexOf( "<a href=\"#a99.0\">" );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain version from pom" );
+      System.err.println( "changes.html doesn't contain version from pom" );
       return false;
     }
 
@@ -92,7 +92,7 @@ try
     indexOf = reportContent.indexOf( formattedDate );
     if ( indexOf < 0 )
     {
-      System.err.println( "changes-report.html doesn't contain publishDate" );
+      System.err.println( "changes.html doesn't contain publishDate" );
       return false;
     }
 
