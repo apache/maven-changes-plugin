@@ -96,12 +96,9 @@ stubFor(post('/rest/api/2/search')
                 "name": "Bug"
             },
             "priority": {
-                "name": "Bug"
+                "name": null
             },
-            "reporter": {
-                "name": "reporter-user",
-                "displayName": "~Reporter User"
-            },
+            "reporter": null,
             "resolution": {
                 "name": "Fixed"
             },

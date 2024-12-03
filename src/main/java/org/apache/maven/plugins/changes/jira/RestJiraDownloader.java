@@ -518,12 +518,12 @@ public class RestJiraDownloader {
             JsonNode val;
 
             val = issueNode.get("id");
-            if (val != null) {
+            if (isNotNullNode(val)) {
                 issue.setId(val.asText());
             }
 
             val = issueNode.get("key");
-            if (val != null) {
+            if (isNotNullNode(val)) {
                 issue.setKey(val.asText());
                 issue.setLink(String.format("%s/browse/%s", jiraUrl, val.asText()));
             }
@@ -559,7 +559,7 @@ public class RestJiraDownloader {
             processStatus(issue, val);
 
             val = fieldsNode.get("summary");
-            if (val != null) {
+            if (isNotNullNode(val)) {
                 issue.setSummary(val.asText());
             }
 
@@ -575,10 +575,12 @@ public class RestJiraDownloader {
 
     private void processVersions(Issue issue, JsonNode val) {
         StringBuilder sb = new StringBuilder();
-        if (val != null) {
+        if (isNotNullNode(val)) {
             for (int vx = 0; vx < val.size(); vx++) {
-                sb.append(val.get(vx).get("name").asText());
-                sb.append(", ");
+                if (isNotNullNode(val.get(vx)) && isNotNullNode(val.get(vx).get("name"))) {
+                    sb.append(val.get(vx).get("name").asText());
+                    sb.append(", ");
+                }
             }
         }
         if (sb.length() > 0) {
@@ -588,29 +590,29 @@ public class RestJiraDownloader {
     }
 
     private void processStatus(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val) && isNotNullNode(val.get("name"))) {
             issue.setStatus(val.get("name").asText());
         }
     }
 
     private void processPriority(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val) && isNotNullNode(val.get("name"))) {
             issue.setPriority(val.get("name").asText());
         }
     }
 
     private void processResolution(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val) && isNotNullNode(val.get("name"))) {
             issue.setResolution(val.get("name").asText());
         }
     }
 
     private String getPerson(JsonNode val) {
         JsonNode nameNode = val.get("displayName");
-        if (nameNode == null) {
+        if (!isNotNullNode(nameNode)) {
             nameNode = val.get("name");
         }
-        if (nameNode != null) {
+        if (isNotNullNode(nameNode)) {
             return nameNode.asText();
         } else {
             return null;
@@ -618,7 +620,7 @@ public class RestJiraDownloader {
     }
 
     private void processAssignee(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             String text = getPerson(val);
             if (text != null) {
                 issue.setAssignee(text);
@@ -627,7 +629,7 @@ public class RestJiraDownloader {
     }
 
     private void processReporter(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             String text = getPerson(val);
             if (text != null) {
                 issue.setReporter(text);
@@ -636,7 +638,7 @@ public class RestJiraDownloader {
     }
 
     private void processCreated(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             try {
                 issue.setCreated(parseDate(val));
             } catch (ParseException e) {
@@ -646,7 +648,7 @@ public class RestJiraDownloader {
     }
 
     private void processUpdated(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             try {
                 issue.setUpdated(parseDate(val));
             } catch (ParseException e) {
@@ -660,27 +662,31 @@ public class RestJiraDownloader {
     }
 
     private void processFixVersions(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             assertIsArray(val);
             for (int vx = 0; vx < val.size(); vx++) {
                 JsonNode fvNode = val.get(vx);
-                issue.addFixVersion(fvNode.get("name").asText());
+                if (isNotNullNode(fvNode) && isNotNullNode(fvNode.get("name"))) {
+                    issue.addFixVersion(fvNode.get("name").asText());
+                }
             }
         }
     }
 
     private void processComponents(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val)) {
             assertIsArray(val);
             for (int cx = 0; cx < val.size(); cx++) {
                 JsonNode cnode = val.get(cx);
-                issue.addComponent(cnode.get("name").asText());
+                if (isNotNullNode(cnode) && isNotNullNode(cnode.get("name"))) {
+                    issue.addComponent(cnode.get("name").asText());
+                }
             }
         }
     }
 
     private void processIssueType(Issue issue, JsonNode val) {
-        if (val != null) {
+        if (isNotNullNode(val) && isNotNullNode(val.get("name"))) {
             issue.setType(val.get("name").asText());
         }
     }
@@ -695,6 +701,10 @@ public class RestJiraDownloader {
         if (!node.isArray()) {
             throw new IllegalArgumentException("json node: " + node + " is not an array");
         }
+    }
+
+    private boolean isNotNullNode(JsonNode node) {
+        return node != null && !node.isNull();
     }
 
     private void doSessionAuth(CloseableHttpClient client, String jiraUrl)
