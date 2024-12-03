@@ -276,6 +276,15 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     private int maxEntries;
 
     /**
+     * If you only want to show issues from JIRA for the current version in the report. The current version being used is
+     * <code>${project.version}</code> minus any "-SNAPSHOT" suffix.
+     *
+     * @since 3.0.0
+     */
+    @Parameter(defaultValue = "false")
+    private boolean onlyCurrentVersion;
+
+    /**
      * Include issues from JIRA with these resolution ids. Multiple resolution ids can be specified as a comma separated
      * list of ids.
      * <p>
@@ -637,6 +646,8 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
         jiraDownloader.setSettingsDecrypter(settingsDecrypter);
 
         jiraDownloader.setNbEntries(maxEntries);
+        jiraDownloader.setOnlyCurrentVersion(onlyCurrentVersion);
+        jiraDownloader.setVersionPrefix(versionPrefix);
 
         jiraDownloader.setFilter(filter);
 
@@ -663,6 +674,12 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 issueList = IssueUtils.filterIssuesWithVersionPrefix(issueList, versionPrefix);
                 getLog().debug("Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
                         + " that matched the versionPrefix '" + versionPrefix + "'.");
+            }
+
+            if (onlyCurrentVersion) {
+                String version = (versionPrefix == null ? "" : versionPrefix) + project.getVersion();
+                issueList = IssueUtils.getIssuesForVersion(issueList, version);
+                getLog().debug("The JIRA Report will contain issues only for the current version.");
             }
 
             return getReleases(issueList, new JIRAIssueManagmentSystem());
