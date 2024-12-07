@@ -477,6 +477,8 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
             }
 
             if (issueManagementSystems.contains(TRAC)) {
+                getLog().warn(
+                                "Trac integration is prepared for removal in next major version due to lack of maintainers");
                 String message = ProjectUtils.validateIssueManagement(project, TRAC, "Trac announcement");
                 if (message == null) {
                     List<Release> tracReleases = getTracReleases();

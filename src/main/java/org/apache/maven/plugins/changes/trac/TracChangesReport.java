@@ -41,7 +41,9 @@ import org.apache.xmlrpc.XmlRpcException;
  * @author Noriko Kinugasa
  * @version $Id$
  * @since 2.1
+ * @deprecated prepared for removal in next major version due to lack of maintainers
  */
+@Deprecated
 @Mojo(name = "trac-changes", threadSafe = true)
 public class TracChangesReport extends AbstractChangesReport {
 
