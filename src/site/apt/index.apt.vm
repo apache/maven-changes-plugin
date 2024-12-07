@@ -105,6 +105,10 @@ ${project.name}
 | trac-report -> trac-changes     | trac-report.html -> trac-changes.html     |
 *---------------------------------+-------------------------------------------+
 
+** Deprecate Trac integration
+
+  <<Trac>> integration is prepared for removal in next major version due to lack of maintainers.
+
 * Examples
 
   To provide you with better understanding of some usages of the Changes Plugin,
