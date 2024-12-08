@@ -22,7 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import junit.framework.TestCase;
-import org.apache.maven.plugin.logging.SystemStreamLog;
+import org.apache.maven.plugin.testing.SilentLog;
 
 /**
  * Test class for {@link JqlQueryBuilder}
@@ -35,7 +35,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
     private static final String ENCODING = "UTF-8";
 
     public void testEmptyQuery() {
-        String actual = new JqlQueryBuilder(new SystemStreamLog()).build();
+        String actual = createBuilder().build();
         String expected = "";
         assertEquals(expected, actual);
     }
@@ -147,6 +147,6 @@ public class JqlQueryBuilderTestCase extends TestCase {
     }
 
     private JqlQueryBuilder createBuilder() {
-        return new JqlQueryBuilder(new SystemStreamLog());
+        return new JqlQueryBuilder(new SilentLog());
     }
 }

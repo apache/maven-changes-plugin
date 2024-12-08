@@ -21,7 +21,7 @@ package org.apache.maven.plugins.changes;
 import java.io.File;
 import java.util.List;
 
-import org.apache.maven.plugin.logging.SystemStreamLog;
+import org.apache.maven.plugin.testing.SilentLog;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
 import org.junit.Test;
@@ -45,7 +45,7 @@ public class ChangesXMLTest {
     @Test
     public void testParseChangesFile() {
         File changesFile = new File(getBasedir() + "/src/test/unit/changes.xml");
-        ChangesXML changesXML = new ChangesXML(changesFile, new SystemStreamLog());
+        ChangesXML changesXML = new ChangesXML(changesFile, new SilentLog());
         assertNotNull(changesXML.getChangesDocument());
         assertEquals("Changes report Project", changesXML.getTitle());
 
@@ -80,12 +80,10 @@ public class ChangesXMLTest {
         File changesFile = new File(getBasedir() + "/src/test/unit/invalid-changes.xml");
 
         try {
-            new ChangesXML(changesFile, new SystemStreamLog());
+            new ChangesXML(changesFile, new SilentLog());
             fail("Should have thrown a ChangesXMLRuntimeException due to the invalid changes.xml file");
         } catch (ChangesXMLRuntimeException e) {
             assertEquals("An error occurred when parsing the changes.xml file", e.getMessage());
-        } catch (Throwable e) {
-            fail("Wrong type of Throwable object was thrown, expected ChangesXMLRuntimeException");
         }
     }
 }
