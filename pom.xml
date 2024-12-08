@@ -23,7 +23,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>43</version>
+    <version>44-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -139,6 +139,7 @@ under the License.
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
+      <version>${version.maven-plugin-tools}</version>
     </dependency>
     <dependency>
       <groupId>javax.inject</groupId>
@@ -435,6 +436,16 @@ under the License.
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/xsd</outputDirectory>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-remote-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>site-download</id>
+            <phase>pre-site</phase>
           </execution>
         </executions>
       </plugin>
