@@ -35,7 +35,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
     private static final String ENCODING = "UTF-8";
 
     private final JqlQueryBuilder builder = new JqlQueryBuilder(new SilentLog());
-    
+
     public void testEmptyQuery() {
         String actual = builder.build();
         String expected = "";
@@ -86,8 +86,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
     public void testMultipleParameterCombinedWithAND() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("priority in (Blocker) AND status in (Resolved)", ENCODING);
 
-        String actual =
-                builder.priorityIds("Blocker").statusIds("Resolved").build();
+        String actual = builder.priorityIds("Blocker").statusIds("Resolved").build();
         assertEquals(expected, actual);
     }
 
@@ -107,32 +106,25 @@ public class JqlQueryBuilderTestCase extends TestCase {
         actual = builder.project("DOXIA").sortColumnNames("key ASC").build();
         assertEquals(expected, actual);
 
-        actual = builder
-                .project("DOXIA")
-                .sortColumnNames("     key    ASC    ")
-                .build();
+        actual = builder.project("DOXIA").sortColumnNames("     key    ASC    ").build();
         assertEquals(expected, actual);
     }
 
     public void testSortSingleDescending() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key DESC", ENCODING);
 
-        String actual =
-                builder.project("DOXIA").sortColumnNames("key DESC").build();
+        String actual = builder.project("DOXIA").sortColumnNames("key DESC").build();
         assertEquals(expected, actual);
 
-        actual = builder
-                .project("DOXIA")
-                .sortColumnNames("     key    DESC    ")
-                .build();
+        actual =
+                builder.project("DOXIA").sortColumnNames("     key    DESC    ").build();
         assertEquals(expected, actual);
     }
 
     public void testSortMultipleColumns() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
-        String actual = builder
-                .project("DOXIA")
+        String actual = builder.project("DOXIA")
                 .sortColumnNames("key ASC,assignee DESC, reporter ASC")
                 .build();
         assertEquals(expected, actual);
@@ -141,8 +133,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
     public void testOrderByIsLastElement() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
-        String actual = builder
-                .sortColumnNames("key ASC,assignee DESC, reporter ASC")
+        String actual = builder.sortColumnNames("key ASC,assignee DESC, reporter ASC")
                 .project("DOXIA")
                 .build();
         assertEquals(expected, actual);
