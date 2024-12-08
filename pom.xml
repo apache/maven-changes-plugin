@@ -258,6 +258,11 @@ under the License.
       <artifactId>jsr311-api</artifactId>
       <version>1.1.1</version>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.36</version>
+    </dependency>
 
     <!-- commons -->
     <dependency>
@@ -339,6 +344,12 @@ under the License.
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
       <version>4.11.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>3.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
