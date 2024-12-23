@@ -48,6 +48,7 @@ under the License.
               due-to="John Doe,John Doe" due-to-email="john@doe.com">
         Updated dependencies.
       </action>
+      <action type="update">No dev action</action>
     </release>
 
     <release version="1.0" date="2005-01-01" description="First release">

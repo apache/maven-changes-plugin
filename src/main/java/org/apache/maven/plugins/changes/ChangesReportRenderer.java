@@ -193,7 +193,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         sink.tableCell_();
 
-        if (NO_TEAM.equals(team)) {
+        if (NO_TEAM.equals(team) || action.getDev() == null || action.getDev().isEmpty()) {
             sinkCell(action.getDev());
         } else {
             sinkCellLink(action.getDev(), team + "#" + action.getDev());
