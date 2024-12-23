@@ -33,13 +33,13 @@ under the License.
         Enable retrieving component-specific issues.
       </action>
       <action dev="jruiz" type="remove" issue="MCHANGES-899"
-              fixedIssues="MCHANGES-1,JIRA-12"
+              fixed-issues="MCHANGES-1,JIRA-12"
               due-to="John Doe,John Doe" due-to-email="john@doe.com">
         The element type " link " must be terminated by the matching end-tag.
         Deleted the erroneous code.
       </action>
       <action dev="you" type="update" system="bugzilla"
-              fixedIssues="bug-12345"
+              fixed-issues="bug-12345"
               due-to="John Doe" due-to-email=",john@doe.com">
         Handle different issue systems.
       </action>
@@ -51,7 +51,7 @@ under the License.
 
     <release version="1.0" date="2005-01-01" description="First release">
       <action dev="me" type="update" issue="MCHANGES-47"
-              fixedIssues="MCHANGES-88,JIRA-YYY"
+              fixed-issues="MCHANGES-88,JIRA-YYY"
               due-to="others,John Doe,John Doe" due-to-email="others@users.com,john@doe.com">
         Uploaded documentation on how to use the plugin.
       </action>

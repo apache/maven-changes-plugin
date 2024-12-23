@@ -38,7 +38,7 @@ under the License.
     </release>
 
     <release version="1.0" date="2005-01-01" description="First release">
-      <action dev="jruiz" type="update" fixedIssues="MABC-123,MABC-124">
+      <action dev="jruiz" type="update" fixed-issues="MABC-123,MABC-124">
         Uploaded documentation.
       </action>
     </release>

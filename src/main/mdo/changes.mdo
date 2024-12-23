@@ -300,7 +300,7 @@ under the License.
           <type>String</type>
           <description>fix date</description>
         </field>
-        <field xml.attribute="true" xml.tagName="fixedIssues">
+        <field xml.attribute="true" xml.tagName="fixed-issues">
           <name>fixedIssuesString</name>
           <version>2.0.0+</version>
           <type>String</type>

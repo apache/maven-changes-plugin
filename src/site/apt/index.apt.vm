@@ -82,10 +82,10 @@ ${project.name}
   * you should update schema in your changes.xml to <<<2.0.0>>> - {{{./using-changes-xsd.html}Using the XML Schema}}.
 
   * tag <<<action/dueto>>> - was removed, you can put your data into existing
-    <<<due-to>>> and <<<dueToEmail>>> attributes of <<<action>>> tag,
+    <<<due-to>>> and <<<due-to-email>>> attributes of <<<action>>> tag,
     which can be comma separated.
 
-  * tag <<<action/fixedIssues>>> - was changed to an attribute of <<action>> tag, it also can be comma separated.
+  * tag <<<action/fixedIssues>>> - was changed to an attribute <<<fixed-issues>>> of <<action>> tag, it also can be comma separated.
 
 ** Report goals and output names
 
