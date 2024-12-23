@@ -227,8 +227,8 @@ under the License.
         <field xml.attribute="true">
           <name>dev</name>
           <version>1.0.0+</version>
-          <required>true</required>
           <type>String</type>
+          <defaultValue/>
           <description>
             <![CDATA[
             Name of developer who committed the change.

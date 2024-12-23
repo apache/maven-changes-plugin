@@ -38,3 +38,5 @@ assert !content.contains('Fixes .'): 'changes.html doesn\'t handle empty fixes a
 assert content.contains('<a class="externalLink" href="mailto:john@doe.com">John Doe</a>')
 assert content.contains('Thanks to External Submitter,')
 assert content.contains('<a class="externalLink" href="mailto:others@users.com">others</a>')
+// no link to empty dev value
+assert content.contains('<td>-</td></tr>')
