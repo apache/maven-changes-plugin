@@ -27,7 +27,7 @@ under the License.
   <body>
     <release version="1.1" date="2005-03-01" description="Subsequent release">
       <action dev="jruiz" type="remove"
-              fixedIssues="MCHANGES-1,JIRA-12"
+              fixed-issues="MCHANGES-1,JIRA-12"
       due-to="John Doe,John Doe" due-to-email="john@doe.com">
         The element type " link " must be terminated by the matching end-tag.
         Deleted the erroneous code.

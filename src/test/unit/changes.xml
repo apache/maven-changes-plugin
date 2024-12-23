@@ -41,7 +41,7 @@ under the License.
       </action>
     </release>
     <release version="1.0" date="2005-01-01" description="First release">
-      <action dev="me" type="update" date="2008-01-01" fixedIssues="JIRA-XXX,JIRA-YYY"
+      <action dev="me" type="update" date="2008-01-01" fixed-issues="JIRA-XXX,JIRA-YYY"
               due-to="John Doe, John Doe" due-to-email="john@doe.com">
         Uploaded documentation on how to use the plugin.
       </action>

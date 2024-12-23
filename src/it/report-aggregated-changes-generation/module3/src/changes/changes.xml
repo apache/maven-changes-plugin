@@ -27,7 +27,7 @@ under the License.
   <body>
     <release version="1.1" date="2005-03-01" description="Subsequent release">
       <action dev="you" type="update" system="bugzilla"
-      fixedIssues="bug-12345"
+      fixed-issues="bug-12345"
               due-to="John Doe" due-to-email="john@doe.com">
         Handle different issue systems.
       </action>
