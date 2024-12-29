@@ -374,6 +374,7 @@ under the License.
   </dependencies>
 
   <build>
+
     <pluginManagement>
       <plugins>
         <plugin>
@@ -385,8 +386,25 @@ under the License.
             </systemPropertyVariables>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-changes-plugin</artifactId>
+          <!--
+              Use the current version to generate sample with the last features/fixes of the plugin.
+              It implies that the current version is already deployed to generate the site.
+            -->
+          <version>${project.version}</version>
+          <configuration>
+            <!-- For Announcement -->
+            <issueManagementSystems>
+              <issueManagementSystem>JIRA</issueManagementSystem>
+            </issueManagementSystems>
+            <onlyCurrentVersion>true</onlyCurrentVersion>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.eclipse.sisu</groupId>
@@ -478,16 +496,7 @@ under the License.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-changes-plugin</artifactId>
-            <!--
-              Use the current version to generate sample with the last features/fixes of the plugin.
-              It implies that the current version is already deployed to generate the site.
-            -->
-            <version>${project.version}</version>
             <configuration>
-              <!-- For Announcement -->
-              <issueManagementSystems>
-                <issueManagementSystem>JIRA</issueManagementSystem>
-              </issueManagementSystems>
               <!-- For (sample) Changes-report -->
               <issueLinkTemplatePerSystem>
                 <default>%URL%/%ISSUE%</default>
@@ -499,13 +508,12 @@ under the License.
               <onlyCurrentVersion>true</onlyCurrentVersion>
               <resolutionIds>Fixed</resolutionIds>
               <sortColumnNames>Type,Key</sortColumnNames>
-              <useJql>true</useJql>
             </configuration>
             <reportSets>
               <reportSet>
                 <reports>
-                  <report>changes-report</report>
-                  <report>jira-report</report>
+                  <report>changes</report>
+                  <report>jira-changes</report>
                 </reports>
               </reportSet>
             </reportSets>
