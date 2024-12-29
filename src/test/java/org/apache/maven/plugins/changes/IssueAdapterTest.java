@@ -24,7 +24,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import org.apache.maven.plugins.changes.issues.Issue;
 import org.apache.maven.plugins.changes.issues.IssueManagementSystem;
-import org.apache.maven.plugins.changes.jira.JIRAIssueManagmentSystem;
+import org.apache.maven.plugins.changes.jira.JIRAIssueManagementSystem;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
 
@@ -36,7 +36,7 @@ import org.apache.maven.plugins.changes.model.Release;
 public class IssueAdapterTest extends TestCase {
 
     public void testDefaultIssueTypeMapping() {
-        IssueAdapter adapter = new IssueAdapter(new JIRAIssueManagmentSystem());
+        IssueAdapter adapter = new IssueAdapter(new JIRAIssueManagementSystem());
 
         Issue issue = createIssue("TST-1", "New Feature");
         Action action = adapter.createAction(issue);
@@ -50,13 +50,25 @@ public class IssueAdapterTest extends TestCase {
         action = adapter.createAction(issue);
         assertEquals("update", action.getType());
 
+        issue = createIssue("TST-3", "Dependency upgrade");
+        action = adapter.createAction(issue);
+        assertEquals("update", action.getType());
+
+        issue = createIssue("TST-3", "Wish");
+        action = adapter.createAction(issue);
+        assertEquals("update", action.getType());
+
+        issue = createIssue("TST-3", "Task");
+        action = adapter.createAction(issue);
+        assertEquals("update", action.getType());
+
         issue = createIssue("TST-4", "Unknown Type");
         action = adapter.createAction(issue);
         assertEquals("", action.getType());
     }
 
     public void testCustomIssueTypeMappingOveridesDefaultMapping() {
-        IssueManagementSystem ims = new JIRAIssueManagmentSystem();
+        IssueManagementSystem ims = new JIRAIssueManagementSystem();
 
         ims.getIssueTypeMap().clear();
         IssueAdapter adapter = new IssueAdapter(ims);
@@ -79,7 +91,7 @@ public class IssueAdapterTest extends TestCase {
     }
 
     public void testCustomIssueTypeMapping() {
-        IssueManagementSystem ims = new JIRAIssueManagmentSystem();
+        IssueManagementSystem ims = new JIRAIssueManagementSystem();
         ims.getIssueTypeMap().put("Story", IssueType.ADD);
         ims.getIssueTypeMap().put("Epic", IssueType.ADD);
         ims.getIssueTypeMap().put("Defect", IssueType.FIX);
@@ -126,7 +138,7 @@ public class IssueAdapterTest extends TestCase {
     }
 
     public void testReleaseOrder() {
-        IssueManagementSystem ims = new JIRAIssueManagmentSystem();
+        IssueManagementSystem ims = new JIRAIssueManagementSystem();
         ims.getIssueTypeMap().put("Story", IssueType.ADD);
         ims.getIssueTypeMap().put("Epic", IssueType.ADD);
         ims.getIssueTypeMap().put("Defect", IssueType.FIX);

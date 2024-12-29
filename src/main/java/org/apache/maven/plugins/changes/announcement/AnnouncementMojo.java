@@ -43,7 +43,7 @@ import org.apache.maven.plugins.changes.github.GitHubIssueManagementSystem;
 import org.apache.maven.plugins.changes.issues.Issue;
 import org.apache.maven.plugins.changes.issues.IssueManagementSystem;
 import org.apache.maven.plugins.changes.issues.IssueUtils;
-import org.apache.maven.plugins.changes.jira.JIRAIssueManagmentSystem;
+import org.apache.maven.plugins.changes.jira.JIRAIssueManagementSystem;
 import org.apache.maven.plugins.changes.jira.RestJiraDownloader;
 import org.apache.maven.plugins.changes.model.Release;
 import org.apache.maven.plugins.changes.trac.TracDownloader;
@@ -684,7 +684,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
                 getLog().debug("The JIRA Report will contain issues only for the current version.");
             }
 
-            return getReleases(issueList, new JIRAIssueManagmentSystem());
+            return getReleases(issueList, new JIRAIssueManagementSystem());
         } catch (Exception e) {
             throw new MojoExecutionException("Failed to extract issues from JIRA.", e);
         }

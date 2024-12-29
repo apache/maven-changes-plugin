@@ -26,19 +26,17 @@ import org.apache.maven.plugins.changes.issues.AbstractIssueManagementSystem;
  *
  * @version $Id$
  */
-public class JIRAIssueManagmentSystem extends AbstractIssueManagementSystem {
-    private static final String DEFAULT_ADD_TYPE = "New Feature";
+public class JIRAIssueManagementSystem extends AbstractIssueManagementSystem {
 
-    private static final String DEFAULT_FIX_TYPE = "Bug";
-
-    private static final String DEFAULT_UPDATE_TYPE = "Improvement";
-
-    public JIRAIssueManagmentSystem() {
+    public JIRAIssueManagementSystem() {
         super();
         // Add the standard issue types for JIRA
-        issueTypeMap.put(DEFAULT_ADD_TYPE, IssueType.ADD);
-        issueTypeMap.put(DEFAULT_FIX_TYPE, IssueType.FIX);
-        issueTypeMap.put(DEFAULT_UPDATE_TYPE, IssueType.UPDATE);
+        issueTypeMap.put("Bug", IssueType.FIX);
+        issueTypeMap.put("Dependency upgrade", IssueType.UPDATE);
+        issueTypeMap.put("Improvement", IssueType.UPDATE);
+        issueTypeMap.put("New Feature", IssueType.ADD);
+        issueTypeMap.put("Task", IssueType.UPDATE);
+        issueTypeMap.put("Wish", IssueType.UPDATE);
     }
 
     @Override
