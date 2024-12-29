@@ -50,7 +50,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
 
     public void initialize() {
         if (StringUtils.isEmpty(getSmtpHost())) {
-            System.out.println("Error in configuration: Missing smtpHost.");
+            getLogger().error("Error in configuration: Missing smtpHost.");
         }
 
         if (getSmtpPort() == 0) {
@@ -85,7 +85,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
     // ----------------------------------------------------------------------
     // MailSender Implementation
     // ----------------------------------------------------------------------
-
+    @Override
     public void send(MailMessage mail) throws MailSenderException {
         verify(mail);
 
