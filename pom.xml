@@ -183,27 +183,13 @@ under the License.
     </dependency>
     <dependency>
       <groupId>org.apache.geronimo.javamail</groupId>
-      <artifactId>geronimo-javamail_1.4_provider</artifactId>
-      <version>1.8.4</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-javamail_1.4_spec</artifactId>
-      <version>1.7.1</version>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.javamail</groupId>
       <artifactId>geronimo-javamail_1.4_mail</artifactId>
       <version>1.8.4</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-mail-sender-javamail</artifactId>
       <version>1.0-alpha-7</version>
-      <scope>runtime</scope>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
