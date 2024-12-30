@@ -190,6 +190,7 @@ under the License.
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-mail-sender-javamail</artifactId>
       <version>1.0-alpha-7</version>
+      <scope>runtime</scope>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
@@ -201,6 +202,7 @@ under the License.
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-mail-sender-simple</artifactId>
       <version>1.0-alpha-7</version>
+      <scope>runtime</scope>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.plexus</groupId>
