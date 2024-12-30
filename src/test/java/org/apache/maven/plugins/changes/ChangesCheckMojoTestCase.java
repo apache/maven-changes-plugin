@@ -20,10 +20,9 @@ package org.apache.maven.plugins.changes;
 
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeThat;
+import static org.junit.Assume.assumeTrue;
 
 /**
  * @author Dennis Lundberg
@@ -113,7 +112,7 @@ public class ChangesCheckMojoTestCase {
     public void testCompat() {
         // @TODO fix for Java 9+
         // System.setProperty( "java.locale.providers", "COMPAT,CLDR" ) is not picked up...
-        assumeThat(System.getProperty("java.version"), startsWith("1."));
+        assumeTrue(System.getProperty("java.version").startsWith("1."));
 
         // pattern with months as text
         String pattern = "dd MMM yyyy";
