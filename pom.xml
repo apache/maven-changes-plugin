@@ -76,7 +76,6 @@ under the License.
     <doxiaVersion>2.0.0</doxiaVersion>
     <mavenVersion>3.6.3</mavenVersion>
     <mavenResolverVersion>1.4.1</mavenResolverVersion>
-    <!-- TODO check with next parent -->
     <version.maven-site-plugin>3.21.0</version.maven-site-plugin>
     <version.maven-fluido-skin>2.0.0</version.maven-fluido-skin>
 
@@ -438,6 +437,28 @@ under the License.
             <phase>pre-site</phase>
             <configuration>
               <outputDirectory>${project.reporting.outputDirectory}/xsd</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <ignoredUnusedDeclaredDependencies>
+                <ignoredUnusedDeclaredDependency>org.apache.maven.resolver:maven-resolver-connector-basic</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.apache.maven.resolver:maven-resolver-transport-http</ignoredUnusedDeclaredDependency>
+                <!-- These next two should be removed. See https://issues.apache.org/jira/browse/MCHANGES-463 -->
+                <ignoredUnusedDeclaredDependency>org.codehaus.plexus:plexus-mail-sender-javamail</ignoredUnusedDeclaredDependency>
+                <ignoredUnusedDeclaredDependency>org.codehaus.plexus:plexus-mail-sender-simple</ignoredUnusedDeclaredDependency>
+              </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
         </executions>
