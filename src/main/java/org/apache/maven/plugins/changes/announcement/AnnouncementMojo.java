@@ -585,13 +585,13 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
     }
 
     /**
-     * Create the velocity template.
+     * Create the Velocity template.
      *
      * @param context velocity context that has the parameter values
      * @param outputDirectory directory where the file will be generated
      * @param template velocity template which will the context be merged
      * @param announcementFile the file name of the generated announcement
-     * @throws VelocityException in case of error processing the Velocty template
+     * @throws VelocityException in case of error processing the Velocity template
      * @throws MojoExecutionException in case of errors
      */
     public void processTemplate(Context context, File outputDirectory, String template, String announcementFile)
