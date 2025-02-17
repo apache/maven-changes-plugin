@@ -29,9 +29,6 @@
 
 Alternate Location for the <<<changes.xml>>> File
 
- <<Note:>> This feature was introduced in version <2.0-beta-2> of the Changes
- plugin.
-
  <<Note:>> Unless you have a specific reason to have your <<<changes.xml>>>
  file in a different location, we advice you to put it in the default location
  <<<$\{basedir\}/src/changes/changes.xml>>>. If nothing else, it saves you from
