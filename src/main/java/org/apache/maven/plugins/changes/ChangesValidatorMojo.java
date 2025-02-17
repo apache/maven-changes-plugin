@@ -32,7 +32,7 @@ import org.apache.maven.plugins.changes.schema.XmlValidationHandler;
 import org.xml.sax.SAXParseException;
 
 /**
- * Goal which validate the <code>changes.xml</code> file.
+ * Goal which validates the <code>changes.xml</code> file.
  *
  * @author Olivier Lamy
  * @version $Id$
@@ -48,13 +48,13 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
     private String changesXsdVersion;
 
     /**
-     * Mojo failure if validation failed. If not and validation failed, only a warning will be logged.
+     * Mojo failure if validation failed. If false and validation failed, only a warning will be logged.
      */
     @Parameter(property = "changes.validate.failed", defaultValue = "false")
     private boolean failOnError;
 
     /**
-     * The path of the <code>changes.xml</code> file that will be converted into an HTML report.
+     * The path of the <code>changes.xml</code> file that will be validated.
      */
     @Parameter(property = "changes.xmlPath", defaultValue = "src/changes/changes.xml")
     private File xmlPath;
@@ -87,7 +87,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
                     logSchemaValidation(xmlValidationHandler.getErrors());
                     if (failOnError) {
                         throw new MojoExecutionException("changes.xml file " + xmlPath.getAbsolutePath()
-                                + " is not valid, see previous errors.");
+                                + " is not valid. See previous errors.");
                     } else {
                         getLog().info(" skip previous validation errors due to failOnError=false.");
                     }
@@ -95,7 +95,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
             } catch (SchemaValidatorException e) {
                 if (failOnError) {
                     throw new MojoExecutionException(
-                            "failed to validate changes.xml file " + xmlPath.getAbsolutePath() + ": " + e.getMessage(),
+                            "changes.xml file is not valid: " + xmlPath.getAbsolutePath() + ": " + e.getMessage(),
                             e);
                 }
             }
@@ -103,7 +103,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
     }
 
     private void logSchemaValidation(List<SAXParseException> errors) {
-        getLog().warn("failed to validate changes.xml file " + xmlPath.getAbsolutePath());
+        getLog().warn("changes.xml file is not valid: " + xmlPath.getAbsolutePath());
         getLog().warn("validation errors: ");
         for (SAXParseException error : errors) {
             getLog().warn(error.getMessage());
