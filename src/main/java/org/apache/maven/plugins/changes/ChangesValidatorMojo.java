@@ -95,8 +95,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
             } catch (SchemaValidatorException e) {
                 if (failOnError) {
                     throw new MojoExecutionException(
-                            "changes.xml file is not valid: " + xmlPath.getAbsolutePath() + ": " + e.getMessage(),
-                            e);
+                            "changes.xml file is not valid: " + xmlPath.getAbsolutePath() + ": " + e.getMessage(), e);
                 }
             }
         }
