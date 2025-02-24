@@ -76,6 +76,21 @@ public class ChangesReport extends AbstractChangesReport {
     private boolean addActionDate;
 
     /**
+     * Whether the changelog action text should be passed as raw text to Doxia for rendering the output or not.
+     * By default, the text is passed as escaped text to Doxia to support any output format like HTML, PDF, etc.
+     * If you want to produce only HTML output, and want to use HTML markup in the changelog (e.g. anchor links)
+     * set this parameter to false.
+     *
+     * <p>
+     * <strong>Note:</strong> Only enable this paramter if you are only using this plugin to produce HTML output.</strong>
+     * </p>
+     *
+     * @since 3.0
+     */
+    @Parameter
+    private boolean passRawText;
+
+    /**
      * The directory for interpolated changes.xml.
      *
      * @since 2.2
@@ -243,6 +258,7 @@ public class ChangesReport extends AbstractChangesReport {
         }
 
         report.setLinkToFeed(feedGenerated);
+        report.setPassRawText(passRawText);
 
         report.render();
 

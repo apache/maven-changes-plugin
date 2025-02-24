@@ -73,6 +73,8 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
     private boolean linkToFeed;
 
+    private boolean passRawText;
+
     public ChangesReportRenderer(Sink sink, ResourceBundle bundleName, ChangesXML changesXML) {
         super(sink, bundleName);
         this.issueLinksPerSystem = new HashMap<>();
@@ -104,6 +106,10 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
     public void setLinkToFeed(boolean generateLinkTofeed) {
         this.linkToFeed = generateLinkTofeed;
+    }
+
+    public void setPassRawText(boolean passRawText) {
+        this.passRawText = passRawText;
     }
 
     /**
@@ -159,7 +165,11 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         String actionDescription = action.getAction();
 
-        text(actionDescription);
+        if (passRawText && StringUtils.isNotEmpty(actionDescription)) {
+            sink.rawText(actionDescription);
+        } else {
+            text(actionDescription);
+        }
 
         // no null check needed classes from modello return a new ArrayList
         if (StringUtils.isNotEmpty(action.getIssue())
