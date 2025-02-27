@@ -32,7 +32,7 @@ public class AnnouncementMojoTest extends AbstractMojoTestCase {
 
     public void testAnnounceGeneration() throws Exception {
         File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
-        AnnouncementMojo mojo = (AnnouncementMojo) lookupMojo("announcement-generate", pom);
+        AnnouncementMojo mojo = lookupMojo("announcement-generate", pom);
 
         setVariableValueToObject(mojo, "xmlPath", new File(getBasedir(), "/src/test/unit/announce-changes.xml"));
 
