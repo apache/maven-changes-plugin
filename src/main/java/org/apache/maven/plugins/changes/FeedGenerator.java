@@ -144,7 +144,7 @@ public class FeedGenerator {
      * "rss_0.92", "rss_0.93", "rss_0.94", "rss_1.0", "rss_2.0", "atom_0.3", "atom_1.0"</code>.
      *
      * @param type the feed type to check. May be null.
-     * @return true if if the given type is supported by the rome library, false otherwise.
+     * @return true if the given type is supported by the rome library, false otherwise
      */
     public boolean isSupportedFeedType(final String type) {
         return getSupportedFeedTypes().contains(type);
@@ -177,8 +177,6 @@ public class FeedGenerator {
         feed.setLink(link);
         feed.setDescription(rbundle.getString("report.changes.text.rssfeed.description"));
         feed.setLanguage(rbundle.getLocale().getLanguage());
-        // feed.setCopyright( );
-        // feed.setEncoding();
         feed.setEntries(getEntries(releases));
 
         try {
@@ -191,7 +189,7 @@ public class FeedGenerator {
     private List<SyndEntry> getEntries(final List<Release> releases) {
         final List<SyndEntry> entries = new ArrayList<>(1);
 
-        if (releases.size() > 0) {
+        if (!releases.isEmpty()) {
             final Release release = releases.get(0); // TODO: is this guaranteed to be the latest?
 
             final SyndEntry entry = new SyndEntryImpl();
@@ -214,7 +212,7 @@ public class FeedGenerator {
 
         final String description = release.getDescription();
 
-        if (description != null && description.trim().length() > 0) {
+        if (description != null && !description.trim().isEmpty()) {
             sb.append("<p>").append(description).append("</p>");
         }
 

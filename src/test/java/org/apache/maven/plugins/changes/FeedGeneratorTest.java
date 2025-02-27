@@ -83,9 +83,9 @@ public class FeedGeneratorTest extends TestCase {
         for (String type : generator.getSupportedFeedTypes()) {
             try (Writer writer = new StringWriter(512)) {
                 generator.export(releases, type, writer);
-                String result = writer.toString(); // TODO: save for inspection?
+                String result = writer.toString();
                 assertNotNull(result);
-                assertTrue(result.length() > 0);
+                assertFalse(result.isEmpty());
             }
         }
     }

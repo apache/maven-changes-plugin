@@ -275,7 +275,7 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
         final MailSender ms = getActualMailSender();
         final String fromName = ms.getName();
         final String fromAddress = ms.getEmail();
-        if (fromAddress == null || fromAddress.equals("")) {
+        if (fromAddress == null || fromAddress.isEmpty()) {
             throw new MojoExecutionException("Invalid mail sender: name and email is mandatory (" + ms + ").");
         }
         getLog().info("Using this sender for email announcement: " + fromAddress + " < " + fromName + " > ");

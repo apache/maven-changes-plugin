@@ -541,7 +541,7 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
             ToolManager toolManager = new ToolManager(true);
             Context context = toolManager.createContext();
 
-            if (getIntroduction() == null || getIntroduction().equals("")) {
+            if (getIntroduction() == null || getIntroduction().isEmpty()) {
                 setIntroduction(getUrl());
             }
 
