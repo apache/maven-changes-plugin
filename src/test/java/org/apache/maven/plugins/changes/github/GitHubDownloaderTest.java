@@ -82,7 +82,7 @@ public class GitHubDownloaderTest {
         SettingsDecryptionResult result = mock(SettingsDecryptionResult.class);
         Log log = mock(Log.class);
         when(result.getProblems())
-                .thenReturn(Collections.<SettingsProblem>singletonList(
+                .thenReturn(Collections.singletonList(
                         new DefaultSettingsProblem("Ups " + server.getId(), Severity.ERROR, null, -1, -1, null)));
         when(result.getServer()).thenReturn(server);
         when(decrypter.decrypt(any(SettingsDecryptionRequest.class))).thenReturn(result);
@@ -107,7 +107,7 @@ public class GitHubDownloaderTest {
         SettingsDecrypter decrypter = mock(SettingsDecrypter.class);
         SettingsDecryptionResult result = mock(SettingsDecryptionResult.class);
         Log log = mock(Log.class);
-        when(result.getProblems()).thenReturn(Collections.<SettingsProblem>emptyList());
+        when(result.getProblems()).thenReturn(Collections.emptyList());
         when(result.getServer()).thenReturn(server);
         when(decrypter.decrypt(new DefaultSettingsDecryptionRequest(server))).thenReturn(result);
 

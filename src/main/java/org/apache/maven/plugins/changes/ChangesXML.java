@@ -134,7 +134,7 @@ public class ChangesXML {
      * @return the current value of the {@link ChangesXML#releaseList} attribute
      */
     public List<Release> getReleaseList() {
-        return releaseList == null ? Collections.<Release>emptyList() : releaseList;
+        return releaseList == null ? Collections.emptyList() : releaseList;
     }
 
     /**

@@ -35,7 +35,7 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
     public void setUp() throws Exception {
         super.setUp();
         File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
-        mojo = (ChangesValidatorMojo) lookupMojo("changes-validate", pom);
+        mojo = lookupMojo("changes-validate", pom);
     }
 
     public void testValidationSuccess() throws Exception {
@@ -53,9 +53,9 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
         setVariableValueToObject(mojo, "failOnError", Boolean.TRUE);
         try {
             mojo.execute();
-            fail(" a MojoExecutionException should occur here changes file is not valid and failOnError is true ");
+            fail(" A MojoExecutionException should occur here. Changes file is not valid and failOnError is true ");
         } catch (MojoExecutionException e) {
-            // we except exception here
+            // expected
         }
     }
 
