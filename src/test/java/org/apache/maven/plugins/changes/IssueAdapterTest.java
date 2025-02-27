@@ -155,11 +155,11 @@ public class IssueAdapterTest extends TestCase {
 
         List<Release> releases = adapter.getReleases(issues);
 
-        assertEquals(releases.size(), 5);
-        assertEquals(releases.get(0).getVersion(), "4");
-        assertEquals(releases.get(1).getVersion(), "3.0");
-        assertEquals(releases.get(2).getVersion(), "1.2.1");
-        assertEquals(releases.get(3).getVersion(), "1.0.0-alpha");
-        assertEquals(releases.get(4).getVersion(), "0.1.1");
+        assertEquals(5, releases.size());
+        assertEquals("4", releases.get(0).getVersion());
+        assertEquals( "3.0", releases.get(1).getVersion() );
+        assertEquals( "1.2.1", releases.get(2).getVersion() );
+        assertEquals( "1.0.0-alpha", releases.get(3).getVersion() );
+        assertEquals( "0.1.1", releases.get(4).getVersion() );
     }
 }
