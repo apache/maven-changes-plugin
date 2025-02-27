@@ -189,7 +189,7 @@ public class FeedGenerator {
     private List<SyndEntry> getEntries(final List<Release> releases) {
         final List<SyndEntry> entries = new ArrayList<>(1);
 
-        if (releases.size() > 0) {
+        if (!releases.isEmpty()) {
             final Release release = releases.get(0); // TODO: is this guaranteed to be the latest?
 
             final SyndEntry entry = new SyndEntryImpl();
@@ -212,7 +212,7 @@ public class FeedGenerator {
 
         final String description = release.getDescription();
 
-        if (description != null && description.trim().length() > 0) {
+        if (description != null && !description.trim().isEmpty()) {
             sb.append("<p>").append(description).append("</p>");
         }
 

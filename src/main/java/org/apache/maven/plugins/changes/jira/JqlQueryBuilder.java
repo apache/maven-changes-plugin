@@ -53,8 +53,8 @@ public class JqlQueryBuilder {
     public String build() {
         try {
             String jqlQuery;
-            // If the user has defined a filter - use that
-            if ((this.filter != null) && (this.filter.length() > 0)) {
+            // If the user has defined a filter, use that
+            if (filter != null && !filter.isEmpty()) {
                 jqlQuery = filter;
             } else {
                 jqlQuery = query.toString() + orderBy.toString();
@@ -221,7 +221,7 @@ public class JqlQueryBuilder {
     }
 
     private void addValues(String key, List<String> values) {
-        if (values != null && values.size() > 0) {
+        if (values != null && !values.isEmpty() ) {
             if (query.length() > 0) {
                 query.append(" AND ");
             }
