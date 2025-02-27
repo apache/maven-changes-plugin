@@ -221,7 +221,7 @@ public class JqlQueryBuilder {
     }
 
     private void addValues(String key, List<String> values) {
-        if (values != null && !values.isEmpty() ) {
+        if (values != null && !values.isEmpty()) {
             if (query.length() > 0) {
                 query.append(" AND ");
             }
