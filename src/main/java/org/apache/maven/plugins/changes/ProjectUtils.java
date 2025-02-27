@@ -45,7 +45,7 @@ public final class ProjectUtils {
         if (project.getIssueManagement() == null) {
             return "No Issue Management set. No " + mojoResult + " will be generated.";
         } else if ((project.getIssueManagement().getUrl() == null)
-                || (project.getIssueManagement().getUrl().trim().equals(""))) {
+                || (project.getIssueManagement().getUrl().trim().isEmpty())) {
             return "No URL set in Issue Management. No " + mojoResult + " will be generated.";
         } else if ((project.getIssueManagement().getSystem() != null)
                 && !(project.getIssueManagement().getSystem().equalsIgnoreCase(issueManagementSystem))) {
