@@ -84,7 +84,7 @@ public class ChangesReport extends AbstractChangesReport {
     private File filteredOutputDirectory;
 
     /**
-     * applying filtering filtering "a la" resources plugin
+     * apply filtering "a la" resources plugin
      *
      * @since 2.2
      */
