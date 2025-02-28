@@ -49,6 +49,9 @@ under the License.
         Updated dependencies.
       </action>
       <action type="update">No dev action</action>
+      <action type="update"><![CDATA[
+        <strong>HTML tags</strong> are escaped and not passed as raw text.
+      ]]></action>
     </release>
 
     <release version="1.0" date="2005-01-01" description="First release">
