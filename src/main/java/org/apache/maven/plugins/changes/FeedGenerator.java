@@ -18,6 +18,7 @@
  */
 package org.apache.maven.plugins.changes;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DateFormat;
@@ -25,6 +26,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.io.OutputStream;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -161,19 +163,42 @@ public class FeedGenerator {
     }
 
     /**
-     * Extract a feed and export it to a Writer.
+     * Extract a feed and export it to a Writer. This method is deprecated, use
+     * {@link #export(List, String, OutputStream)} instead.
      *
      * @param releases the List of Releases. Only the last release is used in the feed.
      * @param feedType The type of the feed to generate. See {@link #isSupportedFeedType(java.lang.String)} for
      *            supported values.
      * @param writer a Writer. Note that this is not flushed nor closed upon exit.
      * @throws IOException if an error occurs during export
+     * @deprecated Use {@link #export(List, String, OutputStream)} instead.
      */
+    @Deprecated
     public void export(final List<Release> releases, final String feedType, final Writer writer) throws IOException {
+        export(releases, feedType, new BufferedOutputStream(new WriterOutputStream(writer)));
+    }
+
+    /**
+     * Extract a feed and export it to an OutputStream.
+     *
+     * @param releases the List of Releases. Only the last release is used in the feed.
+     * @param feedType The type of the feed to generate. See {@link #isSupportedFeedType(java.lang.String)} for
+     *            supported values.
+     * @param outputStream an OutputStream. Note that this is not flushed nor closed upon exit.
+     * @throws IOException if an error occurs during export
+     * @since 1.3
+     */
+    public void export(final List<Release> releases, final String feedType, final OutputStream outputStream)
+            throws IOException {
         feed.setFeedType(feedType);
         feed.setTitle(title);
         feed.setAuthor(author);
         feed.setPublishedDate(new Date());
+        exportInternal(releases, outputStream);
+    }
+
+    private void exportInternal(final List<Release> releases, final OutputStream outputStream) throws IOException {
+
         feed.setLink(link);
         feed.setDescription(rbundle.getString("report.changes.text.rssfeed.description"));
         feed.setLanguage(rbundle.getLocale().getLanguage());
@@ -181,7 +206,7 @@ public class FeedGenerator {
 
         try {
             new SyndFeedOutput().output(feed, writer);
-        } catch (FeedException ex) {
+        } catch (FeedException ex) { //NOPMD
             throw new IOException(ex.getMessage(), ex);
         }
     }
@@ -235,4 +260,35 @@ public class FeedGenerator {
             return new Date();
         }
     }
+
+    /**
+     * Simple {@link OutputStream} implementation that writes to a {@link Writer}.
+     *
+     * @since 1.3
+     */
+    private static class WriterOutputStream extends OutputStream {
+        private final Writer writer;
+
+        WriterOutputStream(final Writer writer) {
+            this.writer = writer;
+        }
+
+        @Override
+        public void write(final int b) throws IOException {
+            writer.write(b);
+        }
+
+        @Override
+        public void write(final byte[] b) throws IOException {
+            writer.write(new String(b));
+        }
+
+        @Override
+        public void write(final byte[] b, final int off, final int len) throws IOException {
+            writer.write(new String(b, off, len));
+        }
+
+    }
+
+
 }
