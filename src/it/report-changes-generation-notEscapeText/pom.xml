@@ -51,11 +51,11 @@
           <artifactId>maven-changes-plugin</artifactId>
           <version>${changesPluginVersion}</version>
           <configuration>
-            <passRawText>true</passRawText>
-          </configuration>                      
+            <escapeText>false</escapeText>
+          </configuration>
         </plugin>
       </plugins>
-    </pluginManagement>    
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -72,7 +72,7 @@
               <failOnError>true</failOnError>
             </configuration>
           </execution>
-        </executions>     
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

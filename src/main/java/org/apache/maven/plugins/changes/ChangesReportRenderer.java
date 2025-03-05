@@ -73,7 +73,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
     private boolean linkToFeed;
 
-    private boolean passRawText;
+    private boolean escapeText;
 
     public ChangesReportRenderer(Sink sink, ResourceBundle bundleName, ChangesXML changesXML) {
         super(sink, bundleName);
@@ -108,8 +108,8 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
         this.linkToFeed = generateLinkTofeed;
     }
 
-    public void setPassRawText(boolean passRawText) {
-        this.passRawText = passRawText;
+    public void setEscapeText(boolean escapeText) {
+        this.escapeText = escapeText;
     }
 
     /**
@@ -165,10 +165,10 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         String actionDescription = action.getAction();
 
-        if (passRawText && StringUtils.isNotEmpty(actionDescription)) {
-            sink.rawText(actionDescription);
-        } else {
+        if (escapeText || StringUtils.isEmpty(actionDescription)) {
             text(actionDescription);
+        } else {
+            sink.rawText(actionDescription);
         }
 
         // no null check needed classes from modello return a new ArrayList
