@@ -76,7 +76,7 @@ public class ChangesReport extends AbstractChangesReport {
     private boolean addActionDate;
 
     /**
-     * Whether the change description should be escaped (default), or passed as raw text to the report renderer.
+     * Whether the change description should be escaped (default), or passed as is to the report renderer.
      *
      * <p>
      * <i>Example</i>: If you are generating the changes report as HTML, and want HTML tags included in your changes XML
