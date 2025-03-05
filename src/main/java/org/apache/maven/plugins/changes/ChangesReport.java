@@ -76,6 +76,21 @@ public class ChangesReport extends AbstractChangesReport {
     private boolean addActionDate;
 
     /**
+     * Whether the change description should be escaped (default), or passed as is to the report renderer.
+     *
+     * <p>
+     * <i>Example</i>: If you are generating the changes report as HTML, and want HTML tags included in your changes XML
+     * (like <code>&lt;b&gt;Bold&lt;/b&gt;</code>) to be interpreted correctly in the generated output, you have to set this
+     * parameter to <code>false</code>. You can use a <code>&lt;![CDATA[...]]&gt;</code> block in your changes XML to
+     * enclose descriptions with HTML tags.
+     * </p>
+     *
+     * @since 3.0
+     */
+    @Parameter(defaultValue = "true")
+    private boolean escapeText;
+
+    /**
      * The directory for interpolated changes.xml.
      *
      * @since 2.2
@@ -243,6 +258,7 @@ public class ChangesReport extends AbstractChangesReport {
         }
 
         report.setLinkToFeed(feedGenerated);
+        report.setEscapeText(escapeText);
 
         report.render();
 
