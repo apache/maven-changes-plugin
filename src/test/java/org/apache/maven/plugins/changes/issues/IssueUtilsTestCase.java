@@ -33,19 +33,19 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class IssueUtilsTestCase extends TestCase {
     public void testFilterIssuesWithVersionPrefix() {
-        Issue issue_1;
-        issue_1 = new Issue();
-        issue_1.setId("1");
-        issue_1.addFixVersion("myPrefix-1.0");
+        Issue issue1;
+        issue1 = new Issue();
+        issue1.setId("1");
+        issue1.addFixVersion("myPrefix-1.0");
 
-        Issue issue_2;
-        issue_2 = new Issue();
-        issue_2.setId("2");
-        issue_2.addFixVersion("1.0");
+        Issue issue2;
+        issue2 = new Issue();
+        issue2.setId("2");
+        issue2.addFixVersion("1.0");
 
         List<Issue> issueList = new ArrayList<>();
-        issueList.add(issue_1);
-        issueList.add(issue_2);
+        issueList.add(issue1);
+        issueList.add(issue2);
 
         List<Issue> filteredIssues;
         try {
