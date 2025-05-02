@@ -40,3 +40,6 @@ assert content.contains('Thanks to External Submitter,')
 assert content.contains('<a class="externalLink" href="mailto:others@users.com">others</a>')
 // no link to empty dev value
 assert content.contains('<td>-</td></tr>')
+
+// HTML tags in action text are escaped, and not passed as raw text
+assert content.contains('&lt;strong&gt;HTML tags&lt;/strong&gt; are escaped and not passed as raw text.')
