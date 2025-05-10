@@ -20,9 +20,11 @@ package org.apache.maven.plugins.changes.jira;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.lang3.ArraySorter;
 import org.apache.maven.plugin.logging.Log;
 
 /**
@@ -33,6 +35,190 @@ import org.apache.maven.plugin.logging.Log;
  * @since 2.8
  */
 public class JqlQueryBuilder {
+
+    /**
+     * JQL <a href="https://confluence.atlassian.com/gsgtest/advanced-searching-815566220.html">reserved words</a>.
+     */
+    private static final String[] RESERVED_JQL_WORDS = ArraySorter.sort(new String[] {
+        "abort",
+        "access",
+        "add",
+        "after",
+        "alias",
+        "all",
+        "alter",
+        "and",
+        "any",
+        "as",
+        "asc",
+        "audit",
+        "avg",
+        "before",
+        "begin",
+        "between",
+        "boolean",
+        "break",
+        "by",
+        "byte",
+        "catch",
+        "cf",
+        "char",
+        "character",
+        "check",
+        "checkpoint",
+        "collate",
+        "collation",
+        "column",
+        "commit",
+        "connect",
+        "continue",
+        "count",
+        "create",
+        "current",
+        "date",
+        "decimal",
+        "declare",
+        "decrement",
+        "default",
+        "defaults",
+        "define",
+        "delete",
+        "delimiter",
+        "desc",
+        "difference",
+        "distinct",
+        "divide",
+        "do",
+        "double",
+        "drop",
+        "else",
+        "empty",
+        "encoding",
+        "end",
+        "equals",
+        "escape",
+        "exclusive",
+        "exec",
+        "execute",
+        "exists",
+        "explain",
+        "false",
+        "fetch",
+        "file",
+        "field",
+        "first",
+        "float",
+        "for",
+        "from",
+        "function",
+        "go",
+        "goto",
+        "grant",
+        "greater",
+        "group",
+        "having",
+        "identified",
+        "if",
+        "immediate",
+        "in",
+        "increment",
+        "index",
+        "initial",
+        "inner",
+        "inout",
+        "input",
+        "insert",
+        "int",
+        "integer",
+        "intersect",
+        "intersection",
+        "into",
+        "is",
+        "isempty",
+        "isnull",
+        "join",
+        "last",
+        "left",
+        "less",
+        "like",
+        "limit",
+        "lock",
+        "long",
+        "max",
+        "min",
+        "minus",
+        "mode",
+        "modify",
+        "modulo",
+        "more",
+        "multiply",
+        "next",
+        "noaudit",
+        "not",
+        "notin",
+        "nowait",
+        "null",
+        "number",
+        "object",
+        "of",
+        "on",
+        "option",
+        "or",
+        "order",
+        "outer",
+        "output",
+        "power",
+        "previous",
+        "prior",
+        "privileges",
+        "public",
+        "raise",
+        "raw",
+        "remainder",
+        "rename",
+        "resource",
+        "return",
+        "returns",
+        "revoke",
+        "right",
+        "row",
+        "rowid",
+        "rownum",
+        "rows",
+        "select",
+        "session",
+        "set",
+        "share",
+        "size",
+        "sqrt",
+        "start",
+        "strict",
+        "string",
+        "subtract",
+        "sum",
+        "synonym",
+        "table",
+        "then",
+        "to",
+        "trans",
+        "transaction",
+        "trigger",
+        "true",
+        "uid",
+        "union",
+        "unique",
+        "update",
+        "user",
+        "validate",
+        "values",
+        "view",
+        "when",
+        "whenever",
+        "where",
+        "while",
+        "with"
+    });
+
     private String filter = "";
 
     private boolean urlEncode = true;
@@ -265,10 +451,20 @@ public class JqlQueryBuilder {
 
     private void trimAndQuoteValue(String value) {
         String trimmedValue = value.trim();
-        if (trimmedValue.contains(" ") || trimmedValue.contains(".")) {
+        if (trimmedValue.contains(" ") || trimmedValue.contains(".") || isReservedJqlWord(trimmedValue)) {
             query.append("\"").append(trimmedValue).append("\"");
         } else {
             query.append(trimmedValue);
         }
+    }
+
+    /**
+     * JQL <a href="https://confluence.atlassian.com/gsgtest/advanced-searching-815566220.html">reserved words</a>.
+     *
+     * @param value a string
+     * @return whether the given string is a JQL reserved word.
+     */
+    private boolean isReservedJqlWord(String value) {
+        return Arrays.binarySearch(RESERVED_JQL_WORDS, value.toLowerCase(Locale.ROOT)) > 0;
     }
 }
