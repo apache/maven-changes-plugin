@@ -146,6 +146,17 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    public void testQuoteReservedWord() throws UnsupportedEncodingException {
+        String expected =
+                URLEncoder.encode("project = \"EXEC\" ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
+
+        String actual = createBuilder()
+                .sortColumnNames("key ASC,assignee DESC, reporter ASC")
+                .project("EXEC")
+                .build();
+        assertEquals(expected, actual);
+    }
+
     private JqlQueryBuilder createBuilder() {
         return new JqlQueryBuilder(new SilentLog());
     }
