@@ -77,7 +77,6 @@ under the License.
     <mavenVersion>3.6.3</mavenVersion>
     <mavenResolverVersion>1.4.1</mavenResolverVersion>
     <version.maven-site-plugin>3.21.0</version.maven-site-plugin>
-    <version.maven-fluido-skin>2.0.0</version.maven-fluido-skin>
 
     <sitePluginVersion>${version.maven-site-plugin}</sitePluginVersion>
     <project.build.outputTimestamp>2024-12-30T11:23:30Z</project.build.outputTimestamp>
