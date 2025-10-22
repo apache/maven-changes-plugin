@@ -21,8 +21,11 @@ package org.apache.maven.plugins.changes.issues;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests for the IssueUtils class.
@@ -31,7 +34,8 @@ import org.apache.maven.plugin.MojoExecutionException;
  * @version $Id$
  * @since 2.4
  */
-public class IssueUtilsTestCase extends TestCase {
+public class IssueUtilsTestCase {
+    @Test
     public void testFilterIssuesWithVersionPrefix() {
         Issue issue1;
         issue1 = new Issue();

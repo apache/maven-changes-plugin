@@ -25,29 +25,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugins.changes.model.Release;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author ltheussl
  */
-public class FeedGeneratorTest extends TestCase {
+public class FeedGeneratorTest {
     /**
      * Test of isSupportedFeedType method, of class FeedGenerator.
      */
+    @Test
     public void testIsSupportedFeedType() {
         final FeedGenerator generator = new FeedGenerator(Locale.ENGLISH);
 
-        assertTrue("rss_0.9 not supported?", generator.isSupportedFeedType("rss_0.9"));
-        assertTrue("rss_0.91N not supported?", generator.isSupportedFeedType("rss_0.91N"));
-        assertTrue("rss_0.91U not supported?", generator.isSupportedFeedType("rss_0.91U"));
-        assertTrue("rss_0.92 not supported?", generator.isSupportedFeedType("rss_0.92"));
-        assertTrue("rss_0.93 not supported?", generator.isSupportedFeedType("rss_0.93"));
-        assertTrue("rss_0.94 not supported?", generator.isSupportedFeedType("rss_0.94"));
-        assertTrue("rss_1.0 not supported?", generator.isSupportedFeedType("rss_1.0"));
-        assertTrue("rss_2.0 not supported?", generator.isSupportedFeedType("rss_2.0"));
-        assertTrue("atom_0.3 not supported?", generator.isSupportedFeedType("atom_0.3"));
-        assertTrue("atom_1.0 not supported?", generator.isSupportedFeedType("atom_1.0"));
+        assertTrue(generator.isSupportedFeedType("rss_0.9"), "rss_0.9 not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_0.91N"), "rss_0.91N not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_0.91U"), "rss_0.91U not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_0.92"), "rss_0.92 not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_0.93"), "rss_0.93 not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_0.94"), "rss_0.94 not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_1.0"), "rss_1.0 not supported?");
+        assertTrue(generator.isSupportedFeedType("rss_2.0"), "rss_2.0 not supported?");
+        assertTrue(generator.isSupportedFeedType("atom_0.3"), "atom_0.3 not supported?");
+        assertTrue(generator.isSupportedFeedType("atom_1.0"), "atom_1.0 not supported?");
 
         assertFalse(generator.isSupportedFeedType(""));
         assertFalse(generator.isSupportedFeedType(null));
@@ -59,6 +65,7 @@ public class FeedGeneratorTest extends TestCase {
      *
      * @throws Exception if any.
      */
+    @Test
     public void testExport() throws Exception {
         final FeedGenerator generator = new FeedGenerator(Locale.ENGLISH);
         generator.setAuthor("author");

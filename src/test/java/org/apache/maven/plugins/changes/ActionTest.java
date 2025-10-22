@@ -18,52 +18,50 @@
  */
 package org.apache.maven.plugins.changes;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.apache.maven.plugins.changes.model.Action;
+import org.junit.jupiter.api.Test;
 
-public class ActionTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ActionTest {
     Action action = new Action();
 
-    public ActionTest(String testName) {
-        super(testName);
-    }
-
-    public static Test suite() {
-        return new TestSuite(ActionTest.class);
-    }
-
+    @Test
     public void testGetSetAction() {
         action.setAction("action");
 
         assertEquals("action", action.getAction());
     }
 
+    @Test
     public void testGetSetDev() {
         action.setDev("developer");
 
         assertEquals("developer", action.getDev());
     }
 
+    @Test
     public void testGetSetType() {
         action.setType("type");
 
         assertEquals("type", action.getType());
     }
 
+    @Test
     public void testGetSetIssue() {
         action.setIssue("issue");
 
         assertEquals("issue", action.getIssue());
     }
 
+    @Test
     public void testGetSetDueTo() {
         action.setDueTo("due-to");
 
         assertEquals("due-to", action.getDueTo());
     }
 
+    @Test
     public void testGetSetDueToEmail() {
         action.setDueToEmail("due-to-mail");
 
