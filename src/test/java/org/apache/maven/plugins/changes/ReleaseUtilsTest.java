@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.plugins.changes.model.Release;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Dennis Lundberg
@@ -41,21 +41,21 @@ public class ReleaseUtilsTest {
         List<Release> mergedReleases;
 
         mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
-        assertEquals("Both empty", 0, mergedReleases.size());
+        assertEquals(0, mergedReleases.size(), "Both empty");
 
         Release release = new Release();
         release.setVersion("1.0");
         firstReleases.add(release);
 
         mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
-        assertEquals("One release in first", 1, mergedReleases.size());
+        assertEquals(1, mergedReleases.size(), "One release in first");
 
         release = new Release();
         release.setVersion("1.1");
         secondReleases.add(release);
 
         mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
-        assertEquals("One release each", 2, mergedReleases.size());
+        assertEquals(2, mergedReleases.size(), "One release each");
 
         release = new Release();
         release.setVersion("1.1");
@@ -63,15 +63,15 @@ public class ReleaseUtilsTest {
 
         mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
         assertEquals(
-                "Two releases in first, one release in second with one version being the same",
                 2,
-                mergedReleases.size());
+                mergedReleases.size(),
+                "Two releases in first, one release in second with one version being the same");
 
         release = new Release();
         release.setVersion("1.2");
         secondReleases.add(release);
 
         mergedReleases = ReleaseUtils.mergeReleases(firstReleases, secondReleases);
-        assertEquals("Two releases each with one version being the same", 3, mergedReleases.size());
+        assertEquals(3, mergedReleases.size(), "Two releases each with one version being the same");
     }
 }

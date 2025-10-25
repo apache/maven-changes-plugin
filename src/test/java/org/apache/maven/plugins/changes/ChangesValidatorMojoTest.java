@@ -22,6 +22,10 @@ import java.io.File;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Olivier Lamy
@@ -32,12 +36,14 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
 
     protected ChangesValidatorMojo mojo;
 
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
         mojo = lookupMojo("changes-validate", pom);
     }
 
+    @Test
     public void testValidationSuccess() throws Exception {
         File changesXml = new File(getBasedir(), "/src/test/unit/changes.xml");
         setVariableValueToObject(mojo, "xmlPath", changesXml);
@@ -46,6 +52,7 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
         mojo.execute();
     }
 
+    @Test
     public void testValidationFailedWithMojoFailure() throws Exception {
         File changesXml = new File(getBasedir(), "/src/test/unit/non-valid-changes.xml");
         setVariableValueToObject(mojo, "xmlPath", changesXml);
@@ -59,6 +66,7 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
         }
     }
 
+    @Test
     public void testValidationFailedWithNoMojoFailure() throws Exception {
         File changesXml = new File(getBasedir(), "/src/test/unit/non-valid-changes.xml");
         setVariableValueToObject(mojo, "xmlPath", changesXml);

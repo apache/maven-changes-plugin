@@ -19,6 +19,9 @@
 package org.apache.maven.plugins.changes.jira;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Unit tests for {@link JiraChangesReport}.
@@ -34,6 +37,7 @@ public class JiraChangesReportTest extends AbstractMojoTestCase {
      *
      * @throws Exception If any errors occur during the test run.
      */
+    @Test
     public void testCanGenerateReportSkipped() throws Exception {
         setVariableValueToObject(mojo, "skip", Boolean.TRUE);
         assertFalse(mojo.canGenerateReport());

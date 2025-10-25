@@ -23,13 +23,20 @@ import java.nio.file.Files;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Olivier Lamy
  * @version $Id$
  */
 public class AnnouncementMojoTest extends AbstractMojoTestCase {
+    @BeforeEach
+    void setup() throws Exception {
+        super.setUp();
+    }
 
+    @Test
     public void testAnnounceGeneration() throws Exception {
         File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
         AnnouncementMojo mojo = lookupMojo("announcement-generate", pom);
