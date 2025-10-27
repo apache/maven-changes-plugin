@@ -21,15 +21,18 @@ package org.apache.maven.plugins.changes.issues;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * @author Alan Parkinson
  * @version $Id$
  * @since 2.7
  */
-public class IssueManagementSystemTest extends TestCase {
+public class IssueManagementSystemTest {
 
     private MockIssueManagementSystem ims;
 
@@ -41,11 +44,12 @@ public class IssueManagementSystemTest extends TestCase {
         }
     }
 
-    @Override
-    protected void setUp() {
+    @BeforeEach
+    public void setUp() {
         ims = new MockIssueManagementSystem();
     }
 
+    @Test
     public void testApplyingValidCustomIssueTypes() {
         Map<String, String> issueTypes = new HashMap<>();
         issueTypes.put("add", "Story,Epic");
@@ -59,6 +63,7 @@ public class IssueManagementSystemTest extends TestCase {
         }
     }
 
+    @Test
     public void testApplyingInvalidCustomIssueTypes() {
         Map<String, String> issueTypes = new HashMap<>();
         issueTypes.put("new", "Story,Epic");

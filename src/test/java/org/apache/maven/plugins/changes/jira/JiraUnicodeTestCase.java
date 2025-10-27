@@ -33,7 +33,11 @@ import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
 import org.eclipse.aether.repository.LocalRepository;
 import org.eclipse.aether.repository.RemoteRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +51,12 @@ public class JiraUnicodeTestCase extends AbstractMojoTestCase {
      */
     private static final String TEST_TURTLES = "&#x6d77;&#x9f9f;&#x4e00;&#x8def;&#x4e0b;&#x8dcc;&#x3002;";
 
+    @BeforeEach
+    public void setUp() throws Exception {
+        super.setUp();
+    }
+
+    @Test
     public void testUnicodeReport() throws Exception {
 
         File pom = new File(getBasedir(), "/src/test/unit/jira-plugin-config.xml");

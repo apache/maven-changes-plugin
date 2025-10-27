@@ -21,35 +21,30 @@ package org.apache.maven.plugins.changes;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
+import org.junit.jupiter.api.Test;
 
-public class ReleaseTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class ReleaseTest {
     Release release = new Release();
 
-    public ReleaseTest(String testName) {
-        super(testName);
-    }
-
-    public static Test suite() {
-        return new TestSuite(ReleaseTest.class);
-    }
-
+    @Test
     public void testGetSetVersion() {
         release.setVersion("version");
 
         assertEquals("version", release.getVersion());
     }
 
+    @Test
     public void testGetSetDateRelease() {
         release.setDateRelease("12-09-1979");
 
         assertEquals("12-09-1979", release.getDateRelease());
     }
 
+    @Test
     public void testGetSetAction() {
         List<Action> actionList = new ArrayList<>();
 

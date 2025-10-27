@@ -18,18 +18,18 @@
  */
 package org.apache.maven.plugins.changes;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * @author Dennis Lundberg
  * @version $Id$
  * @since 2.4
  */
-public class ChangesCheckMojoTestCase {
+public class ChangesCheckMojoTest {
     @Test
     public void testIsValidDate() {
         String pattern;

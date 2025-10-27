@@ -18,7 +18,9 @@
  */
 package org.apache.maven.plugins.changes.jira;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class for {@link UrlBuilder}
@@ -27,13 +29,15 @@ import junit.framework.TestCase;
  * @version $Id$
  * @since 2.8
  */
-public class UrlBuilderTestCase extends TestCase {
+public class UrlBuilderTest {
+    @Test
     public void testUrlWithoutParameters() {
         String expected = "http://www.jira.com/context";
         String actual = new UrlBuilder("http://www.jira.com", "context").build();
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testUrlWithSingleParameter() {
         String expected = "http://www.jira.com/context?key1=value1";
         String actual = new UrlBuilder("http://www.jira.com", "context")
@@ -42,6 +46,7 @@ public class UrlBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testUrlWithMultipleParameters() {
         String expected = "http://www.jira.com/context?key1=value1&key2=value2";
         String actual = new UrlBuilder("http://www.jira.com", "context")
@@ -51,6 +56,7 @@ public class UrlBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testUrlWithIntParameter() {
         String expected = "http://www.jira.com/context?key1=1";
         String actual = new UrlBuilder("http://www.jira.com", "context")
