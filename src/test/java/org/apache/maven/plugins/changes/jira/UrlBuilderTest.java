@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version $Id$
  * @since 2.8
  */
-public class UrlBuilderTestCase {
+public class UrlBuilderTest {
     @Test
     public void testUrlWithoutParameters() {
         String expected = "http://www.jira.com/context";

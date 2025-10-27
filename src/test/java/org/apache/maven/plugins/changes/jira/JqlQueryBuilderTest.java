@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version $Id$
  * @since 2.8
  */
-public class JqlQueryBuilderTestCase {
+public class JqlQueryBuilderTest {
     private static final String ENCODING = "UTF-8";
 
     @Test

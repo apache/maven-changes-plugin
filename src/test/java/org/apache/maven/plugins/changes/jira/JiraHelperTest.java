@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @version $Id$
  * @since 2.4
  */
-public class JiraHelperTestCase {
+public class JiraHelperTest {
     @Test
     public void testGetJiraUrlAndProjectId() {
         Map<String, String> map;

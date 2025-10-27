@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * @version $Id$
  * @since 2.4
  */
-public class ChangesCheckMojoTestCase {
+public class ChangesCheckMojoTest {
     @Test
     public void testIsValidDate() {
         String pattern;

@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @version $Id$
  * @since 2.4
  */
-public class IssueUtilsTestCase {
+public class IssueUtilsTest {
     @Test
     public void testFilterIssuesWithVersionPrefix() {
         Issue issue1;
