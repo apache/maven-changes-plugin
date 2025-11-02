@@ -23,6 +23,9 @@ import java.nio.file.Files;
 
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.codehaus.plexus.util.FileUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Olivier Lamy
@@ -30,6 +33,7 @@ import org.codehaus.plexus.util.FileUtils;
  */
 public class AnnouncementMojoTest extends AbstractMojoTestCase {
 
+    @Test
     public void testAnnounceGeneration() throws Exception {
         File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
         AnnouncementMojo mojo = lookupMojo("announcement-generate", pom);
