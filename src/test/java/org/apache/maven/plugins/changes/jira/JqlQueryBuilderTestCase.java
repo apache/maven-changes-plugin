@@ -21,8 +21,10 @@ package org.apache.maven.plugins.changes.jira;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugin.testing.SilentLog;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class for {@link JqlQueryBuilder}
@@ -31,15 +33,17 @@ import org.apache.maven.plugin.testing.SilentLog;
  * @version $Id$
  * @since 2.8
  */
-public class JqlQueryBuilderTestCase extends TestCase {
+public class JqlQueryBuilderTestCase {
     private static final String ENCODING = "UTF-8";
 
+    @Test
     public void testEmptyQuery() {
         String actual = createBuilder().build();
         String expected = "";
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSingleParameterValue() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA", ENCODING);
 
@@ -47,6 +51,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testFixVersion() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("fixVersion = \"1.0\"", ENCODING);
 
@@ -54,6 +59,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testFixVersionCombinedWithOtherParameters() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA AND fixVersion = \"1.0\"", ENCODING);
 
@@ -61,6 +67,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSingleParameterSingleValue() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("priority in (Blocker)", ENCODING);
 
@@ -71,6 +78,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSingleParameterMultipleValues() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("priority in (Blocker, Critical, Major)", ENCODING);
 
@@ -81,6 +89,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testMultipleParameterCombinedWithAND() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("priority in (Blocker) AND status in (Resolved)", ENCODING);
 
@@ -89,6 +98,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testValueWithSpacesAreQuoted() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("status in (\"In Progress\")", ENCODING);
 
@@ -96,6 +106,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSortSingleRowAscending() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC", ENCODING);
 
@@ -112,6 +123,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSortSingleDescending() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key DESC", ENCODING);
 
@@ -126,6 +138,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testSortMultipleColumns() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
@@ -136,6 +149,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testOrderByIsLastElement() throws UnsupportedEncodingException {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
@@ -146,6 +160,7 @@ public class JqlQueryBuilderTestCase extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testQuoteReservedWord() throws UnsupportedEncodingException {
         String expected =
                 URLEncoder.encode("project = \"EXEC\" ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);

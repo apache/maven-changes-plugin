@@ -20,7 +20,9 @@ package org.apache.maven.plugins.changes.jira;
 
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the JiraHelper class.
@@ -29,7 +31,8 @@ import junit.framework.TestCase;
  * @version $Id$
  * @since 2.4
  */
-public class JiraHelperTestCase extends TestCase {
+public class JiraHelperTestCase {
+    @Test
     public void testGetJiraUrlAndProjectId() {
         Map<String, String> map;
 
@@ -48,6 +51,7 @@ public class JiraHelperTestCase extends TestCase {
         assertEquals("https://issues.apache.org/jira", map.get("url"));
     }
 
+    @Test
     public void testGetJiraUrlAndProjectName() {
         Map<String, String> map;
         map = JiraHelper.getJiraUrlAndProjectName("https://issues.apache.org/jira/browse/DOXIA/");
@@ -59,6 +63,7 @@ public class JiraHelperTestCase extends TestCase {
         assertEquals("DOXIA", map.get("project"));
     }
 
+    @Test
     public void testGetBaseUrl() {
         String expected = "http://www.jira.com";
         String actual = JiraHelper.getBaseUrl("http://www.jira.com/context/test?werewrew");

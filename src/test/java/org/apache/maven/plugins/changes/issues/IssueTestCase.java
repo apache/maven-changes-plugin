@@ -18,7 +18,10 @@
  */
 package org.apache.maven.plugins.changes.issues;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests for the Issue class.
@@ -26,37 +29,43 @@ import junit.framework.TestCase;
  * @author Dennis Lundberg
  * @version $Id$
  */
-public class IssueTestCase extends TestCase {
+public class IssueTestCase {
     Issue issue;
 
-    protected void setUp() {
+    @BeforeEach
+    public void setUp() {
         issue = new Issue();
     }
 
+    @Test
     public void testGetSetAssignee() {
         issue.setAssignee("assignee");
 
         assertEquals("assignee", issue.getAssignee());
     }
 
+    @Test
     public void testGetSetKey() {
         issue.setKey("key");
 
         assertEquals("key", issue.getKey());
     }
 
+    @Test
     public void testGetSetResolution() {
         issue.setResolution("resolution");
 
         assertEquals("resolution", issue.getResolution());
     }
 
+    @Test
     public void testGetSetStatus() {
         issue.setStatus("status");
 
         assertEquals("status", issue.getStatus());
     }
 
+    @Test
     public void testGetSetSummary() {
         issue.setSummary("summary");
 
