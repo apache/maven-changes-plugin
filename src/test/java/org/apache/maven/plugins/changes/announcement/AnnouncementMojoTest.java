@@ -21,8 +21,8 @@ package org.apache.maven.plugins.changes.announcement;
 import java.io.File;
 import java.nio.file.Files;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * @author Olivier Lamy
