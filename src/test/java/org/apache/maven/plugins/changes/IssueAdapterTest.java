@@ -21,20 +21,23 @@ package org.apache.maven.plugins.changes;
 import java.util.Arrays;
 import java.util.List;
 
-import junit.framework.TestCase;
 import org.apache.maven.plugins.changes.issues.Issue;
 import org.apache.maven.plugins.changes.issues.IssueManagementSystem;
 import org.apache.maven.plugins.changes.jira.JIRAIssueManagementSystem;
 import org.apache.maven.plugins.changes.model.Action;
 import org.apache.maven.plugins.changes.model.Release;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author Alan Parkinson
  * @version $Id$
  * @since 2.6
  */
-public class IssueAdapterTest extends TestCase {
+public class IssueAdapterTest {
 
+    @Test
     public void testDefaultIssueTypeMapping() {
         IssueAdapter adapter = new IssueAdapter(new JIRAIssueManagementSystem());
 
@@ -67,6 +70,7 @@ public class IssueAdapterTest extends TestCase {
         assertEquals("", action.getType());
     }
 
+    @Test
     public void testCustomIssueTypeMappingOveridesDefaultMapping() {
         IssueManagementSystem ims = new JIRAIssueManagementSystem();
 
@@ -90,6 +94,7 @@ public class IssueAdapterTest extends TestCase {
         assertEquals("", action.getType());
     }
 
+    @Test
     public void testCustomIssueTypeMapping() {
         IssueManagementSystem ims = new JIRAIssueManagementSystem();
         ims.getIssueTypeMap().put("Story", IssueType.ADD);
@@ -137,6 +142,7 @@ public class IssueAdapterTest extends TestCase {
         return issue;
     }
 
+    @Test
     public void testReleaseOrder() {
         IssueManagementSystem ims = new JIRAIssueManagementSystem();
         ims.getIssueTypeMap().put("Story", IssueType.ADD);

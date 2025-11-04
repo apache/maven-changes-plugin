@@ -242,6 +242,10 @@ under the License.
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -318,14 +322,6 @@ under the License.
       <artifactId>rome</artifactId>
       <version>2.1.0</version>
     </dependency>
-
-    <!-- test dependencies -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.2</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
@@ -354,6 +350,16 @@ under the License.
       <groupId>org.apache.maven.resolver</groupId>
       <artifactId>maven-resolver-transport-http</artifactId>
       <version>${mavenResolverVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -458,6 +464,8 @@ under the License.
                 <!-- These next two should be removed. See https://issues.apache.org/jira/browse/MCHANGES-463 -->
                 <ignoredUnusedDeclaredDependency>org.codehaus.plexus:plexus-mail-sender-javamail</ignoredUnusedDeclaredDependency>
                 <ignoredUnusedDeclaredDependency>org.codehaus.plexus:plexus-mail-sender-simple</ignoredUnusedDeclaredDependency>
+                <!-- junit vintage is needed for the tests that are based on AbstractMojoTestCase-->
+                <ignoredUnusedDeclaredDependency>org.junit.vintage:junit-vintage-engine</ignoredUnusedDeclaredDependency>
               </ignoredUnusedDeclaredDependencies>
             </configuration>
           </execution>
