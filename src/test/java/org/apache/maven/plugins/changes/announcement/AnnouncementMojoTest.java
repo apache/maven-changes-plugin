@@ -19,31 +19,57 @@
 package org.apache.maven.plugins.changes.announcement;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
+import org.apache.maven.api.plugin.testing.MojoTest;
+import org.codehaus.plexus.testing.PlexusExtension;
 import org.codehaus.plexus.util.FileUtils;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author Olivier Lamy
  * @version $Id$
  */
-public class AnnouncementMojoTest extends AbstractMojoTestCase {
-    @BeforeEach
-    void setup() throws Exception {
-        super.setUp();
+@MojoTest
+public class AnnouncementMojoTest {
+    @InjectMojo(goal = "announcement-generate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/announce-changes.xml")
+    @MojoParameter(name = "announcementDirectory", value = "target/test")
+    @MojoParameter(name = "version", value = "1.1")
+    @MojoParameter(name = "template", value = "announcement.vm")
+    @MojoParameter(
+            name = "templateDirectory",
+            value = "src/main/resources/org/apache/maven/plugins/changes/announcement/")
+    @MojoParameter(name = "introduction", value = "Nice library")
+    @Test
+    public void testAnnounceGeneration(AnnouncementMojo mojo) throws Exception {
+        File announcementDirectory = prepareAnnouncementDirectory();
+        mojo.execute();
+
+        String result =
+                new String(Files.readAllBytes(announcementDirectory.toPath().resolve("announcement.vm")));
+
+        assertContains("Nice library", result);
+        assertContains("Changes in this version include:", result);
+        assertContains("New features:", result);
+        assertContains("o Added additional documentation on how to configure the plugin.", result);
+        assertContains("Fixed Bugs:", result);
+        assertContains("o Enable retrieving component-specific issues.  Issue: MCHANGES-88.", result);
+        assertContains("Changes:", result);
+        assertContains("o Handle different issue systems.", result);
+        assertContains("o Updated dependencies.", result);
+        assertContains("Removed:", result);
+        assertContains("o The element type \" link \" must be terminated by the matching end-tag.", result);
+        assertContains("Deleted the erroneous code.", result);
     }
 
-    @Test
-    public void testAnnounceGeneration() throws Exception {
-        File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
-        AnnouncementMojo mojo = lookupMojo("announcement-generate", pom);
-
-        setVariableValueToObject(mojo, "xmlPath", new File(getBasedir(), "/src/test/unit/announce-changes.xml"));
-
-        File announcementDirectory = new File(getBasedir(), "target/test");
+    private File prepareAnnouncementDirectory() throws IOException {
+        File announcementDirectory = new File(PlexusExtension.getBasedir(), "target/test");
 
         if (announcementDirectory.exists()) {
             FileUtils.deleteDirectory(announcementDirectory);
@@ -51,41 +77,7 @@ public class AnnouncementMojoTest extends AbstractMojoTestCase {
         } else {
             announcementDirectory.mkdirs();
         }
-        setVariableValueToObject(mojo, "announcementDirectory", announcementDirectory);
-        setVariableValueToObject(mojo, "version", "1.1");
-        setVariableValueToObject(mojo, "template", "announcement.vm");
-        setVariableValueToObject(
-                mojo, "templateDirectory", "src/main/resources/org/apache/maven/plugins/changes/announcement/");
-        setVariableValueToObject(mojo, "basedir", getBasedir());
-        setVariableValueToObject(mojo, "introduction", "Nice library");
-        mojo.execute();
-
-        String result =
-                new String(Files.readAllBytes(announcementDirectory.toPath().resolve("announcement.vm")));
-
-        assertContains("Nice library", result);
-
-        assertContains("Changes in this version include:", result);
-
-        assertContains("New features:", result);
-
-        assertContains("o Added additional documentation on how to configure the plugin.", result);
-
-        assertContains("Fixed Bugs:", result);
-
-        assertContains("o Enable retrieving component-specific issues.  Issue: MCHANGES-88.", result);
-
-        assertContains("Changes:", result);
-
-        assertContains("o Handle different issue systems.", result);
-
-        assertContains("o Updated dependencies.", result);
-
-        assertContains("Removed:", result);
-
-        assertContains("o The element type \" link \" must be terminated by the matching end-tag.", result);
-
-        assertContains("Deleted the erroneous code.", result);
+        return announcementDirectory;
     }
 
     private static void assertContains(String content, String announce) {
