@@ -90,7 +90,7 @@ public class JiraUnicodeTestCase {
     }
 
     @InjectMojo(goal = "jira-changes", pom = "src/test/unit/jira-plugin-config.xml")
-    @MojoParameter(name = "siteDirectory", value = "non-existing" )
+    @MojoParameter(name = "siteDirectory", value = "non-existing")
     @Test
     public void testUnicodeReport(JiraChangesReport mojo) throws Exception {
         RestJiraDownloader mock = mock(RestJiraDownloader.class);
