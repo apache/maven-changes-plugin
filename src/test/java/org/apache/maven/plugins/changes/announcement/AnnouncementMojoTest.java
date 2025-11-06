@@ -25,10 +25,10 @@ import java.nio.file.Files;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
-import org.codehaus.plexus.testing.PlexusExtension;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 
+import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -69,7 +69,7 @@ public class AnnouncementMojoTest {
     }
 
     private File prepareAnnouncementDirectory() throws IOException {
-        File announcementDirectory = new File(PlexusExtension.getBasedir(), "target/test");
+        File announcementDirectory = new File(getBasedir(), "target/test");
 
         if (announcementDirectory.exists()) {
             FileUtils.deleteDirectory(announcementDirectory);
