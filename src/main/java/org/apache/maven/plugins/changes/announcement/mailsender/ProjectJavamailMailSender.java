@@ -35,11 +35,14 @@ import org.codehaus.plexus.mailsender.MailMessage;
 import org.codehaus.plexus.mailsender.MailSenderException;
 import org.codehaus.plexus.mailsender.util.DateFormatUtils;
 import org.codehaus.plexus.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class for sending email.
  */
 public class ProjectJavamailMailSender extends AbstractMailSender {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectJavamailMailSender.class);
     private static final String SSL_FACTORY = "javax.net.ssl.SSLSocketFactory";
 
     private Properties props;
@@ -50,7 +53,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
 
     public void initialize() {
         if (StringUtils.isEmpty(getSmtpHost())) {
-            getLogger().error("Error in configuration: Missing smtpHost.");
+            LOGGER.error("Error in configuration: Missing smtpHost.");
         }
 
         if (getSmtpPort() == 0) {
@@ -67,7 +70,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
             props.put("mail.smtp.auth", "true");
         }
 
-        props.put("mail.debug", String.valueOf(getLogger().isDebugEnabled()));
+        props.put("mail.debug", String.valueOf(LOGGER.isDebugEnabled()));
 
         if (isSslMode()) {
             props.put("mail.smtp.socketFactory.port", String.valueOf(getSmtpPort()));
@@ -102,7 +105,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
 
             Session session = Session.getDefaultInstance(props, auth);
 
-            session.setDebug(getLogger().isDebugEnabled());
+            session.setDebug(LOGGER.isDebugEnabled());
 
             Message msg = new MimeMessage(session);
             InternetAddress addressFrom = new InternetAddress(mail.getFrom().getRfc2822Address());
