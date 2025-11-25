@@ -18,11 +18,10 @@
  */
 package org.apache.maven.plugins.changes;
 
-import java.io.File;
-
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
+import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
@@ -32,32 +31,24 @@ import static org.junit.jupiter.api.Assertions.fail;
  * @since 29 juil. 2008
  * @version $Id$
  */
-public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
+@MojoTest
+public class ChangesValidatorMojoTest {
 
-    protected ChangesValidatorMojo mojo;
-
-    @BeforeEach
-    public void setUp() throws Exception {
-        super.setUp();
-        File pom = new File(getBasedir(), "/src/test/unit/plugin-config.xml");
-        mojo = lookupMojo("changes-validate", pom);
-    }
-
+    @InjectMojo(goal = "changes-validate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "changesXsdVersion", value = "2.0.0")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/changes.xml")
+    @MojoParameter(name = "failOnError", value = "true")
     @Test
-    public void testValidationSuccess() throws Exception {
-        File changesXml = new File(getBasedir(), "/src/test/unit/changes.xml");
-        setVariableValueToObject(mojo, "xmlPath", changesXml);
-        setVariableValueToObject(mojo, "changesXsdVersion", "2.0.0");
-        setVariableValueToObject(mojo, "failOnError", Boolean.TRUE);
+    public void testValidationSuccess(ChangesValidatorMojo mojo) throws Exception {
         mojo.execute();
     }
 
+    @InjectMojo(goal = "changes-validate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "changesXsdVersion", value = "2.0.0")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/non-valid-changes.xml")
+    @MojoParameter(name = "failOnError", value = "true")
     @Test
-    public void testValidationFailedWithMojoFailure() throws Exception {
-        File changesXml = new File(getBasedir(), "/src/test/unit/non-valid-changes.xml");
-        setVariableValueToObject(mojo, "xmlPath", changesXml);
-        setVariableValueToObject(mojo, "changesXsdVersion", "2.0.0");
-        setVariableValueToObject(mojo, "failOnError", Boolean.TRUE);
+    public void testValidationFailedWithMojoFailure(ChangesValidatorMojo mojo) throws Exception {
         try {
             mojo.execute();
             fail(" A MojoExecutionException should occur here. Changes file is not valid and failOnError is true ");
@@ -66,12 +57,12 @@ public class ChangesValidatorMojoTest extends AbstractMojoTestCase {
         }
     }
 
+    @InjectMojo(goal = "changes-validate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "changesXsdVersion", value = "1.0.0")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/non-valid-changes.xml")
+    @MojoParameter(name = "failOnError", value = "false")
     @Test
-    public void testValidationFailedWithNoMojoFailure() throws Exception {
-        File changesXml = new File(getBasedir(), "/src/test/unit/non-valid-changes.xml");
-        setVariableValueToObject(mojo, "xmlPath", changesXml);
-        setVariableValueToObject(mojo, "changesXsdVersion", "1.0.0");
-        setVariableValueToObject(mojo, "failOnError", Boolean.FALSE);
+    public void testValidationFailedWithNoMojoFailure(ChangesValidatorMojo mojo) throws Exception {
         mojo.execute();
     }
 }

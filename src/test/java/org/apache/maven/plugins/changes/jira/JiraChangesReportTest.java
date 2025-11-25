@@ -18,7 +18,9 @@
  */
 package org.apache.maven.plugins.changes.jira;
 
-import org.apache.maven.plugin.testing.AbstractMojoTestCase;
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
+import org.apache.maven.api.plugin.testing.MojoTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -29,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  * @author jrh3k5
  * @since 2.8
  */
-public class JiraChangesReportTest extends AbstractMojoTestCase {
-    private final JiraChangesReport mojo = new JiraChangesReport(null);
+@MojoTest
+public class JiraChangesReportTest {
 
     /**
      * If the mojo has been marked to be skipped, then it should indicate that the report cannot be generated.
@@ -38,8 +40,9 @@ public class JiraChangesReportTest extends AbstractMojoTestCase {
      * @throws Exception If any errors occur during the test run.
      */
     @Test
-    public void testCanGenerateReportSkipped() throws Exception {
-        setVariableValueToObject(mojo, "skip", Boolean.TRUE);
+    @InjectMojo(goal = "jira-changes")
+    @MojoParameter(name = "skip", value = "true")
+    public void testCanGenerateReportSkipped(JiraChangesReport mojo) {
         assertFalse(mojo.canGenerateReport());
     }
 }
