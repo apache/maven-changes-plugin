@@ -332,7 +332,6 @@ under the License.
       <groupId>org.apache.maven.plugin-testing</groupId>
       <artifactId>maven-plugin-testing-harness</artifactId>
       <version>3.4.0</version>
-      <!-- TODO check 4.0.0-alpha-2-->
       <scope>test</scope>
     </dependency>
     <dependency>
