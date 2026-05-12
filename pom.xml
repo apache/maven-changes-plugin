@@ -23,7 +23,7 @@ under the License.
   <parent>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-plugins</artifactId>
-    <version>47</version>
+    <version>48</version>
     <relativePath />
   </parent>
 
@@ -76,9 +76,6 @@ under the License.
     <doxiaVersion>2.1.0</doxiaVersion>
     <mavenVersion>3.6.3</mavenVersion>
     <mavenResolverVersion>1.4.1</mavenResolverVersion>
-    <version.maven-site-plugin>3.21.0</version.maven-site-plugin>
-
-    <sitePluginVersion>${version.maven-site-plugin}</sitePluginVersion>
     <project.build.outputTimestamp>2025-05-12T19:07:48Z</project.build.outputTimestamp>
   </properties>
 
@@ -483,7 +480,6 @@ under the License.
             <plugin>
               <groupId>org.apache.maven.plugins</groupId>
               <artifactId>maven-invoker-plugin</artifactId>
-              <version>3.9.1</version>
               <configuration>
                 <goals>
                   <goal>clean</goal>
