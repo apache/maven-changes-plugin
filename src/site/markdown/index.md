@@ -1,135 +1,80 @@
- ------
- Introduction
- ------
- Dennis Lundberg
- ------
- 2013-07-22
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
- ~~ Licensed to the Apache Software Foundation (ASF) under one
- ~~ or more contributor license agreements.  See the NOTICE file
- ~~ distributed with this work for additional information
- ~~ regarding copyright ownership.  The ASF licenses this file
- ~~ to you under the Apache License, Version 2.0 (the
- ~~ "License"); you may not use this file except in compliance
- ~~ with the License.  You may obtain a copy of the License at
- ~~
- ~~   http://www.apache.org/licenses/LICENSE-2.0
- ~~
- ~~ Unless required by applicable law or agreed to in writing,
- ~~ software distributed under the License is distributed on an
- ~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~~ KIND, either express or implied.  See the License for the
- ~~ specific language governing permissions and limitations
- ~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
- ~~ NOTE: For help with the syntax of this file, see:
- ~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# Apache Maven Changes Plugin
+This plugin is used to inform your users of the changes that have occurred between different releases of your project. The plugin can extract these changes, either from a `changes.xml` file or from an issue management system (Jira, Trac and GitHub supported), and presents them as a report.
 
-${project.name}
+You also have the option of creating a release announcement and even sending it via email to your users.
 
-  This plugin is used to inform your users of the changes that have occurred
-  between different releases of your project. The plugin can extract these
-  changes, either from a <<<changes.xml>>> file or from an issue
-  management system (Jira, Trac and GitHub supported), and presents them as a report.
+## Goals Overview
 
-  You also have the option of creating a release announcement and even sending it via email
-  to your users.
+- [changes:announcement-mail](./announcement-mail-mojo.html) send a release announcement via email.
+- [changes:announcement-generate](./announcement-generate-mojo.html) generate a release announcement.
+- [changes:changes-check](./changes-check-mojo.html) check that the `changes.xml` file contains a valid release date.
+- [changes:changes-validate](./changes-validate-mojo.html) validate the `changes.xml` file.
+- [changes:changes](./changes-mojo.html) create a report from `changes.xml` file.
+- [changes:jira-changes](./jira-changes-mojo.html) create a report from issues downloaded from [JIRA](https://www.atlassian.com/software/jira/).
+- [changes:trac-changes](./trac-changes-mojo.html) create a report from issues downloaded from [Trac](https://trac.edgewall.org/).
+- [changes:github-changes](./github-changes-mojo.html) create a report from issues downloaded from [GitHub](https://github.com/).
+## Usage
 
-* Goals Overview
+General instructions on how to use the Changes Plugin can be found on the [usage page](./usage.html). Some more specific use cases are described in the examples given below.
 
-  * {{{./announcement-mail-mojo.html}changes:announcement-mail}} send a release announcement via email.
+In case you still have questions regarding the plugin's usage, please have a look at the [FAQ](./faq.html) and feel free to contact the [user mailing list](./mailing-lists.html). The posts to the mailing list are archived and could already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching the [mail archive](./mailing-lists.html).
 
-  * {{{./announcement-generate-mojo.html}changes:announcement-generate}} generate a release announcement.
+If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our [issue tracker](./issue-management.html). When creating a new issue, please provide a comprehensive description of your concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason, entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated. Of course, patches are welcome, too. Contributors can check out the project from our [source repository](./scm.html) and will find supplementary information in the [guide to helping with Maven](https://maven.apache.org/guides/development/guide-helping.html).
 
-  * {{{./changes-check-mojo.html}changes:changes-check}} check that the <<<changes.xml>>> file contains a valid release date.
+## Migration to 3.x
 
-  * {{{./changes-validate-mojo.html}changes:changes-validate}} validate the <<<changes.xml>>> file.
+### changes.xml - schema changes
 
-  * {{{./changes-mojo.html}changes:changes}} create a report from <<<changes.xml>>> file.
+- you should update schema in your changes.xml to `2.0.0` - [Using the XML Schema](./using-changes-xsd.html).
+- tag `action/dueto` - was removed, you can put your data into existing `due-to` and `due-to-email` attributes of `action` tag, which can be comma separated.
+- tag `action/fixedIssues` - was changed to an attribute `fixed-issues` of **action** tag, it also can be comma separated.
+### Report goals and output names
 
-  * {{{./jira-changes-mojo.html}changes:jira-changes}} create a report from issues downloaded from {{{https://www.atlassian.com/software/jira/}JIRA}}.
+The reports output filename and goals name were changed for alignment with other reporting plugins from `org.apache.maven.plugins`.
 
-  * {{{./trac-changes-mojo.html}changes:trac-changes}} create a report from issues downloaded from {{{https://trac.edgewall.org/}Trac}}.
-  
-  * {{{./github-changes-mojo.html}changes:github-changes}} create a report from issues downloaded from {{{https://github.com/}GitHub}}.
+See the following table for changes:
 
-  []
+|goal name|output name|
+|:---|:---|
+|changes-report -&gt; changes|changes-report.html -&gt; changes.html|
+|github-report -&gt; github-changes|github-report.html -&gt; github-changes.html|
+|jira-report -&gt; jira-changes|jira-report.html -&gt; jira-changes.html|
+|trac-report -&gt; trac-changes|trac-report.html -&gt; trac-changes.html|
 
-* Usage
+### Deprecate Trac integration
 
-  General instructions on how to use the Changes Plugin can be found on the {{{./usage.html}usage page}}. Some more
-  specific use cases are described in the examples given below.
+**Trac** integration is prepared for removal in next major version due to lack of maintainers.
 
-  In case you still have questions regarding the plugin's usage, please have a look at the {{{./faq.html}FAQ}} and feel
-  free to contact the {{{./mailing-lists.html}user mailing list}}. The posts to the mailing list are archived and could
-  already contain the answer to your question as part of an older thread. Hence, it is also worth browsing/searching
-  the {{{./mailing-lists.html}mail archive}}.
+## Examples
 
-  If you feel like the plugin is missing a feature or has a defect, you can fill a feature request or bug report in our
-  {{{./issue-management.html}issue tracker}}. When creating a new issue, please provide a comprehensive description of your
-  concern. Especially for fixing bugs it is crucial that the developers can reproduce your problem. For this reason,
-  entire debug logs, POMs or most preferably little demo projects attached to the issue are very much appreciated.
-  Of course, patches are welcome, too. Contributors can check out the project from our
-  {{{./scm.html}source repository}} and will find supplementary information in the
-  {{{https://maven.apache.org/guides/development/guide-helping.html}guide to helping with Maven}}.
+To provide you with better understanding of some usages of the Changes Plugin, you can take a look at the following examples:
 
-* Migration to 3.x
-
-** changes.xml - schema changes
-
-  * you should update schema in your changes.xml to <<<2.0.0>>> - {{{./using-changes-xsd.html}Using the XML Schema}}.
-
-  * tag <<<action/dueto>>> - was removed, you can put your data into existing
-    <<<due-to>>> and <<<due-to-email>>> attributes of <<<action>>> tag,
-    which can be comma separated.
-
-  * tag <<<action/fixedIssues>>> - was changed to an attribute <<<fixed-issues>>> of <<action>> tag, it also can be comma separated.
-
-** Report goals and output names
-
-  The reports output filename and goals name were changed for alignment with other reporting plugins from <<<org.apache.maven.plugins>>>.
-
-  See the following table for changes:
-
-*---------------------------------+-------------------------------------------+
-|       <<goal name>>             |          <<output name>>                  |
-*---------------------------------+-------------------------------------------+
-| changes-report -> changes       | changes-report.html -> changes.html       |
-*---------------------------------+-------------------------------------------+
-| github-report -> github-changes | github-report.html -> github-changes.html |
-*---------------------------------+-------------------------------------------+
-| jira-report -> jira-changes     | jira-report.html -> jira-changes.html     |
-*---------------------------------+-------------------------------------------+
-| trac-report -> trac-changes     | trac-report.html -> trac-changes.html     |
-*---------------------------------+-------------------------------------------+
-
-** Deprecate Trac integration
-
-  <<Trac>> integration is prepared for removal in next major version due to lack of maintainers.
-
-* Examples
-
-  To provide you with better understanding of some usages of the Changes Plugin,
-  you can take a look at the following examples:
-
-  * {{{./examples/alternate-changes-xml-location.html}Alternate Location for the <<<changes.xml>>> File}}
-
-  * {{{./examples/check-changes-file.html}Check Your <<<changes.xml>>> File}}
-
-  * {{{./examples/configuring-trac-report.html}Configuring the Trac Report}}
-
-  * {{{./examples/customizing-jira-report.html}Customizing the JIRA Report}}
-  
-  * {{{./examples/configuring-github-report.html}Configuring the GitHub Report}}
-
-  * {{{./examples/include-announcement-file.html}Include an Announcement File in Your Packaging}}
-
-  * {{{./examples/smtp-authentication.html}SMTP authentication}}
-
-  * {{{./examples/specifying-mail-sender.html}Specifying the mail sender}}
-
-  * {{{./examples/using-a-custom-announcement-template.html}Using a Custom Announcement Template}}
-
-  * {{{./examples/changes-file-validation.html}Validate Your <<<changes.xml>>> File}}
+- [Alternate Location for the `changes.xml` File](./examples/alternate-changes-xml-location.html)
+- [Check Your `changes.xml` File](./examples/check-changes-file.html)
+- [Configuring the Trac Report](./examples/configuring-trac-report.html)
+- [Customizing the JIRA Report](./examples/customizing-jira-report.html)
+- [Configuring the GitHub Report](./examples/configuring-github-report.html)
+- [Include an Announcement File in Your Packaging](./examples/include-announcement-file.html)
+- [SMTP authentication](./examples/smtp-authentication.html)
+- [Specifying the mail sender](./examples/specifying-mail-sender.html)
+- [Using a Custom Announcement Template](./examples/using-a-custom-announcement-template.html)
+- [Validate Your `changes.xml` File](./examples/changes-file-validation.html)

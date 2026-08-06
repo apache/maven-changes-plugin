@@ -1,48 +1,34 @@
- ------
- Using a Custom Announcement Template
- ------
- Dennis Lundberg
- ------
- 2011-03-30
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
- ~~ Licensed to the Apache Software Foundation (ASF) under one
- ~~ or more contributor license agreements.  See the NOTICE file
- ~~ distributed with this work for additional information
- ~~ regarding copyright ownership.  The ASF licenses this file
- ~~ to you under the Apache License, Version 2.0 (the
- ~~ "License"); you may not use this file except in compliance
- ~~ with the License.  You may obtain a copy of the License at
- ~~
- ~~   http://www.apache.org/licenses/LICENSE-2.0
- ~~
- ~~ Unless required by applicable law or agreed to in writing,
- ~~ software distributed under the License is distributed on an
- ~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~~ KIND, either express or implied.  See the License for the
- ~~ specific language governing permissions and limitations
- ~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
- ~~ NOTE: For help with the syntax of this file, see:
- ~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# Using a Custom Announcement Template
 
-Using a Custom Announcement Template
+The `announcement-generate` goal uses a [Velocity](https://velocity.apache.org/) template to create an announcement. If you want to, you can create your own custom template.
 
- The <<<announcement-generate>>> goal uses a {{{https://velocity.apache.org/}Velocity}}
- template to create an announcement. If you want to, you can create your own
- custom template.
+Configuring the Plugin
+----------------------
 
-* Configuring the Plugin
+First you must configure the plugin and tell it where your template is. In this example we want to use the template `${esc.d}{basedir}/src/main/resources/our-announcements/my-announcement.vm`.
 
- First you must configure the plugin and tell it where your template is. In
- this example we want to use the template
- <<<$\{basedir\}/src/main/resources/our-announcements/my-announcement.vm>>>.
+**Note:** The `<templateDirectory>` must be a subdirectory of `${esc.d}{basedir}/src/main/resources/`.
 
- <<Note:>> The <<<\<templateDirectory\>>>> must be a subdirectory of
- <<<$\{basedir\}/src/main/resources/>>>.
-
-+-----------------+
+```xml
 <project>
   ...
   <build>
@@ -60,96 +46,60 @@ Using a Custom Announcement Template
   </build>
   ...
 </project>
-+-----------------+
+```
 
+Creating Your Template
+----------------------
 
-* Creating Your Template
+Next you want to create your own template. A wise thing is to start with the default one that is included in the plugin. You can download it from [here](https://github.com/apache/maven-changes-plugin/blob/master/src/main/resources/org/apache/maven/plugins/announcement/announcement.vm). It will provide you with examples on how to iterate over the actions of a release among other things.
 
- Next you want to create your own template. A wise thing is to start with the
- default one that is included in the plugin. You can download it from
- {{{https://github.com/apache/maven-changes-plugin/blob/master/src/main/resources/org/apache/maven/plugins/announcement/announcement.vm}here}}.
- It will provide you with examples on how to iterate over the actions of a
- release among other things.
+Available Variables
+-------------------
 
+Here's a list of the variables that you have at your disposal, when creating your own template:
 
-* Available Variables
+|Variable|Type|Since|Description|
+|:---|:---|:---|:---|
+|releases*|List|2.0|All the releases from either the changes.xml file or from JIRA.|
+|groupId*|String|2.0|The groupId from your project's pom.|
+|artifactId*|String|2.0|The artifactId from your project's pom.|
+|version*|String|2.0|The version from your project's pom.|
+|packaging*|String|2.0|The packaging from your project's pom.|
+|release*|Release|2.0|The release that you are announcing.|
+|project*|MavenProject|2.1|The Maven Project being released.|
+|url|String|2.0|Distribution url of the artifact. **Default value is**: `${esc.d}{project.url}`.|
+|introduction|String|2.0|A short description or introduction of the released artifact. **Default value is**: `${esc.d}{project.description}`.|
+|developmentTeam|String|2.0|Name of the team that develops the artifact. **Default value is**: `${esc.d}{project.name} team`.|
+|finalName|String|2.0|The name of the artifact to be used in the announcement. **Default value is**: `${esc.d}{project.build.finalName}`.|
+|urlDownload|String|2.0|URL where the artifact can be downloaded. **Default value is**: `${esc.d}{project.url}`.|
+|announceParameters|Map|2.1|A Map of custom parameters that can be specified in the plugin's configuration.|
+[Variables marked with \* are read-only.]
 
- Here's a list of the variables that you have at your disposal, when creating
- your own template:
+Each `Release` also has a set of variables:
 
-*-----------------+----------+-----------+-----------------+
-| <<Variable>>    | <<Type>> | <<Since>> | <<Description>>
-*-----------------+----------+-----------+-----------------+
-| releases*       | List     |    2.0    | All the releases from either the changes.xml file or from JIRA.
-*-----------------+----------+-----------+-----------------+
-| groupId*        | String   |    2.0    | The groupId from your project's pom.
-*-----------------+----------+-----------+-----------------+
-| artifactId*     | String   |    2.0    | The artifactId from your project's pom.
-*-----------------+----------+-----------+-----------------+
-| version*        | String   |    2.0    | The version from your project's pom.
-*-----------------+----------+-----------+-----------------+
-| packaging*      | String   |    2.0    | The packaging from your project's pom.
-*-----------------+----------+-----------+-----------------+
-| release*        | Release  |    2.0    | The release that you are announcing.
-*-----------------+----------+-----------+-----------------+
-| project*        | MavenProject | 2.1   | The Maven Project being released.
-*-----------------+----------+-----------+-----------------+
-| url             | String   |    2.0    | Distribution url of the artifact. <<Default value is>>: <<<$\{project.url\}>>>.
-*-----------------+----------+-----------+-----------------+
-| introduction    | String   |    2.0    | A short description or introduction of the released artifact. <<Default value is>>: <<<$\{project.description\}>>>.
-*-----------------+----------+-----------+-----------------+
-| developmentTeam | String   |    2.0    | Name of the team that develops the artifact. <<Default value is>>: <<<$\{project.name\} team>>>.
-*-----------------+----------+-----------+-----------------+
-| finalName       | String   |    2.0    | The name of the artifact to be used in the announcement. <<Default value is>>: <<<$\{project.build.finalName\}>>>.
-*-----------------+----------+-----------+-----------------+
-| urlDownload     | String   |    2.0    | URL where the artifact can be downloaded. <<Default value is>>: <<<$\{project.url\}>>>.
-*-----------------+----------+-----------+-----------------+
-| announceParameters | Map   |    2.1    | A Map of custom parameters that can be specified in the plugin's configuration.
-*-----------------+----------+-----------+-----------------+
-<Variables marked with * are read-only.>
+|Variable|Type|Since|Description|
+|:---|:---|:---|:---|
+|actions*|List|2.0|All actions that were completed in this release.|
+|dateRelease*|String|2.0|The date when this release is made.|
+|description*|String|2.0|A description of the release.|
+|version*|String|2.0|The version of this release.|
+[Variables marked with \* are read-only.]
 
- Each <<<Release>>> also has a set of variables:
+Finally each `Action` has the following variables:
 
-*-----------------+----------+-----------+-----------------+
-| <<Variable>>    | <<Type>> | <<Since>> | <<Description>>
-*-----------------+----------+-----------+-----------------+
-| actions*        | List     |    2.0    | All actions that were completed in this release.
-*-----------------+----------+-----------+-----------------+
-| dateRelease*    | String   |    2.0    | The date when this release is made.
-*-----------------+----------+-----------+-----------------+
-| description*    | String   |    2.0    | A description of the release.
-*-----------------+----------+-----------+-----------------+
-| version*        | String   |    2.0    | The version of this release.
-*-----------------+----------+-----------+-----------------+
-<Variables marked with * are read-only.>
+|Variable|Type|Since|Description|
+|:---|:---|:---|:---|
+|action*|String|2.0|What was done.|
+|date|String|2.0|Fix date.|
+|dev*|String|2.0|The developer who made the change.|
+|dueTo*|String|2.0|If this was a contribution from a non-committer, the name of that person.|
+|dueToEmail*|String|2.0|If this was a contribution from a non-committer, the e-mail address of that person.|
+|issue*|String|2.0|The key of the issue in your issue tracking system.|
+|type*|String|2.0|What kind of change was this.|
+|dueTos*|List|3.0|Collection of parsed dueTo and dueToEmail. Each item has variable name and email.|
+|fixedIssues*|List|3.0|Collection of fixed issues.|
+[Variables marked with \* are read-only.]
 
- Finally each <<<Action>>> has the following variables:
+Velocity Context contains all default tools provided by the [ToolManager](https://velocity.apache.org/tools/devel/standalone.html). See the [Tools Usage Summary](https://velocity.apache.org/tools/devel/tools-summary.html) for further details.
 
-*-----------------+----------+-----------+-----------------+
-| <<Variable>>    | <<Type>> | <<Since>> | <<Description>>
-*-----------------+----------+-----------+-----------------+
-| action*         | String   |    2.0    | What was done.
-*-----------------+----------+-----------+-----------------+
-| date            | String   |    2.0    | Fix date.
-*-----------------+----------+-----------+-----------------+
-| dev*            | String   |    2.0    | The developer who made the change.
-*-----------------+----------+-----------+-----------------+
-| dueTo*          | String   |    2.0    | If this was a contribution from a non-committer, the name of that person.
-*-----------------+----------+-----------+-----------------+
-| dueToEmail*     | String   |    2.0    | If this was a contribution from a non-committer, the e-mail address of that person.
-*-----------------+----------+-----------+-----------------+
-| issue*          | String   |    2.0    | The key of the issue in your issue tracking system.
-*-----------------+----------+-----------+-----------------+
-| type*           | String   |    2.0    | What kind of change was this.
-*-----------------+----------+-----------+-----------------+
-| dueTos*         | List     |    3.0    | Collection of parsed dueTo and dueToEmail. Each item has variable name and email.
-*-----------------+----------+-----------+-----------------+
-| fixedIssues*    | List     |    3.0    | Collection of fixed issues.
-*-----------------+----------+-----------+-----------------+
-<Variables marked with * are read-only.>
-
- Velocity Context contains all default tools provided by the {{{https://velocity.apache.org/tools/devel/standalone.html}ToolManager}}.
- See the {{{https://velocity.apache.org/tools/devel/tools-summary.html}Tools Usage Summary}} for further details.
-
- For information on how to access variables in your template and more,
- see the {{{https://velocity.apache.org/engine/devel/developer-guide.html}Velocity user guide}}.
+For information on how to access variables in your template and more, see the [Velocity user guide](https://velocity.apache.org/engine/devel/developer-guide.html).
