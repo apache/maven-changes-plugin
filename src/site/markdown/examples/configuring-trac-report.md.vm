@@ -1,83 +1,64 @@
- ------
- Configuring the Trac Report
- ------
- David Roussel
- ------
- 2009-10-02
- ------
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
 
- ~~ Licensed to the Apache Software Foundation (ASF) under one
- ~~ or more contributor license agreements.  See the NOTICE file
- ~~ distributed with this work for additional information
- ~~ regarding copyright ownership.  The ASF licenses this file
- ~~ to you under the Apache License, Version 2.0 (the
- ~~ "License"); you may not use this file except in compliance
- ~~ with the License.  You may obtain a copy of the License at
- ~~
- ~~   http://www.apache.org/licenses/LICENSE-2.0
- ~~
- ~~ Unless required by applicable law or agreed to in writing,
- ~~ software distributed under the License is distributed on an
- ~~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- ~~ KIND, either express or implied.  See the License for the
- ~~ specific language governing permissions and limitations
- ~~ under the License.
+http://www.apache.org/licenses/LICENSE-2.0
 
- ~~ NOTE: For help with the syntax of this file, see:
- ~~ http://maven.apache.org/doxia/references/apt-format.html
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
 
+# Configuring the Trac Report
 
-Configuring the Trac Report
+Configuring your Trac instance
+------------------------------
 
-* Configuring your Trac instance
+The plugin needs to be told details of your Trac installation so that it can connect and query the open tickets. The Trac installation needs to be accessible via no authentication, basic authentication or NTLM authentication. If you've used form authentication then you are out of luck.
 
- The plugin needs to be told details of your Trac installation so that it
- can connect and query the open tickets.  The Trac installation needs to be
- accessible via no authentication, basic authentication or NTLM authentication.
- If you've used form authentication then you are out of luck.
+Your Trac installation needs to have the [XML-RPC plugin](https://trac-hacks.org/wiki/XmlRpcPlugin) installed and working for this plugin to be able to read the tickets.
 
- Your Trac installation needs to have the {{{https://trac-hacks.org/wiki/XmlRpcPlugin}XML-RPC plugin}}
- installed and working for this plugin to be able to read the tickets.
+#[[### Basic Report Configuration]]#
 
-** Basic Report Configuration
+The most basic report configuration is read from the `<issueManagement>` section of your POM. This should work with no additional configuration, but by default all ticket will be listed
 
- The most basic report configuration is read from the <<<\<issueManagement\>>>> section
- of your POM.  This should work with no additional configuration, but by default all ticket
- will be listed
-
-+-----------------+
+```xml
   <issueManagement>
     <system>trac</system>
     <url>http://mytracserver.local/trac/MYPROJECT/</url>
   </issueManagement>
-+-----------------+
+```
 
-** Configuring a Custom Query
+#[[### Configuring a Custom Query]]#
 
- The exact query can configured in the <<<\<query\>>>> element.
- See {{{https://trac.edgewall.org/wiki/TracQuery}TracQuery}} for the exact syntax.
+The exact query can configured in the `<query>` element. See [TracQuery](https://trac.edgewall.org/wiki/TracQuery) for the exact syntax.
 
-+-----------------+
+```unknown
   ...
   <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-changes-plugin</artifactId>
     <version>${project.version}</version>
     <configuration>
-      <query>status=accepted&amp;status=assigned&amp;status=new&amp;status=reopened&amp;order=priority&amp;component=\${project.artifactId}</query>
+      <query>status=accepted&amp;status=assigned&amp;status=new&amp;status=reopened&amp;order=priority&amp;component=${esc.d}{project.artifactId}</query>
     </configuration>
   </plugin>
   ...
-+-----------------+
+```
 
+#[[### Configuring Basic Authentication]]#
 
-** Configuring Basic Authentication
+If your Trac is protected by basic authentication then you'll need to add the `<tracUser>` and `<tracPassword>` configuration elements so that the plugin knows who to authenticate as.
 
- If your Trac is protected by basic authentication then you'll need to add
- the <<<\<tracUser\>>>> and <<<\<tracPassword\>>>> configuration elements
- so that the plugin knows who to authenticate as.
-
-+-----------------+
+```xml
 <project>
   ...
   <reporting>
@@ -95,23 +76,17 @@ Configuring the Trac Report
   </reporting>
   ...
 </project>
-+-----------------+
+```
 
+#[[### Configuring NTLM Authentication]]#
 
-** Configuring NTLM Authentication
+If you have your Trac sitting behind Apache on Windows with mod\_sspi doing authentication with Active Directory, then the plugin should authenticate to the server as the current user without any extra config. No `<tracUser>` and `<tracPassword>` configuration elements are needed.
 
- If you have your Trac sitting behind Apache on Windows with mod_sspi
- doing authentication with Active Directory, then the plugin should
- authenticate to the server as the current user without any extra config.
- No <<<\<tracUser\>>>> and <<<\<tracPassword\>>>> configuration elements
- are needed.
+#[[### Using custom encoding]]#
 
-** Using custom encoding
+If you have to support non-western encodings, then specify an `<outputEncoding>` in the configuration.
 
- If you have to support non-western encodings, then specify an <<<\<outputEncoding\>>>> in the
- configuration.
-
-+-----------------+
+```xml
 <project>
   ...
   <reporting>
@@ -129,6 +104,4 @@ Configuring the Trac Report
   </reporting>
   ...
 </project>
-+-----------------+
-
-
+```
