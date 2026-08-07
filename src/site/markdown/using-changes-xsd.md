@@ -1,3 +1,10 @@
+---
+title: Using the XML Schema Changes 2.0.0
+author: 
+  - Vincent Siveton
+date: 2009-10-02
+---
+
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
