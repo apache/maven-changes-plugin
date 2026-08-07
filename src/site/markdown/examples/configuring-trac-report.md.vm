@@ -80,7 +80,7 @@ If your Trac is protected by basic authentication then you'll need to add the `<
 
 #[[### Configuring NTLM Authentication]]#
 
-If you have your Trac sitting behind Apache on Windows with mod\_sspi doing authentication with Active Directory, then the plugin should authenticate to the server as the current user without any extra config. No `<tracUser>` and `<tracPassword>` configuration elements are needed.
+If you have your Trac sitting behind Apache on Windows with mod_sspi doing authentication with Active Directory, then the plugin should authenticate to the server as the current user without any extra config. No `<tracUser>` and `<tracPassword>` configuration elements are needed.
 
 #[[### Using custom encoding]]#
 
