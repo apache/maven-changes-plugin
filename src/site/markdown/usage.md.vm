@@ -123,7 +123,7 @@ The following table shows the pre-configured issue management systems and the te
 |System|Issue Link Template|
 |:---|:---|
 |Bitbucket|%URL%/issue/%ISSUE%|
-|Bugzilla|%URL%/show\_bug.cgi?id=%ISSUE%|
+|Bugzilla|%URL%/show_bug.cgi?id=%ISSUE%|
 |GitHub|%URL%/%ISSUE%|
 |GoogleCode|%URL%/detail?id=%ISSUE%|
 |JIRA|%URL%/%ISSUE%|
