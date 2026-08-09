@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+---
+title: Frequently Asked Questions
+---
 
 <!--
 Licensed to the Apache Software Foundation (ASF) under one
@@ -19,51 +21,38 @@ specific language governing permissions and limitations
 under the License.
 -->
 
+<a id="top"></a>
 
-<faqs xmlns="http://maven.apache.org/FML/1.0.1"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
-  id="FAQ" title="Frequently Asked Questions">
- <part id="General">
-   <faq id="question1">
-     <question>What's the difference between the changes-maven-plugin at Mojo and this one?</question>
-     <answer>
-       <p>
-         This plugin started out at <a href="http://mojo.codehaus.org/">the Mojo project</a>.
-         In March of 2006 the plugin was moved to Apache and the Maven sandbox.
-         So it's the same plugin, but this one is newer.
-       </p>
-     </answer>
-   </faq>
+# Frequently Asked Questions
 
-   <faq id="question2">
-     <question>I get a <code>org.xml.sax.SAXParseException</code>, when generating the JIRA Report. What can do about it?</question>
-     <answer>
-       <p>
-         If you have a lot of entities in the xml file returned from your JIRA
-         installation, you might get an error like this one, when you run the
-         JIRA Report:
+1. [What's the difference between the changes-maven-plugin at Mojo and this one?](#question1)
+2. [I get a `org.xml.sax.SAXParseException`, when generating the JIRA Report. What can do about it?](#question2)
 
-         <source>
+<a id="question1"></a>
+
+### What's the difference between the changes-maven-plugin at Mojo and this one?
+
+This plugin started out at [the Mojo project](http://mojo.codehaus.org/). In March of 2006 the plugin was moved
+to Apache and the Maven sandbox. So it's the same plugin, but this one is newer.
+
+<a id="question2"></a>
+
+### I get a `org.xml.sax.SAXParseException`, when generating the JIRA Report. What can do about it?
+
+If you have a lot of entities in the xml file returned from your JIRA installation, you might get an error like
+this one, when you run the JIRA Report:
+
+```
 org.xml.sax.SAXParseException: Parser has reached the entity expansion limit "64,000" set by the Application.
-         </source>
+```
 
-         If that happens you need to tell the xml parser to use a higher limit.
-         This can be accomplished by adding a command line parameter. In the
-         following example we have set it to double the original value:
+If that happens you need to tell the xml parser to use a higher limit. This can be accomplished by adding a
+command line parameter. In the following example we have set it to double the original value:
 
-         <source>
+```
 mvn -DentityExpansionLimit=128000 ...
-         </source>
-       </p>
-       <p>
-         Unfortunately we have not been able to set this in Java. If someone
-         knows how to do this, then please reopen
-         <a href="https://issues.apache.org/jira/browse/MCHANGES-75">MCHANGES-75</a>,
-         and tell us how. It would be nicer if this could be set using a
-         parameter in the POM.
-       </p>
-     </answer>
-   </faq>
- </part>
-</faqs>
+```
+
+Unfortunately we have not been able to set this in Java. If someone knows how to do this, then please reopen
+[MCHANGES-75](https://issues.apache.org/jira/browse/MCHANGES-75), and tell us how. It would be nicer if this
+could be set using a parameter in the POM.
