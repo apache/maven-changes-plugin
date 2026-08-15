@@ -626,11 +626,37 @@ public class AnnouncementMojo extends AbstractAnnouncementMojo {
         } catch (ResourceNotFoundException ex) {
             throw new ResourceNotFoundException(
                     "Template not found. ( " + templateDirectory + "/" + template + " )", ex);
-        } catch (VelocityException ve) {
-            throw ve;
+        } catch (VelocityException | NullPointerException e) {
+            throw announceTemplateFailure(template, e);
         } catch (RuntimeException | IOException e) {
             throw new MojoExecutionException(e.toString(), e);
         }
+    }
+
+    /**
+     * Velocity ends in {@link NullPointerException} when the template calls {@code String.replace} with a null target
+     * or a context field is missing. Surface that as a plugin error instead of a raw NPE.
+     */
+    static MojoExecutionException announceTemplateFailure(String template, Throwable cause) {
+        if (isNullTemplateValue(cause)) {
+            return new MojoExecutionException(
+                    "Failed to process announcement template '" + template
+                            + "': a template value was null. "
+                            + "A required announcement field is missing or the template called String.replace() "
+                            + "with a null target.",
+                    cause);
+        }
+        return new MojoExecutionException(
+                "Failed to process announcement template '" + template + "': " + cause, cause);
+    }
+
+    private static boolean isNullTemplateValue(Throwable cause) {
+        for (Throwable t = cause; t != null; t = t.getCause()) {
+            if (t instanceof NullPointerException) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected List<Release> getJiraReleases() throws MojoExecutionException {

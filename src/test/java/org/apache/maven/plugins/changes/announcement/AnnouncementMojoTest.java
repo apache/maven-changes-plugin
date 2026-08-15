@@ -25,10 +25,12 @@ import java.nio.file.Files;
 import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -66,6 +68,23 @@ public class AnnouncementMojoTest {
         assertContains("Removed:", result);
         assertContains("o The element type \" link \" must be terminated by the matching end-tag.", result);
         assertContains("Deleted the erroneous code.", result);
+    }
+
+    @InjectMojo(goal = "announcement-generate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/announce-changes.xml")
+    @MojoParameter(name = "announcementDirectory", value = "target/test")
+    @MojoParameter(name = "version", value = "1.1")
+    @MojoParameter(name = "finalName", value = "demo-1.0")
+    @MojoParameter(name = "template", value = "null-replace.vm")
+    @MojoParameter(
+            name = "templateDirectory",
+            value = "src/test/resources/org/apache/maven/plugins/changes/announcement")
+    @MojoParameter(name = "introduction", value = "Nice library")
+    @Test
+    public void testAnnounceGenerationFailsWhenReplaceTargetIsNull(AnnouncementMojo mojo) throws Exception {
+        prepareAnnouncementDirectory();
+        MojoExecutionException error = assertThrows(MojoExecutionException.class, mojo::execute);
+        assertTrue(error.getMessage().contains("template value was null"), error.getMessage());
     }
 
     private File prepareAnnouncementDirectory() throws IOException {
