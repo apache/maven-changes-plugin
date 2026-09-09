@@ -126,9 +126,20 @@ public class GitHubChangesReport extends AbstractChangesReport {
     /* Public methods */
     /* --------------------------------------------------------------------- */
 
+    /**
+     * @deprecated use {@link #getOutputPath()} instead
+     */
     @Override
     @Deprecated
     public String getOutputName() {
+        return getOutputPath();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getOutputPath() {
         return "github-changes";
     }
 

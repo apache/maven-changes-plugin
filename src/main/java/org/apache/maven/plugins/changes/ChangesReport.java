@@ -312,9 +312,20 @@ public class ChangesReport extends AbstractChangesReport {
         return getBundle(locale).getString("report.issues.name");
     }
 
+    /**
+     * @deprecated use {@link #getOutputPath()} instead
+     */
     @Override
     @Deprecated
     public String getOutputName() {
+        return getOutputPath();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getOutputPath() {
         return "changes";
     }
 
