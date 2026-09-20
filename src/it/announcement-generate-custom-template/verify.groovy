@@ -54,10 +54,10 @@ try
       return false;
     }
     
-    indexOf = reportContent.indexOf( "$date.systemDate" );
+    indexOf = reportContent.indexOf( '$date.systemDate' );
     if ( indexOf >= 0 )
     {
-      System.err.println( "$date.systemDate not resolved" );
+      System.err.println( '$date.systemDate not resolved' );
       return false;
     }
     
