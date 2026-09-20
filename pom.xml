@@ -74,8 +74,8 @@ under the License.
   <properties>
     <javaVersion>8</javaVersion>
     <doxiaVersion>2.1.0</doxiaVersion>
-    <mavenVersion>3.6.3</mavenVersion>
-    <mavenResolverVersion>1.4.1</mavenResolverVersion>
+    <mavenVersion>3.9.16</mavenVersion>
+    <mavenResolverVersion>1.9.27</mavenResolverVersion>
     <project.build.outputTimestamp>2025-05-12T19:07:48Z</project.build.outputTimestamp>
   </properties>
 
