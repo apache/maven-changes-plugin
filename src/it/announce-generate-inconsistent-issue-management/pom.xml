@@ -31,12 +31,6 @@
   with this system in the POM</description>
   <url>http://www.foo.com</url>
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <issueManagement>
     <system>GitHub</system>
