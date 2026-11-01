@@ -48,7 +48,7 @@ The most basic report configuration is read from the `<issueManagement>` section
 
 The exact query can configured in the `<query>` element. See [TracQuery](https://trac.edgewall.org/wiki/TracQuery) for the exact syntax.
 
-```unknown
+```xml
   ...
   <plugin>
     <groupId>org.apache.maven.plugins</groupId>
