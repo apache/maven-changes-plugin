@@ -21,8 +21,6 @@ package org.apache.maven.plugins.changes.issues;
 import java.util.ResourceBundle;
 
 import org.apache.maven.doxia.sink.Sink;
-import org.apache.maven.doxia.sink.SinkEventAttributes;
-import org.apache.maven.doxia.sink.impl.SinkEventAttributeSet;
 import org.apache.maven.reporting.AbstractMavenReportRenderer;
 
 /**
@@ -97,37 +95,25 @@ public abstract class AbstractIssuesReportRenderer extends AbstractMavenReportRe
         sink.tableCell_();
     }
 
-    protected void sinkFigure(String image, String altText) {
-        SinkEventAttributes attributes = new SinkEventAttributeSet();
-        attributes.addAttribute("alt", altText);
-        attributes.addAttribute("title", altText);
-
-        sink.figureGraphics(image, attributes);
-    }
-
-    protected void sinkShowTypeIcon(String type) {
-        String image = "";
-        String altText = "";
+    protected void sinkShowTypeText(String type) {
+        String key;
 
         if (type == null) {
-            image = "images/icon_help_sml.gif";
-            altText = "Unknown";
+            key = "unknown";
         } else if (type.equals("fix")) {
-            image = "images/fix.gif";
-            altText = "Fix";
+            key = "fix";
         } else if (type.equals("update")) {
-            image = "images/update.gif";
-            altText = "Update";
+            key = "update";
         } else if (type.equals("add")) {
-            image = "images/add.gif";
-            altText = "Add";
+            key = "add";
         } else if (type.equals("remove")) {
-            image = "images/remove.gif";
-            altText = "Remove";
+            key = "remove";
+        } else {
+            key = "unknown";
         }
 
         sink.tableCell();
-        sinkFigure(image, altText);
+        text(bundle.getString("report.changes.label.type." + key));
         sink.tableCell_();
     }
 }

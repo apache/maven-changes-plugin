@@ -159,7 +159,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
     private void constructAction(Action action) {
         sink.tableRow();
 
-        sinkShowTypeIcon(action.getType());
+        sinkShowTypeText(action.getType());
 
         sink.tableCell();
 
@@ -324,7 +324,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
             text(bundle.getString("report.changes.text.rssfeed"));
             sink.nonBreakingSpace();
             sink.link("changes.rss");
-            sinkFigure("images/rss.png", "rss feed");
+            text(bundle.getString("report.changes.text.rssfeed.link"));
             sink.link_();
             sink.paragraph_();
         }

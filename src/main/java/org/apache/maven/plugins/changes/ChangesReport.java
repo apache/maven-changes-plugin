@@ -23,7 +23,6 @@ import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,7 +46,6 @@ import org.apache.maven.reporting.MavenReportException;
 import org.apache.maven.shared.filtering.MavenFileFilter;
 import org.apache.maven.shared.filtering.MavenFileFilterRequest;
 import org.apache.maven.shared.filtering.MavenFilteringException;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * Goal which creates a nicely formatted Changes Report in html format from a changes.xml file.
@@ -261,9 +259,6 @@ public class ChangesReport extends AbstractChangesReport {
         report.setEscapeText(escapeText);
 
         report.render();
-
-        // Copy the images
-        copyStaticResources();
     }
 
     private Map<String, String> prepareIssueLinksPerSystem() {
@@ -381,27 +376,6 @@ public class ChangesReport extends AbstractChangesReport {
             }
         }
         return new ChangesXML(changesXml, getLog());
-    }
-
-    private void copyStaticResources() throws MavenReportException {
-        final String pluginResourcesBase = "org/apache/maven/plugins/changes";
-        String[] resourceNames = {
-            "images/add.gif",
-            "images/fix.gif",
-            "images/icon_help_sml.gif",
-            "images/remove.gif",
-            "images/rss.png",
-            "images/update.gif"
-        };
-        try {
-            getLog().debug("Copying static resources.");
-            for (String resourceName : resourceNames) {
-                URL url = this.getClass().getClassLoader().getResource(pluginResourcesBase + "/" + resourceName);
-                FileUtils.copyURLToFile(url, new File(getReportOutputDirectory(), resourceName));
-            }
-        } catch (IOException e) {
-            throw new MavenReportException("Unable to copy static resources.");
-        }
     }
 
     private ResourceBundle getBundle(Locale locale) {

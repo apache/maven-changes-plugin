@@ -85,6 +85,7 @@
         <artifactId>maven-changes-plugin</artifactId>
         <version>@project.version@</version>
         <configuration>
+          <feedType>rss_2.0</feedType>
           <issueLinkTemplatePerSystem>
             <jira>http://myjira/browse/%ISSUE%</jira>
           </issueLinkTemplatePerSystem>
