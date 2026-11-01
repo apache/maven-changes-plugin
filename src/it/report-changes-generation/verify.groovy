@@ -43,3 +43,14 @@ assert content.contains('<td>-</td></tr>')
 
 // HTML tags in action text are escaped, and not passed as raw text
 assert content.contains('&lt;strong&gt;HTML tags&lt;/strong&gt; are escaped and not passed as raw text.')
+
+// change types are rendered as text, not as images
+assert content.contains('<td>Add</td>')
+assert content.contains('<td>Fix</td>')
+assert content.contains('<td>Remove</td>')
+assert content.contains('<td>Update</td>')
+['add.gif', 'fix.gif', 'update.gif', 'remove.gif', 'icon_help_sml.gif', 'rss.png'].each {
+    assert !content.contains(it): "changes.html still references ${it}"
+}
+assert content.contains('Get the RSS feed of the last changes:')
+assert content.contains('href="changes.rss">RSS</a>')
