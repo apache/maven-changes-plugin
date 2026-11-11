@@ -667,7 +667,9 @@ public class RestJiraDownloader {
             for (int vx = 0; vx < val.size(); vx++) {
                 JsonNode fvNode = val.get(vx);
                 if (isNotNullNode(fvNode) && isNotNullNode(fvNode.get("name"))) {
-                    issue.addFixVersion(fvNode.get("name").asText());
+                    JsonNode descriptionNode = fvNode.get("description");
+                    String description = isNotNullNode(descriptionNode) ? descriptionNode.asText() : null;
+                    issue.addFixVersion(fvNode.get("name").asText(), description);
                 }
             }
         }
