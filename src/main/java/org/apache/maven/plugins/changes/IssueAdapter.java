@@ -78,6 +78,9 @@ public class IssueAdapter {
                         release.setVersion(fixVersion);
                         releasesMap.put(fixVersion, release);
                     }
+                    if (release.getDescription() == null) {
+                        release.setDescription(issue.getFixVersionDescription(fixVersion));
+                    }
 
                     // Add this issue as an Action to this release
                     Action action = createAction(issue);

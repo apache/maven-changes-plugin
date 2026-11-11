@@ -168,4 +168,17 @@ public class IssueAdapterTest {
         assertEquals("1.0.0-alpha", releases.get(3).getVersion());
         assertEquals("0.1.1", releases.get(4).getVersion());
     }
+
+    @Test
+    public void testReleaseDescriptionFromFixVersion() {
+        IssueAdapter adapter = new IssueAdapter(new JIRAIssueManagementSystem());
+
+        Issue issue = createIssue("TST-1", "Bug");
+        issue.addFixVersion("1.0", "First stable release");
+
+        List<Release> releases = adapter.getReleases(Arrays.asList(issue));
+
+        assertEquals(1, releases.size());
+        assertEquals("First stable release", releases.get(0).getDescription());
+    }
 }

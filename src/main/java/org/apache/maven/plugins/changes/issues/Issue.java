@@ -20,7 +20,9 @@ package org.apache.maven.plugins.changes.issues;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An issue.
@@ -37,6 +39,8 @@ public class Issue {
     private Date created;
 
     private List<String> fixVersions;
+
+    private Map<String, String> fixVersionDescriptions;
 
     private String id;
 
@@ -94,10 +98,34 @@ public class Issue {
     }
 
     public void addFixVersion(String fixVersion) {
+        addFixVersion(fixVersion, null);
+    }
+
+    /**
+     * @param fixVersion the name of the fix version
+     * @param description the issue tracker's own description of that version, e.g. JIRA's per-version
+     *            description, or {@code null} if none is available
+     */
+    public void addFixVersion(String fixVersion, String description) {
         if (fixVersions == null) {
             fixVersions = new ArrayList<>();
         }
         fixVersions.add(fixVersion);
+
+        if (description != null) {
+            if (fixVersionDescriptions == null) {
+                fixVersionDescriptions = new HashMap<>();
+            }
+            fixVersionDescriptions.put(fixVersion, description);
+        }
+    }
+
+    /**
+     * @param fixVersion the name of the fix version
+     * @return the issue tracker's own description of that version, or {@code null} if none was recorded
+     */
+    public String getFixVersionDescription(String fixVersion) {
+        return fixVersionDescriptions == null ? null : fixVersionDescriptions.get(fixVersion);
     }
 
     public String getId() {
