@@ -1,0 +1,61 @@
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<document xmlns="http://maven.apache.org/changes/2.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/changes/2.0.0 http://maven.apache.org/xsd/changes-2.0.0.xsd">
+  <properties>
+    <title>Changes report Project</title>
+    <author email="zloug@toto.com">Mr Zloug</author>
+  </properties>
+  <body>
+    <release version="1.1" date="2005-03-01" description="Subsequent release">
+      <action dev="me" type="add">
+        Added additional documentation on how to configure the plugin.
+      </action>
+      <action dev="me" type="fix" issue="MCHANGES-88">
+        Enable retrieving component-specific issues.
+      </action>
+      <action dev="jruiz" type="remove" issue="MCHANGES-899"
+              fixed-issues="MCHANGES-1,JIRA-12"
+              due-to="John Doe,John Doe" due-to-email="john@doe.com">
+        The element type " link " must be terminated by the matching end-tag.
+        Deleted the erroneous code.
+      </action>
+      <action dev="you" type="update" issue="MCHANGES-999"
+              fixed-issues="bug-12345"
+              system="bugzilla"
+              due-to="External Submitter,John Doe" due-to-email=",john@doe.com">
+        Handle different issue systems.
+      </action>
+      <action dev="him" type="update"
+              due-to="John Doe,John Doe" due-to-email="john@doe.com">
+        Updated dependencies.
+      </action>
+    </release>
+
+    <release version="1.0" date="2005-01-01" description="First release">
+      <action dev="me" type="update" issue="MCHANGES-47"
+              fixed-issues="MCHANGES-88,JIRA-YYY"
+              due-to="others,John Doe,John Doe" due-to-email="others@users.com,john@doe.com">
+        Uploaded documentation on how to use the plugin.
+      </action>
+    </release>
+  </body>
+</document>
