@@ -50,7 +50,7 @@ import static org.mockito.Mockito.when;
 public class GitHubDownloaderTest {
 
     @Test
-    public void testCreateIssue() throws IOException {
+    public void testCreateIssue() throws Exception {
         IssueManagement issueManagement = newGitHubIssueManagement();
         GitHubDownloader gitHubDownloader = newGitHubDownloader(issueManagement);
 
