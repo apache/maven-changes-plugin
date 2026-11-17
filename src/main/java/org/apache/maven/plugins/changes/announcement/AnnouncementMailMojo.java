@@ -218,6 +218,7 @@ public class AnnouncementMailMojo extends AbstractAnnouncementMojo {
 
     private ProjectJavamailMailSender mailer = new ProjectJavamailMailSender();
 
+    @Override
     public void execute() throws MojoExecutionException {
 
         // Run only at the execution root

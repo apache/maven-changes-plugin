@@ -51,6 +51,7 @@ public class DefaultChangesSchemaValidator implements ChangesSchemaValidator {
 
     private Map<String, Schema> compiledSchemas = new HashMap<>();
 
+    @Override
     public XmlValidationHandler validateXmlWithSchema(File file, String schemaVersion, boolean failOnValidationError)
             throws SchemaValidatorException {
         try {

@@ -53,6 +53,7 @@ public class XmlValidationHandler extends DefaultHandler {
     /**
      * @see org.xml.sax.ErrorHandler#error(org.xml.sax.SAXParseException)
      */
+    @Override
     public void error(SAXParseException excp) throws SAXException {
         this.setErrorParsing(true);
         this.errors.add(excp);
@@ -64,6 +65,7 @@ public class XmlValidationHandler extends DefaultHandler {
     /**
      * @see org.xml.sax.ErrorHandler#fatalError(org.xml.sax.SAXParseException)
      */
+    @Override
     public void fatalError(SAXParseException excp) throws SAXException {
         this.fatalErrors.add(excp);
         if (this.failOnValidationError) {
@@ -74,6 +76,7 @@ public class XmlValidationHandler extends DefaultHandler {
     /**
      * @see org.xml.sax.ErrorHandler#warning(org.xml.sax.SAXParseException)
      */
+    @Override
     public void warning(SAXParseException excp) {
         this.warnings.add(excp);
     }
@@ -81,6 +84,7 @@ public class XmlValidationHandler extends DefaultHandler {
     /**
      * @see org.xml.sax.ContentHandler#startElement(String, String, String, Attributes)
      */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         // nothing
     }
