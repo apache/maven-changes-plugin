@@ -37,7 +37,7 @@ import org.apache.maven.plugin.logging.Log;
  * @author Dennis Lundberg
  * @version $Id$
  */
-public class JiraHelper {
+public final class JiraHelper {
     private static final String PID = "?pid="; // MCHANGES-281 addd ?
 
     /**

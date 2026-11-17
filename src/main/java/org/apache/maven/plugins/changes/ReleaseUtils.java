@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * @version $Id$
  * @since 2.4
  */
-public class ReleaseUtils {
+public final class ReleaseUtils {
     private static final String SNAPSHOT_SUFFIX = "-SNAPSHOT";
 
     private static final Logger LOG = LoggerFactory.getLogger(ReleaseUtils.class);
