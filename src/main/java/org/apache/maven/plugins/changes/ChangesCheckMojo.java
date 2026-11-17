@@ -23,7 +23,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -120,18 +119,18 @@ public class ChangesCheckMojo extends AbstractChangesMojo {
      * @return <code>true</code> if the string can be parsed as a date using the pattern, otherwise <code>false</code>
      */
     protected static boolean isValidDate(String string, String pattern, String locale) {
-        if (StringUtils.isEmpty(string)) {
+        if (string == null || string.isEmpty()) {
             return false;
         }
 
-        if (StringUtils.isEmpty(pattern)) {
+        if (pattern == null || pattern.isEmpty()) {
             return false;
         }
 
         try {
             Locale usedLocale = null;
 
-            if (StringUtils.isEmpty(locale)) {
+            if (locale == null || locale.isEmpty()) {
                 // No locale specified, use the default locale as default value
                 // The same behavior as before the locale parameter was added
                 usedLocale = Locale.getDefault();

@@ -26,7 +26,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.changes.AbstractChangesReport;
@@ -340,7 +339,7 @@ public class JiraChangesReport extends AbstractChangesReport {
 
             List<Issue> issueList = issueDownloader.getIssueList();
 
-            if (StringUtils.isNotEmpty(versionPrefix)) {
+            if (versionPrefix != null && !versionPrefix.isEmpty()) {
                 int originalNumberOfIssues = issueList.size();
                 issueList = IssueUtils.filterIssuesWithVersionPrefix(issueList, versionPrefix);
                 getLog().debug("Filtered out " + issueList.size() + " issues of " + originalNumberOfIssues
