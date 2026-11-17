@@ -81,6 +81,6 @@ public class AnnouncementMojoTest {
     }
 
     private static void assertContains(String content, String announce) {
-        assertTrue(announce.indexOf(content) >= 1);
+        assertTrue(announce.indexOf(content) > 0);
     }
 }

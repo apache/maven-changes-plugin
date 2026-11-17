@@ -165,14 +165,14 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         String actionDescription = action.getAction();
 
-        if (escapeText || (actionDescription == null || actionDescription.isEmpty())) {
+        if (escapeText || StringUtils.isEmpty(actionDescription)) {
             text(actionDescription);
         } else {
             sink.rawText(actionDescription);
         }
 
         // no null check needed classes from modello return a new ArrayList
-        if ((action.getIssue() != null && !action.getIssue().isEmpty())
+        if (StringUtils.isNotEmpty(action.getIssue())
                 || (!action.getFixedIssues().isEmpty())) {
             if (StringUtils.isNotBlank(actionDescription) && !actionDescription.endsWith(".")) {
                 text(".");
@@ -182,11 +182,11 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
             // Try to get the issue management system specified in the changes.xml file
             String system = action.getSystem();
             // Try to get the issue management system configured in the POM
-            if (system == null || system.isEmpty()) {
+            if (StringUtils.isEmpty(system)) {
                 system = this.system;
             }
             // Use the default issue management system
-            if (system == null || system.isEmpty()) {
+            if (StringUtils.isEmpty(system)) {
                 system = DEFAULT_ISSUE_SYSTEM_KEY;
             }
             if (!canGenerateIssueLinks(system)) {
@@ -228,7 +228,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
         for (DueTo dueTo : action.getDueTos()) {
             i++;
 
-            if (dueTo.getEmail() != null && !dueTo.getEmail().isEmpty()) {
+            if (StringUtils.isNotEmpty(dueTo.getEmail())) {
                 String text = dueTo.getName();
                 link("mailto:" + dueTo.getEmail(), text);
             } else {
@@ -251,7 +251,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
      * @param fixes The List of issues specified as fixes elements
      */
     private void constructIssueLink(String issue, String system, List<String> fixes) {
-        if (issue != null && !issue.isEmpty()) {
+        if (StringUtils.isNotEmpty(issue)) {
             link(parseIssueLink(issue, system), issue);
             if (!fixes.isEmpty()) {
                 text(", ");
@@ -260,7 +260,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
             String currentIssueId = iterator.next();
-            if (currentIssueId != null && !currentIssueId.isEmpty()) {
+            if (StringUtils.isNotEmpty(currentIssueId)) {
                 link(parseIssueLink(currentIssueId, system), currentIssueId);
             }
 
@@ -277,7 +277,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
      * @param fixes The List of issues specified as fixes elements
      */
     private void constructIssueText(String issue, List<String> fixes) {
-        if (issue != null && !issue.isEmpty()) {
+        if (StringUtils.isNotEmpty(issue)) {
             text(issue);
 
             if (!fixes.isEmpty()) {
@@ -287,7 +287,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
 
         for (Iterator<String> iterator = fixes.iterator(); iterator.hasNext(); ) {
             String currentIssueId = iterator.next();
-            if (currentIssueId != null && !currentIssueId.isEmpty()) {
+            if (StringUtils.isNotEmpty(currentIssueId)) {
                 text(currentIssueId);
             }
 
