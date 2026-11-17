@@ -505,7 +505,7 @@ under the License.
               <issueLinkTemplatePerSystem>
                 <default>%URL%/%ISSUE%</default>
               </issueLinkTemplatePerSystem>
-              <xmlPath>${basedir}/src/site/changes/sample-changes.xml</xmlPath>
+              <xmlPath>${project.basedir}/src/site/changes/sample-changes.xml</xmlPath>
               <!-- For JIRA-report -->
               <columnNames>Type,Key,Summary,Assignee,Status,Resolution,Created</columnNames>
               <maxEntries>200</maxEntries>
