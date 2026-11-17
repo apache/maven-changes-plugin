@@ -216,6 +216,7 @@ public class Issue {
         this.version = version;
     }
 
+    @Override
     public String toString() {
         return this.getClass().getSimpleName() + "[id='" + this.getId() + "'" + ", summary='" + this.getSummary() + "'"
                 + ", fixVersions='" + this.getFixVersions() + "'" + "]";

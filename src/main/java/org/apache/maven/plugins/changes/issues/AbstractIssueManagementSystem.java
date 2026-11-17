@@ -46,6 +46,7 @@ public abstract class AbstractIssueManagementSystem implements IssueManagementSy
      * (non-Javadoc)
      * @see org.apache.maven.plugins.issues.IssueManagementSystem#getIssueTypeMap()
      */
+    @Override
     public Map<String, IssueType> getIssueTypeMap() {
         return issueTypeMap;
     }
@@ -54,12 +55,14 @@ public abstract class AbstractIssueManagementSystem implements IssueManagementSy
      * (non-Javadoc)
      * @see org.apache.maven.plugins.issues.IssueManagementSystem#getName()
      */
+    @Override
     public abstract String getName();
 
     /*
      * (non-Javadoc)
      * @see org.apache.maven.plugins.issues.IssueManagementSystem#applyConfiguration(java.util.Map)
      */
+    @Override
     public void applyConfiguration(Map<String, String> issueTypes) throws MojoExecutionException {
         for (Map.Entry<String, String> me : issueTypes.entrySet()) {
             IssueType type = IssueType.lookupByKey(me.getKey());

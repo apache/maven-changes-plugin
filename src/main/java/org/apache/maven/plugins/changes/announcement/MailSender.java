@@ -55,6 +55,7 @@ public class MailSender {
         this.email = email;
     }
 
+    @Override
     public String toString() {
         return getName() + " (" + getEmail() + ")";
     }

@@ -77,6 +77,7 @@ public class ChangesCheckMojo extends AbstractChangesMojo {
      *
      * @throws MojoExecutionException in case of errors.
      */
+    @Override
     public void execute() throws MojoExecutionException {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {

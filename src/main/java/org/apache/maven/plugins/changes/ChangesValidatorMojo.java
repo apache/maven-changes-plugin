@@ -69,6 +69,7 @@ public class ChangesValidatorMojo extends AbstractChangesMojo {
     /**
      * @see org.apache.maven.plugin.Mojo#execute()
      */
+    @Override
     public void execute() throws MojoExecutionException {
         // Run only at the execution root
         if (runOnlyAtExecutionRoot && !isThisTheExecutionRoot()) {
