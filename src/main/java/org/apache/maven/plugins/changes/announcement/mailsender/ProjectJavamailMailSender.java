@@ -111,7 +111,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
             InternetAddress addressFrom = new InternetAddress(mail.getFrom().getRfc2822Address());
             msg.setFrom(addressFrom);
 
-            if (mail.getToAddresses().size() > 0) {
+            if (!mail.getToAddresses().isEmpty()) {
                 InternetAddress[] addressTo =
                         new InternetAddress[mail.getToAddresses().size()];
                 int count = 0;
@@ -122,7 +122,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
                 msg.setRecipients(Message.RecipientType.TO, addressTo);
             }
 
-            if (mail.getCcAddresses().size() > 0) {
+            if (!mail.getCcAddresses().isEmpty()) {
                 InternetAddress[] addressCc =
                         new InternetAddress[mail.getCcAddresses().size()];
                 int count = 0;
@@ -133,7 +133,7 @@ public class ProjectJavamailMailSender extends AbstractMailSender {
                 msg.setRecipients(Message.RecipientType.CC, addressCc);
             }
 
-            if (mail.getBccAddresses().size() > 0) {
+            if (!mail.getBccAddresses().isEmpty()) {
                 InternetAddress[] addressBcc =
                         new InternetAddress[mail.getBccAddresses().size()];
                 int count = 0;

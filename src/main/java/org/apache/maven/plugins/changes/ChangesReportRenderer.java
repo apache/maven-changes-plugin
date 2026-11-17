@@ -348,7 +348,7 @@ public class ChangesReportRenderer extends AbstractIssuesReportRenderer {
      */
     private void constructRelease(Release release) {
 
-        final String date = (release.getDateRelease() == null) ? "" : " \u2013 " + release.getDateRelease();
+        final String date = release.getDateRelease() == null ? "" : " \u2013 " + release.getDateRelease();
 
         startSection(
                 bundle.getString("report.changes.label.release") + " " + release.getVersion() + date,

@@ -59,7 +59,8 @@ public class ChangesCheckMojoTest {
 
     @Test
     public void testIsValidateWithLocale() {
-        String pattern, locale = null;
+        String pattern;
+        String locale = null;
 
         // null locale
         pattern = "yyyy-MM-dd";

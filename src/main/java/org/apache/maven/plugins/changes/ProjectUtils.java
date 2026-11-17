@@ -48,7 +48,7 @@ public final class ProjectUtils {
                 || (project.getIssueManagement().getUrl().trim().isEmpty())) {
             return "No URL set in Issue Management. No " + mojoResult + " will be generated.";
         } else if ((project.getIssueManagement().getSystem() != null)
-                && !(project.getIssueManagement().getSystem().equalsIgnoreCase(issueManagementSystem))) {
+                && !project.getIssueManagement().getSystem().equalsIgnoreCase(issueManagementSystem)) {
             return "The " + mojoResult + " only supports " + issueManagementSystem + ".  No " + mojoResult
                     + " will be generated.";
         }
