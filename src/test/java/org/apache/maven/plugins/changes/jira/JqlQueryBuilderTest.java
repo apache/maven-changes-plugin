@@ -18,7 +18,6 @@
  */
 package org.apache.maven.plugins.changes.jira;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.apache.maven.plugin.testing.SilentLog;
@@ -44,7 +43,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSingleParameterValue() throws UnsupportedEncodingException {
+    public void testSingleParameterValue() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA", ENCODING);
 
         String actual = createBuilder().project("DOXIA").build();
@@ -52,7 +51,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testFixVersion() throws UnsupportedEncodingException {
+    public void testFixVersion() throws Exception {
         String expected = URLEncoder.encode("fixVersion = \"1.0\"", ENCODING);
 
         String actual = createBuilder().fixVersion("1.0").build();
@@ -60,7 +59,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testFixVersionCombinedWithOtherParameters() throws UnsupportedEncodingException {
+    public void testFixVersionCombinedWithOtherParameters() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA AND fixVersion = \"1.0\"", ENCODING);
 
         String actual = createBuilder().project("DOXIA").fixVersion("1.0").build();
@@ -68,7 +67,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSingleParameterSingleValue() throws UnsupportedEncodingException {
+    public void testSingleParameterSingleValue() throws Exception {
         String expected = URLEncoder.encode("priority in (Blocker)", ENCODING);
 
         String actual = createBuilder().priorityIds("Blocker").build();
@@ -79,7 +78,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSingleParameterMultipleValues() throws UnsupportedEncodingException {
+    public void testSingleParameterMultipleValues() throws Exception {
         String expected = URLEncoder.encode("priority in (Blocker, Critical, Major)", ENCODING);
 
         String actual = createBuilder().priorityIds("Blocker,Critical,Major").build();
@@ -90,7 +89,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testMultipleParameterCombinedWithAND() throws UnsupportedEncodingException {
+    public void testMultipleParameterCombinedWithAND() throws Exception {
         String expected = URLEncoder.encode("priority in (Blocker) AND status in (Resolved)", ENCODING);
 
         String actual =
@@ -99,7 +98,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testValueWithSpacesAreQuoted() throws UnsupportedEncodingException {
+    public void testValueWithSpacesAreQuoted() throws Exception {
         String expected = URLEncoder.encode("status in (\"In Progress\")", ENCODING);
 
         String actual = createBuilder().statusIds("In Progress").build();
@@ -107,7 +106,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSortSingleRowAscending() throws UnsupportedEncodingException {
+    public void testSortSingleRowAscending() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC", ENCODING);
 
         String actual = createBuilder().project("DOXIA").sortColumnNames("key").build();
@@ -124,7 +123,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSortSingleDescending() throws UnsupportedEncodingException {
+    public void testSortSingleDescending() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key DESC", ENCODING);
 
         String actual =
@@ -139,7 +138,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testSortMultipleColumns() throws UnsupportedEncodingException {
+    public void testSortMultipleColumns() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
         String actual = createBuilder()
@@ -150,7 +149,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testOrderByIsLastElement() throws UnsupportedEncodingException {
+    public void testOrderByIsLastElement() throws Exception {
         String expected = URLEncoder.encode("project = DOXIA ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
         String actual = createBuilder()
@@ -161,7 +160,7 @@ public class JqlQueryBuilderTest {
     }
 
     @Test
-    public void testQuoteReservedWord() throws UnsupportedEncodingException {
+    public void testQuoteReservedWord() throws Exception {
         String expected =
                 URLEncoder.encode("project = \"EXEC\" ORDER BY key ASC, assignee DESC, reporter ASC", ENCODING);
 
