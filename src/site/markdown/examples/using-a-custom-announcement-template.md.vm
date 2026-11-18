@@ -31,9 +31,9 @@ The `announcement-generate` goal uses a [Velocity](https://velocity.apache.org/)
 Configuring the Plugin
 ----------------------
 
-First you must configure the plugin and tell it where your template is. In this example we want to use the template `${esc.d}{basedir}/src/main/resources/our-announcements/my-announcement.vm`.
+First you must configure the plugin and tell it where your template is. In this example we want to use the template `${esc.d}{basedir}/src/announcement/my-announcement.vm`. A directory outside `src/main/resources` keeps the template out of your JAR file.
 
-**Note:** The `<templateDirectory>` must be a subdirectory of `${esc.d}{basedir}/src/main/resources/`.
+**Note:** The `<templateDirectory>` is relative to the project base directory, `${esc.d}{basedir}`.
 
 ```xml
 <project>
@@ -46,7 +46,7 @@ First you must configure the plugin and tell it where your template is. In this 
         <version>${project.version}</version>
         <configuration>
           <template>my-announcement.vm</template>
-          <templateDirectory>our-announcements</templateDirectory>
+          <templateDirectory>src/announcement</templateDirectory>
         </configuration>
       </plugin>
     </plugins>
@@ -58,7 +58,8 @@ First you must configure the plugin and tell it where your template is. In this 
 Creating Your Template
 ----------------------
 
-Next you want to create your own template. A wise thing is to start with the default one that is included in the plugin. You can download it from [here](https://github.com/apache/maven-changes-plugin/blob/master/src/main/resources/org/apache/maven/plugins/announcement/announcement.vm). It will provide you with examples on how to iterate over the actions of a release among other things.
+Next you want to create your own template. A wise thing is to start with the default one that is included in the plugin. You can find it in the source repository:
+[announcement.vm](https://github.com/apache/maven-changes-plugin/blob/master/src/main/resources/org/apache/maven/plugins/changes/announcement/announcement.vm). It will provide you with examples on how to iterate over the actions of a release among other things.
 
 Available Variables
 -------------------
@@ -67,7 +68,7 @@ Here's a list of the variables that you have at your disposal, when creating you
 
 |Variable|Type|Since|Description|
 |:---|:---|:---|:---|
-|releases*|List|2.0|All the releases from either the changes.xml file or from JIRA.|
+|releases*|List|2.0|All the releases from the changes.xml file or the issue tracker.|
 |groupId*|String|2.0|The groupId from your project's pom.|
 |artifactId*|String|2.0|The artifactId from your project's pom.|
 |version*|String|2.0|The version from your project's pom.|
@@ -75,10 +76,10 @@ Here's a list of the variables that you have at your disposal, when creating you
 |release*|Release|2.0|The release that you are announcing.|
 |project*|MavenProject|2.1|The Maven Project being released.|
 |url|String|2.0|Distribution url of the artifact. **Default value is**: `${esc.d}{project.url}`.|
-|introduction|String|2.0|A short description or introduction of the released artifact. **Default value is**: `${esc.d}{project.description}`.|
+|introduction|String|2.0|A short description or introduction of the released artifact. **Default value is**: `${esc.d}{project.description}`, or `url` if that is empty.|
 |developmentTeam|String|2.0|Name of the team that develops the artifact. **Default value is**: `${esc.d}{project.name} team`.|
 |finalName|String|2.0|The name of the artifact to be used in the announcement. **Default value is**: `${esc.d}{project.build.finalName}`.|
-|urlDownload|String|2.0|URL where the artifact can be downloaded. **Default value is**: `${esc.d}{project.url}`.|
+|urlDownload|String|2.0|URL where the artifact can be downloaded. No default value.|
 |announceParameters|Map|2.1|A Map of custom parameters that can be specified in the plugin's configuration.|
 [Variables marked with \* are read-only.]
 
@@ -109,4 +110,4 @@ Finally each `Action` has the following variables:
 
 Velocity Context contains all default tools provided by the [ToolManager](https://velocity.apache.org/tools/devel/standalone.html). See the [Tools Usage Summary](https://velocity.apache.org/tools/devel/tools-summary.html) for further details.
 
-For information on how to access variables in your template and more, see the [Velocity user guide](https://velocity.apache.org/engine/devel/developer-guide.html).
+For information on how to access variables in your template and more, see the [Velocity user guide](https://velocity.apache.org/engine/devel/user-guide.html).

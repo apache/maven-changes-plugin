@@ -26,27 +26,31 @@ under the License.
 
 # Configuring the Trac Report
 
+**Note:** The Trac integration is deprecated and prepared for removal in the next major version due to lack of
+maintainers.
+
 Configuring your Trac instance
 ------------------------------
 
-The plugin needs to be told details of your Trac installation so that it can connect and query the open tickets. The Trac installation needs to be accessible via no authentication, basic authentication or NTLM authentication. If you've used form authentication then you are out of luck.
+The plugin needs to be told details of your Trac installation so that it can connect and query the open tickets. The Trac installation needs to be accessible via no authentication, basic authentication or NTLM authentication.
+Form-based authentication is not supported.
 
 Your Trac installation needs to have the [XML-RPC plugin](https://trac-hacks.org/wiki/XmlRpcPlugin) installed and working for this plugin to be able to read the tickets.
 
 #[[### Basic Report Configuration]]#
 
-The most basic report configuration is read from the `<issueManagement>` section of your POM. This should work with no additional configuration, but by default all ticket will be listed
+The most basic report configuration is read from the `<issueManagement>` section of your POM. This works with no additional configuration, but by default all tickets are listed.
 
 ```xml
   <issueManagement>
     <system>trac</system>
-    <url>http://mytracserver.local/trac/MYPROJECT/</url>
+    <url>https://trac.example.com/trac/MYPROJECT/</url>
   </issueManagement>
 ```
 
 #[[### Configuring a Custom Query]]#
 
-The exact query can configured in the `<query>` element. See [TracQuery](https://trac.edgewall.org/wiki/TracQuery) for the exact syntax.
+The exact query can be configured in the `<query>` element. See [TracQuery](https://trac.edgewall.org/wiki/TracQuery) for the exact syntax.
 
 ```xml
   ...
@@ -91,24 +95,5 @@ If you have your Trac sitting behind Apache on Windows with mod_sspi doing authe
 
 #[[### Using custom encoding]]#
 
-If you have to support non-western encodings, then specify an `<outputEncoding>` in the configuration.
-
-```xml
-<project>
-  ...
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${project.version}</version>
-        <configuration>
-          ...
-          <outputEncoding>Windows-31J</outputEncoding>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
-  ...
-</project>
-```
+The report has no encoding parameter of its own. It is written in the output encoding of the site, which you set
+with the `outputEncoding` parameter of the [Maven Site Plugin](https://maven.apache.org/plugins/maven-site-plugin/site-mojo.html).

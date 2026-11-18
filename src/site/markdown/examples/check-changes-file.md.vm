@@ -26,7 +26,9 @@ under the License.
 
 # Check Your changes.xml File
 
-Since version 2.4 this plugin has a [goal](../changes-check-mojo.html) that checks that your `changes.xml` file has a valid release date.
+The [changes-check](../changes-check-mojo.html) goal checks that your `changes.xml` file has a release for the
+current project version and that its release date is valid. Set `<skipSnapshots>` to `true` to skip the check for
+`-SNAPSHOT` versions.
 
 You can attach this goal to the `verify` phase if you want the check to be performed automatically when you build the project.
 

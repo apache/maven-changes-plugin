@@ -26,7 +26,12 @@ under the License.
 
 # Validate Your changes.xml File
 
-Since 2.1, a [goal](../changes-validate-mojo.html) is provided to validate your `changes.xml` file.
+The [changes-validate](../changes-validate-mojo.html) goal validates your `changes.xml` file against the
+[XML schema](../using-changes-xsd.html). You can also run it from the command line:
+
+```
+mvn changes:changes-validate
+```
 
 You can attach this goal to the `pre-site` phase if you want the validation to be performed automatically when you generate the site.
 
