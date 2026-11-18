@@ -72,7 +72,7 @@ public abstract class AbstractIssueManagementSystem implements IssueManagementSy
             String imsTypes = me.getValue();
             String[] imsTypeArray = imsTypes.split(",");
             for (String imsType : imsTypeArray) {
-                issueTypeMap.put(imsType, type);
+                issueTypeMap.put(imsType.trim(), type);
             }
         }
     }

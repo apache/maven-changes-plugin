@@ -22,9 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.changes.IssueType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -74,5 +76,16 @@ public class IssueManagementSystemTest {
         } catch (MojoExecutionException ignored) {
 
         }
+    }
+
+    @Test
+    public void testApplyingCustomIssueTypesTrimsWhitespace() throws MojoExecutionException {
+        Map<String, String> issueTypes = new HashMap<>();
+        issueTypes.put("fix", "Defect, Malfunction");
+
+        ims.applyConfiguration(issueTypes);
+
+        assertEquals(IssueType.FIX, ims.getIssueTypeMap().get("Defect"));
+        assertEquals(IssueType.FIX, ims.getIssueTypeMap().get("Malfunction"));
     }
 }
