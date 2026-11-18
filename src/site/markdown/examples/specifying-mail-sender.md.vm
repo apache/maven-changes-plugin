@@ -40,7 +40,7 @@ To specify which developer is used to send the announcement, simply specify the 
     <developer>
       <id>jsmith</id>
       <name>John Smith</name>
-      <email>jsmith@foo.bar</email>
+      <email>jsmith@example.com</email>
     </developer>
     ...
   </developers>
@@ -86,7 +86,7 @@ If you want to specify the sender explicitly and not rely on the `developers` se
         <configuration>
           <mailSender>
             <name>Release Notification</name>
-            <email>noreply@foo.bar</email>
+            <email>noreply@example.com</email>
           </mailSender>
         </configuration>
       </plugin>

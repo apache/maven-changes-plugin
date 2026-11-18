@@ -26,7 +26,9 @@ under the License.
 
 # Customizing the JIRA Report
 
-**Note:** Most of the features used in this document were introduced in version **2.0** of the Changes Plugin. See the [goal documentation](../jira-changes-mojo.html) for detailed info on which feature was added in which version.
+The `jira-changes` report reads issues through the JIRA REST API. See the [goal documentation](../jira-changes-mojo.html)
+for all parameters. For a private JIRA instance, put the credentials in a `<server>` of your `settings.xml` and refer
+to it with `<jiraServerId>`.
 
 Selecting version(s)
 --------------------
@@ -35,7 +37,8 @@ We'll start off by creating a JIRA Report for one or more versions of your proje
 
 #[[### Using fix version id(s)]]#
 
-This is the manual way of doing it. You specify one or more fix version ids, separated by commas. The version ids are usually five digit numbers, but that depends on your JIRA installation.
+This is the manual way of doing it. You specify one or more fix versions, separated by commas, either by name or by
+JIRA's internal version id.
 
 The good thing about this method is that you can specify exactly which versions you want, but you have to remember to update your configuration for every new release that you want to include in the report.
 
@@ -49,7 +52,7 @@ The good thing about this method is that you can specify exactly which versions 
         <artifactId>maven-changes-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <fixVersionIds>13722,12515</fixVersionIds>
+          <fixVersionIds>2.12,2.12.1</fixVersionIds>
         </configuration>
         ...
       </plugin>
@@ -61,7 +64,7 @@ The good thing about this method is that you can specify exactly which versions 
 
 #[[### Using the current version]]#
 
-If you are lazy and only ever want the latest release in you JIRA Report, you can use the `<onlyCurrentVersion>` configuration parameter. It will take the version from your project's POM and try to match it against the "Fix for" version of the JIRA issues.
+If you only ever want the current release in your JIRA Report, you can use the `<onlyCurrentVersion>` configuration parameter. It will take the version from your project's POM and try to match it against the "Fix for" version of the JIRA issues.
 
 Once you have configured this, you can forget about it, as it updates itself when you change the version number in your POM.
 
@@ -90,7 +93,9 @@ Once you have configured this, you can forget about it, as it updates itself whe
 Selecting columns
 -----------------
 
-If you are a fan of the Issue Navigator in JIRA, you are going to love this. You can select which columns to include in the report and also specify in which way the issues are sorted.
+You can select which columns to include in the report and also specify in which way the issues are sorted. Valid
+columns for JIRA are `Assignee`, `Component`, `Created`, `Fix Version`, `Id`, `Key`, `Priority`, `Reporter`,
+`Resolution`, `Status`, `Summary`, `Type`, `Updated` and `Version`.
 
 In this example we have selected a couple of extra columns, that are not included by default. We want the issues sorted by `Type` first and by `Key` secondly. The keys will be sorted in descending order thanks to the `DESC` marker. Normally they are sorted in ascending order.
 
@@ -150,9 +155,13 @@ You can also filter by `<component>` and `<priorityIds>`. See the [goal document
 
 #[[### Using JIRA syntax]]#
 
-Another way to filter and sort issues is to configure the plugin using a JIRA syntaxed filter. You can grab this from the URL if you filter and sort issues in the Issue Navigator in JIRA. Just remember that you have to escape the ampersand (&amp;) characters, when you put them into the XML based POM.
+Another way to filter and sort issues is to give the plugin a complete [JQL](https://support.atlassian.com/jira-service-management-cloud/docs/use-advanced-search-with-jira-query-language-jql/)
+query in `<filter>`. You can copy it from the advanced search in JIRA. The query replaces everything the plugin would
+otherwise build, including the project, the version and the other filter parameters above, so it must name the project
+itself. Remember to escape `&`, `<` and `>` characters when you put them into the XML based POM.
 
-In this example we are filtering out issues with _Fixed_ as resolution and sorting them by _type_, in ascending order.
+In this example we are only including issues with _Fixed_ as resolution and sorting them by _type_, in ascending
+order.
 
 ```xml
 <project>
@@ -164,7 +173,7 @@ In this example we are filtering out issues with _Fixed_ as resolution and sorti
         <artifactId>maven-changes-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <filter>resolution=1&amp;sorter/field=issuetype&amp;sorter/order=ASC</filter>
+          <filter>project = MCHANGES AND fixVersion = 2.12.1 AND resolution = Fixed ORDER BY issuetype ASC</filter>
         </configuration>
         ...
       </plugin>

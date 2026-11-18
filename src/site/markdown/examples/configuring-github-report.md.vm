@@ -26,17 +26,21 @@ under the License.
 
 # Configuring the GitHub Report
 
-**Note:** See the [goal documentation](../github-changes-mojo.html) for detailed info on which feature was added in which version.
+The `github-changes` report reads the issues of the repository named in `<issueManagement>/<url>`, which must look
+like `https://github.com/OWNER/REPO/issues/`. See the [goal documentation](../github-changes-mojo.html) for all
+parameters.
 
 Using GitHub Enterprise
 -----------------------
 
-Additional configurations are not needed. Address of your **GitHub** instance will be taken from `project -> issueManagement -> url`
+No additional configuration is needed. The address of your **GitHub** instance is taken from
+`<issueManagement>/<url>` in your POM.
 
 Authenticating to the GitHub REST API
 -------------------------------------
 
-If you are using GitHub Enterprise or you want to authenticate to GitHub, configure the server in settings.xml like so:
+Anonymous requests to the GitHub REST API have a low rate limit. If you are using GitHub Enterprise or you want to
+authenticate to GitHub, configure the server in `settings.xml` like so:
 
 ```xml
 <settings>
@@ -51,20 +55,22 @@ If you are using GitHub Enterprise or you want to authenticate to GitHub, config
 </settings>
 ```
 
-Only the `password` item is used as your token for `Authorization: Bearer YOUR-TOKEN`
+Only the `password` item is used, as the token in `Authorization: Bearer YOUR-TOKEN`. It can be
+[encrypted](https://maven.apache.org/guides/mini/guide-encryption.html).
 
 The default serverId is `github`. You can change it by setting the `<githubAPIServerId>` configuration parameter.
 
-[Authenticating to the REST API](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api)
+See [Authenticating to the REST API](https://docs.github.com/en/rest/authentication/authenticating-to-the-rest-api)
+in the GitHub documentation.
 
 Filtering Issues
 ----------------
 
-We'll start off by creating a GitHub Report for one or more versions of your project. There are two ways to do this.
+By default the report includes open and closed issues, but only issues that have a milestone.
 
 #[[### Only include closed issues]]#
 
-If you only want to include closed issues in your report make sure to configure the includeOpenIssues to false in your configuration, which is true by default.
+If you only want to include closed issues in your report, set `<includeOpenIssues>` to `false`. It is `true` by default.
 
 ```xml
 <project>
@@ -88,7 +94,8 @@ If you only want to include closed issues in your report make sure to configure 
 
 #[[### Include issues without milestones]]#
 
-If you only want to include issues that do not have a milestone attached to them in your report make sure to configure the onlyMilestoneIssues to false in your configuration, which is true by default.
+If you also want to include issues that do not have a milestone attached to them, set `<onlyMilestoneIssues>` to
+`false`. It is `true` by default.
 
 ```xml
 <project>
@@ -112,7 +119,7 @@ If you only want to include issues that do not have a milestone attached to them
 
 #[[### Using the current version]]#
 
-If you are lazy and only ever want the latest release in you GitHub Report, you can use the `<onlyCurrentVersion>` configuration parameter. It will take the version from your project's POM and try to match it against the milestone title of the GitHub issues.
+If you only ever want the current release in your GitHub Report, you can use the `<onlyCurrentVersion>` configuration parameter. It will take the version from your project's POM and try to match it against the milestone title of the GitHub issues.
 
 Once you have configured this, you can forget about it, as it updates itself when you change the version number in your POM.
 
@@ -141,7 +148,8 @@ Once you have configured this, you can forget about it, as it updates itself whe
 Selecting columns
 -----------------
 
-You can select which columns to include in the report.
+You can select which columns to include in the report. Valid columns for GitHub are `Assignee`, `Created`,
+`Fix Version`, `Id`, `Reporter`, `Status`, `Summary`, `Type` and `Updated`.
 
 ```xml
 <project>
@@ -153,7 +161,7 @@ You can select which columns to include in the report.
         <artifactId>maven-changes-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <columnNames>Type,Key,Summary,Assignee,Status,Fix Version</columnNames>
+          <columnNames>Type,Id,Summary,Assignee,Status,Fix Version</columnNames>
         </configuration>
         ...
       </plugin>

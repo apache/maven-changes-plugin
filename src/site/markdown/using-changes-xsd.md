@@ -26,7 +26,9 @@ under the License.
 
 # Using the XML Schema Changes 2.0.0
 
-The Changes XSD is located [here](https://maven.apache.org/xsd/changes-2.0.0.xsd).
+The current version of the `changes.xml` schema is 2.0.0. The XSD is published at
+<https://maven.apache.org/xsd/changes-2.0.0.xsd>, and a copy is part of this site:
+[changes-2.0.0.xsd](./xsd/changes-2.0.0.xsd).
 
 Your favorite IDE probably supports validation and/or syntax highlighting for XML files by using XSD schemas. For this to work you need to specify the schema in your `changes.xml` file:
 
@@ -37,3 +39,6 @@ Your favorite IDE probably supports validation and/or syntax highlighting for XM
 ...
 </document>
 ```
+
+To validate the file during the build, use the [changes-validate](./changes-validate-mojo.html) goal; see
+[Validate Your changes.xml File](./examples/changes-file-validation.html).

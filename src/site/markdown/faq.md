@@ -26,33 +26,28 @@ under the License.
 # Frequently Asked Questions
 
 1. [What's the difference between the changes-maven-plugin at Mojo and this one?](#question1)
-2. [I get a `org.xml.sax.SAXParseException`, when generating the JIRA Report. What can do about it?](#question2)
+2. [I get a `org.xml.sax.SAXParseException` when generating the JIRA Report. What can I do about it?](#question2)
+3. [Why does the Changes Report link to the wrong issue URL?](#question3)
 
 <a id="question1"></a>
 
 ### What's the difference between the changes-maven-plugin at Mojo and this one?
 
-This plugin started out at [the Mojo project](http://mojo.codehaus.org/). In March of 2006 the plugin was moved
-to Apache and the Maven sandbox. So it's the same plugin, but this one is newer.
+This plugin started out at the Mojo project (now [MojoHaus](https://www.mojohaus.org/)). In March of 2006 the plugin
+was moved to Apache. So it's the same plugin, and this one is the maintained version.
 
 <a id="question2"></a>
 
-### I get a `org.xml.sax.SAXParseException`, when generating the JIRA Report. What can do about it?
+### I get a `org.xml.sax.SAXParseException` when generating the JIRA Report. What can I do about it?
 
-If you have a lot of entities in the xml file returned from your JIRA installation, you might get an error like
-this one, when you run the JIRA Report:
+Old versions of the plugin downloaded issues as XML from JIRA and could hit the parser's entity expansion limit.
+The plugin now reads issues through the JIRA REST API, which returns JSON, so this error no longer occurs. Upgrade to
+the latest version of the plugin.
 
-```
-org.xml.sax.SAXParseException: Parser has reached the entity expansion limit "64,000" set by the Application.
-```
+<a id="question3"></a>
 
-If that happens you need to tell the xml parser to use a higher limit. This can be accomplished by adding a
-command line parameter. In the following example we have set it to double the original value:
+### Why does the Changes Report link to the wrong issue URL?
 
-```
-mvn -DentityExpansionLimit=128000 ...
-```
-
-Unfortunately we have not been able to set this in Java. If someone knows how to do this, then please reopen
-[MCHANGES-75](https://issues.apache.org/jira/browse/MCHANGES-75), and tell us how. It would be nicer if this
-could be set using a parameter in the POM.
+The link is built from `<issueManagement>/<url>` with the last `/` and everything after it removed. For GitHub, end
+the URL with a slash (`https://github.com/example/project/issues/`). See
+[Linking to Your Issue Management System](./usage.html#Linking_to_Your_Issue_Management_System).

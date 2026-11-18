@@ -26,7 +26,8 @@ under the License.
 
 # Include an Announcement File in Your Packaging
 
-Since version 2.4 this plugin has options that allows you to put the generated announcement file anywhere you like. This makes it possible to include the generated announcement in your packaging.
+The `announcement-generate` goal can put the generated announcement file anywhere you like. This makes it possible
+to include the generated announcement in your packaging.
 
 Configuring the Plugin
 ----------------------

@@ -26,9 +26,10 @@ under the License.
 
 # SMTP Authentication
 
-If the SMTP host needs authentication, you can provide your `<username>` and `<password>` in the `<configuration>` section:
+If the SMTP host needs authentication, you can provide your `<username>` and `<password>` in the `<configuration>`
+section. Use `<sslMode>` for SMTPS or `<startTls>` for STARTTLS:
 
-```
+```xml
 <project>
   ...
   <build>
@@ -38,9 +39,10 @@ If the SMTP host needs authentication, you can provide your `<username>` and `<p
         <artifactId>maven-changes-plugin</artifactId>
         <version>${project.version}</version>
         <configuration>
-          <smtpHost>mail.yourhost.com</smtpHost>
-          <smtpPort implementation="java.lang.Integer">25</smtpPort>
-          <username>some@email.com</username>
+          <smtpHost>mail.example.com</smtpHost>
+          <smtpPort>587</smtpPort>
+          <startTls>true</startTls>
+          <username>releases@example.com</username>
           <password>somepassword</password>
           ...
         </configuration>
