@@ -36,25 +36,25 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingJsonFactory;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicHeader;
+import org.apache.hc.client5.http.auth.AuthScope;
+import org.apache.hc.client5.http.auth.UsernamePasswordCredentials;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.cookie.BasicCookieStore;
+import org.apache.hc.client5.http.impl.auth.BasicCredentialsProvider;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicHeader;
+import org.apache.hc.core5.util.Timeout;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
@@ -398,7 +398,7 @@ public class RestJiraDownloader {
 
         try (CloseableHttpResponse response = client.execute(httpPost)) {
 
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            if (response.getCode() != HttpStatus.SC_OK) {
                 reportErrors(response);
             }
 
@@ -419,23 +419,24 @@ public class RestJiraDownloader {
 
         HttpGet httpGet = new HttpGet(jiraUrl + "/rest/api/2/serverInfo");
         try (CloseableHttpResponse response = client.execute(httpGet)) {
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            if (response.getCode() != HttpStatus.SC_OK) {
                 throw new NoRest("This JIRA server does not support version 2 of the REST API, "
                         + "which maven-changes-plugin requires.");
             }
         }
     }
 
-    private JsonNode getResponseTree(HttpResponse response) throws IOException {
+    private JsonNode getResponseTree(ClassicHttpResponse response) throws IOException {
         try (InputStream inputStream = response.getEntity().getContent();
                 JsonParser jsonParser = jsonFactory.createParser(inputStream)) {
             return jsonParser.readValueAsTree();
         }
     }
 
-    private void reportErrors(HttpResponse resp) throws IOException, MojoExecutionException {
-        ContentType contentType = ContentType.get(resp.getEntity());
-        if (contentType != null && contentType.getMimeType().equals(ContentType.APPLICATION_JSON.getMimeType())) {
+    private void reportErrors(ClassicHttpResponse resp) throws IOException, MojoExecutionException {
+        String contentTypeHeader = resp.getEntity().getContentType();
+        ContentType contentType = contentTypeHeader != null ? ContentType.parseLenient(contentTypeHeader) : null;
+        if (contentType != null && ContentType.APPLICATION_JSON.getMimeType().equals(contentType.getMimeType())) {
             JsonNode errorTree = getResponseTree(resp);
             assertIsObject(errorTree);
             JsonNode messages = errorTree.get("errorMessages");
@@ -450,8 +451,7 @@ public class RestJiraDownloader {
                 }
             }
         }
-        throw new MojoExecutionException(String.format(
-                "Failed to query issues; response %d", resp.getStatusLine().getStatusCode()));
+        throw new MojoExecutionException(String.format("Failed to query issues; response %d", resp.getCode()));
     }
 
     private void resolveIds(CloseableHttpClient client, String jiraUrl, String jiraProject)
@@ -484,7 +484,7 @@ public class RestJiraDownloader {
         HttpGet httpGet = new HttpGet(listRestUrlPattern);
 
         try (CloseableHttpResponse response = client.execute(httpGet)) {
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            if (response.getCode() != HttpStatus.SC_OK) {
                 getLog().error(String.format("Could not get %s list from %s", what, listRestUrlPattern));
                 reportErrors(response);
             }
@@ -739,7 +739,7 @@ public class RestJiraDownloader {
             post.setEntity(new StringEntity(jsWriter.toString()));
 
             try (CloseableHttpResponse response = client.execute(post)) {
-                int statusCode = response.getStatusLine().getStatusCode();
+                int statusCode = response.getCode();
                 if (statusCode != HttpStatus.SC_OK) {
                     if (statusCode != HttpStatus.SC_UNAUTHORIZED && statusCode != HttpStatus.SC_FORBIDDEN) {
                         // if not one of the documented failures, assume that there's no rest in there in the first
@@ -757,18 +757,19 @@ public class RestJiraDownloader {
         HttpClientBuilder httpClientBuilder = HttpClients.custom()
                 .setDefaultCookieStore(new BasicCookieStore())
                 .setDefaultRequestConfig(RequestConfig.custom()
-                        .setConnectionRequestTimeout(receiveTimout)
-                        .setConnectTimeout(connectionTimeout)
+                        .setConnectionRequestTimeout(Timeout.ofMilliseconds(receiveTimout))
+                        .setConnectTimeout(Timeout.ofMilliseconds(connectionTimeout))
                         .build())
                 .setDefaultHeaders(Collections.singletonList(new BasicHeader("Accept", "application/json")));
 
         Proxy proxy = getProxy(jiraUrl);
         if (proxy != null) {
             if (proxy.getUsername() != null && proxy.getPassword() != null) {
-                CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+                BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
                 credentialsProvider.setCredentials(
                         new AuthScope(proxy.getHost(), proxy.getPort()),
-                        new UsernamePasswordCredentials(proxy.getUsername(), proxy.getPassword()));
+                        new UsernamePasswordCredentials(
+                                proxy.getUsername(), proxy.getPassword().toCharArray()));
                 httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
             }
             httpClientBuilder.setProxy(new HttpHost(proxy.getHost(), proxy.getPort()));

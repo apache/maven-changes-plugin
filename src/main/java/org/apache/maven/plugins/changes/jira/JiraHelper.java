@@ -24,11 +24,10 @@ import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.maven.plugin.logging.Log;
 
 /**
@@ -102,15 +101,18 @@ public final class JiraHelper {
 
         String projectPage;
         try {
-            HttpResponse response = client.execute(request);
-            log.debug("Successfully reached JIRA.");
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                projectPage = EntityUtils.toString(entity);
-            } else {
+            projectPage = client.execute(request, response -> {
+                log.debug("Successfully reached JIRA.");
+                HttpEntity entity = response.getEntity();
+                if (entity != null) {
+                    return EntityUtils.toString(entity);
+                }
                 if (log.isDebugEnabled()) {
                     log.error("Unable to read the JIRA project page");
                 }
+                return null;
+            });
+            if (projectPage == null) {
                 return null;
             }
         } catch (IOException e) {
