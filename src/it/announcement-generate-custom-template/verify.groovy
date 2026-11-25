@@ -18,55 +18,15 @@
  * under the License.
  */
 
-import java.io.*;
 import java.nio.file.*;
-import java.util.*;
-import java.util.jar.*;
 
-boolean result = true;
+File report = new File( basedir, "target/announcement/test-announce.vm" )
+assert report.exists() : "report file is missing."
+assert !report.isDirectory() : "report file is a directory."
+String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8")
 
-try
-{
-    File report = new File( basedir, "target/announcement/test-announce.vm" );
-    if ( !report.exists() )
-    {
-        System.err.println( "report file is missing." );
-        return false;
-    }
-    if ( report.isDirectory() )
-    {
-        System.err.println( "report file is a directory." );
-        return false;
-    }
-    String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8");
+assert reportContent.contains( "maven-changes-plugin-test-1.1 release" ) : "test-announce.vm doesn't contain 'maven-changes-plugin-test-1.1 release'"
 
-    int indexOf = reportContent.indexOf( "maven-changes-plugin-test-1.1 release" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "test-announce.vm doesn't contain 'maven-changes-plugin-test-1.1 release'" );
-      return false;
-    }
+assert reportContent.contains( "Test Announcement Custom template" ) : "Test Announcement Custom template"
 
-    indexOf = reportContent.indexOf( "Test Announcement Custom template" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "Test Announcement Custom template" );
-      return false;
-    }
-    
-    indexOf = reportContent.indexOf( '$date.systemDate' );
-    if ( indexOf >= 0 )
-    {
-      System.err.println( '$date.systemDate not resolved' );
-      return false;
-    }
-    
-
-}
-catch( Throwable e )
-{
-    e.printStackTrace();
-    result = false;
-}
-
-return result;
+assert !reportContent.contains( '$date.systemDate' ) : '$date.systemDate not resolved'

@@ -21,5 +21,3 @@ assert new File(basedir, 'build.log').exists();
 content = new File(basedir, 'build.log').text;
 
 assert content.contains( "Skipping snapshot version '1.0-SNAPSHOT'." );
-
-return true;
