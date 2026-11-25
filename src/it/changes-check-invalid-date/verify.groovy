@@ -17,6 +17,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-String log = new File( basedir, "build.log" ).text
-assert log.contains( "has an invalid release date." )
+String log = new File(basedir, "build.log").text
+assert log.contains("has an invalid release date.")
 assert log =~ /changes.xml has an invalid release date/

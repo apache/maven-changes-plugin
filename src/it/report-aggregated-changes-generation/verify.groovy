@@ -16,18 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File(basedir, 'target/site/changes.html').exists();
-content = new File(basedir, 'target/site/changes.html').text;
+assert new File(basedir, 'target/site/changes.html').exists()
+content = new File(basedir, 'target/site/changes.html').text
 
-assert content.contains( 'Changes' );
+assert content.contains('Changes')
 
-assert content.contains( '<th>Module1</th>' );
-assert !content.contains( '<th>Module2</th>' );
-assert content.contains( '<th>Module3</th>' );
-assert !content.contains( '<th>Module4</th>' );
+assert content.contains('<th>Module1</th>')
+assert !content.contains('<th>Module2</th>')
+assert content.contains('<th>Module3</th>')
+assert !content.contains('<th>Module4</th>')
 
-assert content.contains( 'MCHANGES-88' );
-assert content.contains( 'MCHANGES-1' );
-assert content.contains( 'bug-12345' );
+assert content.contains('MCHANGES-88')
+assert content.contains('MCHANGES-1')
+assert content.contains('bug-12345')
 
-assert content.contains( 'No changes in this release.' );
+assert content.contains('No changes in this release.')

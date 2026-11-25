@@ -31,7 +31,9 @@ Thread thread = new Thread({
             socket.withCloseable {
                 def reader = new BufferedReader(new InputStreamReader(socket.inputStream, 'ISO-8859-1'))
                 def writer = new PrintWriter(new OutputStreamWriter(socket.outputStream, 'ISO-8859-1'), true)
-                def send = { String line -> writer.print(line + '\r\n'); writer.flush() }
+                def send = { String line ->
+                    writer.print(line + '\r\n'); writer.flush()
+                }
                 StringBuilder envelope = new StringBuilder()
                 send('220 localhost fake SMTP')
                 String line

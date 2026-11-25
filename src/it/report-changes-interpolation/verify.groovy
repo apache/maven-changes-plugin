@@ -18,10 +18,10 @@
  * under the License.
  */
 
-import java.nio.file.*;
-import java.text.*;
+import java.nio.file.*
+import java.text.*
 
-File report = new File( basedir, "target/site/changes.html" )
+File report = new File(basedir, "target/site/changes.html")
 assert report.exists() : "report file is missing."
 assert !report.isDirectory() : "report file is a directory."
 String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8")
@@ -39,8 +39,8 @@ assert !reportContent.contains( "Fixes ." ) : "changes.html doesn't handle empty
 
 assert reportContent.contains( "<a href=\"#a99.0\">" ) : "changes.html doesn't contain version from pom"
 
-Date now = new Date();
-SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd", new Locale( "en" ) );
-String formattedDate = simpleDateFormat.format( now );
+Date now = new Date()
+SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd", new Locale( "en" ) )
+String formattedDate = simpleDateFormat.format( now )
 
 assert reportContent.contains( formattedDate ) : "changes.html doesn't contain publishDate"

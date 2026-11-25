@@ -48,27 +48,27 @@ stubFor(post('/rest/auth/1/session')
         .withHeader('content-type', equalTo('application/json'))
         .withRequestBody(equalToJson('{"username" : "jira-test",  "password" : "jira-password"}'))
         .willReturn(aResponse()
-                .withStatus(200)
+        .withStatus(200)
         .withHeader('Set-Cookie', 'JSESSIONID=D6961281D4A029FFA4E6BC8A526CF5CC; Path=/; HttpOnly')))
 
 stubFor(get('/rest/api/2/status')
         .withHeader('accept', equalTo('application/json'))
         .withCookie('JSESSIONID', equalTo('D6961281D4A029FFA4E6BC8A526CF5CC'))
         .willReturn(aResponse().withStatus(200)
-                .withBody('[{"name": "Closed","id": "6"}]')))
+        .withBody('[{"name": "Closed","id": "6"}]')))
 
 stubFor(get('/rest/api/2/resolution')
         .withHeader('accept', equalTo('application/json'))
         .withCookie('JSESSIONID', equalTo('D6961281D4A029FFA4E6BC8A526CF5CC'))
         .willReturn(aResponse().withStatus(200)
-                .withBody('[{"name": "Fixed","id": "1"}]')))
+        .withBody('[{"name": "Fixed","id": "1"}]')))
 
 stubFor(post('/rest/api/2/search')
         .withHeader('accept', equalTo('application/json'))
         .withHeader('content-type', equalTo('application/json'))
         .withCookie('JSESSIONID', equalTo('D6961281D4A029FFA4E6BC8A526CF5CC'))
         .willReturn(aResponse().withStatus(200)
-                .withBody('''
+        .withBody('''
 {
     "issues": [
     {
