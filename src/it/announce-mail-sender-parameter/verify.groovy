@@ -24,8 +24,8 @@ List messages = context.get("smtpMessages")
 server.close()
 
 assert messages.size() == 2
-String mail = messages.join( "\n" )
-assert mail.contains( "MAIL FROM: <rm@example.org>" )
-assert mail.contains( "Release Manager" )
-assert !mail.contains( "first@example.org" )
-assert mail.contains( "Subject: Custom subject for 1.1" )
+String mail = messages.join("\n")
+assert mail.contains("MAIL FROM: <rm@example.org>")
+assert mail.contains("Release Manager")
+assert !mail.contains("first@example.org")
+assert mail.contains("Subject: Custom subject for 1.1")

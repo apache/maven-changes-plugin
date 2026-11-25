@@ -17,17 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-String text = new File( basedir, "target/announcement/values.vm" ).text
-assert text.contains( "groupId=org.apache.maven.plugins.changes.it" )
-assert text.contains( "artifactId=announce-generate-project-values" )
-assert text.contains( "version=1.1" )
-assert text.contains( "packaging=pom" )
-assert text.contains( "url=https://example.org/values" )
-assert text.contains( "introduction=Project description." )
-assert text.contains( "team=Values Project team" )
-assert text.contains( "finalName=announce-generate-project-values-1.1" )
-assert text.contains( "download=https://example.org/download" )
-assert text.contains( "projectName=Values Project" )
-assert text.contains( "projectArtifactId=announce-generate-project-values" )
-assert text.contains( "param=hello" )
-assert text.contains( "release=1.1" )
+String text = new File(basedir, "target/announcement/values.vm").text
+assert text.contains("groupId=org.apache.maven.plugins.changes.it")
+assert text.contains("artifactId=announce-generate-project-values")
+assert text.contains("version=1.1")
+assert text.contains("packaging=pom")
+assert text.contains("url=https://example.org/values")
+assert text.contains("introduction=Project description.")
+assert text.contains("team=Values Project team")
+assert text.contains("finalName=announce-generate-project-values-1.1")
+assert text.contains("download=https://example.org/download")
+assert text.contains("projectName=Values Project")
+assert text.contains("projectArtifactId=announce-generate-project-values")
+assert text.contains("param=hello")
+assert text.contains("release=1.1")

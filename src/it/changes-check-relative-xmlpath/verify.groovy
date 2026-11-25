@@ -17,6 +17,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-String log = new File( basedir, "build.log" ).text
-assert !log.contains( "does not exist" )
-assert !log.contains( "invalid release date" )
+String log = new File(basedir, "build.log").text
+assert !log.contains("does not exist")
+assert !log.contains("invalid release date")

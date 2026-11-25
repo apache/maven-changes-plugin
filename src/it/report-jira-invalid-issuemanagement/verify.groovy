@@ -19,6 +19,6 @@
  */
 
 
-content = new File( basedir, 'build.log' ).text;
+content = new File(basedir, 'build.log').text
 
-assert !content.contains( '[ERROR]' );
+assert !content.contains('[ERROR]')

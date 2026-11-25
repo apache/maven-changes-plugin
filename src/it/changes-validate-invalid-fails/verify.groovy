@@ -17,5 +17,5 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-String log = new File( basedir, "build.log" ).text
+String log = new File(basedir, "build.log").text
 assert log =~ /changes.xml file is not valid: .*changes.xml: SAXException/

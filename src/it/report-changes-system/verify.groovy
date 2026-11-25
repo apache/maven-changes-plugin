@@ -18,9 +18,9 @@
  * under the License.
  */
 
-import java.nio.file.*;
+import java.nio.file.*
 
-File report = new File( basedir, "target/site/en/changes.html" )
+File report = new File(basedir, "target/site/en/changes.html")
 assert report.exists() : "report file is missing."
 assert !report.isDirectory() : "report file is a directory."
 String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8")

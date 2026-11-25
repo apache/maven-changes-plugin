@@ -17,4 +17,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-assert new File( basedir, "build.log" ).text.contains( "Skipping snapshot version '1.0-SNAPSHOT'." )
+assert new File(basedir, "build.log").text.contains("Skipping snapshot version '1.0-SNAPSHOT'.")

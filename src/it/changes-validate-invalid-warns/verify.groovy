@@ -17,6 +17,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-String log = new File( basedir, "build.log" ).text
-assert log.contains( "validation errors:" )
-assert log.contains( "skip previous validation errors due to failOnError=false." )
+String log = new File(basedir, "build.log").text
+assert log.contains("validation errors:")
+assert log.contains("skip previous validation errors due to failOnError=false.")
