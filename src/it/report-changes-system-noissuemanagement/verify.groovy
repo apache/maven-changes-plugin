@@ -18,66 +18,16 @@
  * under the License.
  */
 
-import java.io.*;
 import java.nio.file.*;
-import java.util.*;
-import java.util.jar.*;
 
-boolean result = true;
+File report = new File( basedir, "target/site/changes.html" )
+assert report.exists() : "report file is missing."
+assert !report.isDirectory() : "report file is a directory."
+String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8")
 
-try
-{
-    File report = new File( basedir, "target/site/changes.html" );
-    if ( !report.exists() )
-    {
-        System.err.println( "report file is missing." );
-        return false;
-    }
-    if ( report.isDirectory() )
-    {
-        System.err.println( "report file is a directory." );
-        return false;
-    }
-    String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8");
+assert reportContent.contains( "Changes" ) : "changes.html doesn't contain Changes title"
 
-    int indexOf = reportContent.indexOf( "Changes" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain Changes title" );
-      return false;
-    }
-
-    indexOf = reportContent.indexOf( "href=\"http://myjira/browse/MCHANGES-88\"" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain jira issue link" );
-      return false;
-    }
-    indexOf = reportContent.indexOf( "href=\"http://localhost/1212\"" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain qc issue link" );
-      return false;
-    }
-    indexOf = reportContent.indexOf( "href=\"http://www.redmine.org/show/issue/88\"" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain redmine issue link" );
-      return false;
-    }
-    indexOf = reportContent.indexOf( "2008-01-01" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain date 2008-01-01" );
-      return false;
-    }
-
-
-}
-catch( Throwable e )
-{
-    e.printStackTrace();
-    result = false;
-}
-
-return result;
+assert reportContent.contains( "href=\"http://myjira/browse/MCHANGES-88\"" ) : "changes.html doesn't contain jira issue link"
+assert reportContent.contains( "href=\"http://localhost/1212\"" ) : "changes.html doesn't contain qc issue link"
+assert reportContent.contains( "href=\"http://www.redmine.org/show/issue/88\"" ) : "changes.html doesn't contain redmine issue link"
+assert reportContent.contains( "2008-01-01" ) : "changes.html doesn't contain date 2008-01-01"

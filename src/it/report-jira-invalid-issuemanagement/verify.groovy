@@ -18,11 +18,7 @@
  * under the License.
  */
 
-import java.io.*;
-import java.util.*;
 
 content = new File( basedir, 'build.log' ).text;
 
 assert !content.contains( '[ERROR]' );
-
-return true;

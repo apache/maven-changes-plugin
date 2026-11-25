@@ -31,5 +31,3 @@ assert content.contains( 'MCHANGES-1' );
 assert content.contains( 'bug-12345' );
 
 assert content.contains( 'No changes in this release.' );
-
-return true;

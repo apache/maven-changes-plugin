@@ -43,5 +43,3 @@ assert content.contains( 'Removed:' );
 assert content.contains( 'o The element type \" link \" must be terminated by the matching end-tag.' );
 
 assert content.contains( 'Deleted the erroneous code.  Issue: MCHANGES-899.' );
-
-return true;

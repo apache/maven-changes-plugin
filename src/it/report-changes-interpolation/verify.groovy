@@ -18,89 +18,29 @@
  * under the License.
  */
 
-import java.io.*;
 import java.nio.file.*;
 import java.text.*;
-import java.util.*;
-import java.util.jar.*;
-import java.nio.file.*;
 
-boolean result = true;
+File report = new File( basedir, "target/site/changes.html" )
+assert report.exists() : "report file is missing."
+assert !report.isDirectory() : "report file is a directory."
+String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8")
 
-try
-{
-    File report = new File( basedir, "target/site/changes.html" );
-    if ( !report.exists() )
-    {
-        System.err.println( "report file is missing." );
-        return false;
-    }
-    if ( report.isDirectory() )
-    {
-        System.err.println( "report file is a directory." );
-        return false;
-    }
-    String reportContent = new String(Files.readAllBytes( report.toPath() ), "UTF-8");
+assert reportContent.contains( "Changes" ) : "changes.html doesn't contain Changes title"
 
-    int indexOf = reportContent.indexOf( "Changes" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain Changes title" );
-      return false;
-    }
+assert reportContent.contains( "href=\"http://myjira/browse/MCHANGES-88\"" ) : "changes.html doesn't contain jira issue link"
 
-    indexOf = reportContent.indexOf( "href=\"http://myjira/browse/MCHANGES-88\"" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain jira issue link" );
-      return false;
-    }
+// Test for output problem caused by only using <dueTo> elements
+assert !reportContent.contains( "Thanks to , " ) : "changes.html has too many dueTos in the Map"
 
-    // Test for output problem caused by only using <dueTo> elements
-    indexOf = reportContent.indexOf( "Thanks to , " );
-    if ( indexOf != -1 )
-    {
-      System.err.println( "changes.html has too many dueTos in the Map" );
-      return false;
-    }
+// Tests output problems caused by only using <fixes> element
+assert reportContent.contains( "bug-12345" ) : "changes.html doesn't contain issue text for issue specified with <fixes> element"
+assert !reportContent.contains( "Fixes ." ) : "changes.html doesn't handle empty fixes attribute properly"
 
-    // Tests output problems caused by only using <fixes> element
-    indexOf = reportContent.indexOf( "bug-12345" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain issue text for issue specified with <fixes> element" );
-      return false;
-    }
-    indexOf = reportContent.indexOf( "Fixes ." );
-    if ( indexOf != -1 )
-    {
-      System.err.println( "changes.html doesn't handle empty fixes attribute properly" );
-      return false;
-    }
+assert reportContent.contains( "<a href=\"#a99.0\">" ) : "changes.html doesn't contain version from pom"
 
-    indexOf = reportContent.indexOf( "<a href=\"#a99.0\">" );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain version from pom" );
-      return false;
-    }
+Date now = new Date();
+SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd", new Locale( "en" ) );
+String formattedDate = simpleDateFormat.format( now );
 
-    Date now = new Date();
-	SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyy-MM-dd", new Locale( "en" ) );
-    String formattedDate = simpleDateFormat.format( now );
-
-    indexOf = reportContent.indexOf( formattedDate );
-    if ( indexOf < 0 )
-    {
-      System.err.println( "changes.html doesn't contain publishDate" );
-      return false;
-    }
-
-}
-catch( Throwable e )
-{
-    e.printStackTrace();
-    result = false;
-}
-
-return result;
+assert reportContent.contains( formattedDate ) : "changes.html doesn't contain publishDate"
