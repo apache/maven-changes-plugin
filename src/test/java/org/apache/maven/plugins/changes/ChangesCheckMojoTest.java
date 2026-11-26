@@ -22,12 +22,17 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Dennis Lundberg
@@ -160,7 +165,14 @@ public class ChangesCheckMojoTest {
     @MojoParameter(name = "version", value = "1.0")
     @Test
     public void testValidReleaseDatePasses(ChangesCheckMojo mojo) throws Exception {
+        Log log = mock(Log.class);
+        mojo.setLog(log);
+
         mojo.execute();
+
+        verify(log, never()).warn(contains("does not exist"));
+        verify(log, never()).warn(contains("invalid release date"));
+        verify(log, never()).error(contains("invalid release date"));
     }
 
     @InjectMojo(goal = "changes-check", pom = POM)
