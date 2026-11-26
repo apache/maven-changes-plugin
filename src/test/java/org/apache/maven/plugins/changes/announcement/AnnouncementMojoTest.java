@@ -29,6 +29,7 @@ import org.codehaus.plexus.util.FileUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.apache.maven.api.plugin.testing.MojoExtension.getBasedir;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -66,6 +67,28 @@ public class AnnouncementMojoTest {
         assertContains("Removed:", result);
         assertContains("o The element type \" link \" must be terminated by the matching end-tag.", result);
         assertContains("Deleted the erroneous code.", result);
+    }
+
+    @InjectMojo(goal = "announcement-generate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/announce-changes.xml")
+    @MojoParameter(name = "announcementDirectory", value = "target/test-custom-template")
+    @MojoParameter(name = "version", value = "1.1")
+    @MojoParameter(name = "finalName", value = "maven-changes-plugin-test-1.1")
+    @MojoParameter(name = "template", value = "test-announce.vm")
+    @MojoParameter(name = "templateDirectory", value = "src/test/unit/announce-custom")
+    @MojoParameter(name = "introduction", value = "Test Announcement Custom template")
+    @Test
+    public void testCustomTemplate(AnnouncementMojo mojo) throws Exception {
+        File dir = new File(getBasedir(), "target/test-custom-template");
+        FileUtils.deleteDirectory(dir);
+        dir.mkdirs();
+
+        mojo.execute();
+
+        String result = new String(Files.readAllBytes(dir.toPath().resolve("test-announce.vm")), "UTF-8");
+        assertTrue(result.contains("maven-changes-plugin-test-1.1 release"), result);
+        assertTrue(result.contains("Test Announcement Custom template"), result);
+        assertFalse(result.contains("$"), "unresolved velocity reference in: " + result);
     }
 
     private File prepareAnnouncementDirectory() throws IOException {
