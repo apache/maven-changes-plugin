@@ -49,6 +49,7 @@ import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.HttpHeaders;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpStatus;
@@ -433,8 +434,9 @@ public class RestJiraDownloader {
         }
     }
 
-    private void reportErrors(ClassicHttpResponse resp) throws IOException, MojoExecutionException {
-        String contentTypeHeader = resp.getEntity().getContentType();
+    void reportErrors(ClassicHttpResponse resp) throws IOException, MojoExecutionException {
+        HttpEntity entity = resp.getEntity();
+        String contentTypeHeader = entity != null ? entity.getContentType() : null;
         ContentType contentType = contentTypeHeader != null ? ContentType.parseLenient(contentTypeHeader) : null;
         if (contentType != null && ContentType.APPLICATION_JSON.getMimeType().equals(contentType.getMimeType())) {
             JsonNode errorTree = getResponseTree(resp);
