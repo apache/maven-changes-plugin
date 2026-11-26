@@ -18,9 +18,14 @@
  */
 package org.apache.maven.plugins.changes;
 
+import org.apache.maven.api.plugin.testing.InjectMojo;
+import org.apache.maven.api.plugin.testing.MojoParameter;
+import org.apache.maven.api.plugin.testing.MojoTest;
+import org.apache.maven.plugin.MojoExecutionException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -29,6 +34,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * @version $Id$
  * @since 2.4
  */
+@MojoTest
 public class ChangesCheckMojoTest {
     @Test
     public void testIsValidDate() {
@@ -136,5 +142,50 @@ public class ChangesCheckMojoTest {
                 System.clearProperty("java.locale.providers");
             }
         }
+    }
+
+    private static final String POM = "src/test/unit/plugin-config.xml";
+
+    @InjectMojo(goal = "changes-check", pom = POM)
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/check/pending-release-changes.xml")
+    @MojoParameter(name = "version", value = "1.0")
+    @Test
+    public void testPendingReleaseDateFails(ChangesCheckMojo mojo) {
+        MojoExecutionException e = assertThrows(MojoExecutionException.class, mojo::execute);
+        assertTrue(e.getMessage().endsWith("pending-release-changes.xml has an invalid release date."));
+    }
+
+    @InjectMojo(goal = "changes-check", pom = POM)
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/check/valid-changes.xml")
+    @MojoParameter(name = "version", value = "1.0")
+    @Test
+    public void testValidReleaseDatePasses(ChangesCheckMojo mojo) throws Exception {
+        mojo.execute();
+    }
+
+    @InjectMojo(goal = "changes-check", pom = POM)
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/check/pending-changes.xml")
+    @MojoParameter(name = "version", value = "1.0-SNAPSHOT")
+    @MojoParameter(name = "skipSnapshots", value = "true")
+    @Test
+    public void testSkipSnapshotsSkipsInvalidDate(ChangesCheckMojo mojo) throws Exception {
+        mojo.execute();
+    }
+
+    @InjectMojo(goal = "changes-check", pom = POM)
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/check/pending-changes.xml")
+    @MojoParameter(name = "version", value = "1.0-SNAPSHOT")
+    @MojoParameter(name = "skipSnapshots", value = "false")
+    @Test
+    public void testSnapshotIsCheckedWhenNotSkipped(ChangesCheckMojo mojo) {
+        assertThrows(MojoExecutionException.class, mojo::execute);
+    }
+
+    @InjectMojo(goal = "changes-check", pom = POM)
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/check/does-not-exist.xml")
+    @MojoParameter(name = "version", value = "1.0")
+    @Test
+    public void testMissingFileOnlyWarns(ChangesCheckMojo mojo) throws Exception {
+        mojo.execute();
     }
 }

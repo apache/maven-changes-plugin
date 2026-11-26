@@ -22,9 +22,15 @@ import org.apache.maven.api.plugin.testing.InjectMojo;
 import org.apache.maven.api.plugin.testing.MojoParameter;
 import org.apache.maven.api.plugin.testing.MojoTest;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 /**
  * @author Olivier Lamy
@@ -64,5 +70,29 @@ public class ChangesValidatorMojoTest {
     @Test
     public void testValidationFailedWithNoMojoFailure(ChangesValidatorMojo mojo) throws Exception {
         mojo.execute();
+    }
+
+    @InjectMojo(goal = "changes-validate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/validate/schema-invalid-changes.xml")
+    @MojoParameter(name = "failOnError", value = "true")
+    @Test
+    public void testSchemaExceptionMessageNamesFile(ChangesValidatorMojo mojo) {
+        MojoExecutionException e = assertThrows(MojoExecutionException.class, mojo::execute);
+        assertTrue(e.getMessage().contains("changes.xml file is not valid"), e.getMessage());
+        assertTrue(e.getMessage().contains("schema-invalid-changes.xml"), e.getMessage());
+    }
+
+    @InjectMojo(goal = "changes-validate", pom = "src/test/unit/plugin-config.xml")
+    @MojoParameter(name = "xmlPath", value = "src/test/unit/validate/schema-invalid-changes.xml")
+    @MojoParameter(name = "failOnError", value = "false")
+    @Test
+    public void testInvalidFileOnlyWarnsWhenNotFailing(ChangesValidatorMojo mojo) throws Exception {
+        Log log = mock(Log.class);
+        mojo.setLog(log);
+
+        mojo.execute();
+
+        verify(log).warn("validation errors: ");
+        verify(log).info(contains("skip previous validation errors due to failOnError=false."));
     }
 }
